@@ -27,8 +27,8 @@ const styles = StyleSheet.create({
     marginHorizontal: -16,
     marginVertical: -8,
   },
-  icon: {
-    marginHorizontal: 0,
+  innerIcon: {
+    marginHorizontal: -8,
   },
 });
 
@@ -55,14 +55,13 @@ const PlayerControls = ({ songInfo }: PlayerControlsProps) => {
           size={32}
           onPress={toggleShuffle}
           accessibilityLabel={t('toggleShuffle')}
-          style={styles.icon}
         />
         <IconButton
           icon='skip-previous'
           size={48}
           onPress={playPreviousTrack}
           accessibilityLabel={t('playPrevious')}
-          style={styles.icon}
+          style={styles.innerIcon}
         />
         <IconButton
           icon={isPlayingOptimistic ? 'play-circle' : 'pause-circle'}
@@ -70,21 +69,20 @@ const PlayerControls = ({ songInfo }: PlayerControlsProps) => {
           animated
           onPress={handlePlayPause}
           accessibilityLabel={t(isPlayingOptimistic ? 'play' : 'pause')}
-          style={styles.icon}
+          style={styles.innerIcon}
         />
         <IconButton
           icon='skip-next'
           size={48}
           onPress={playNextTrack}
           accessibilityLabel={t('playNext')}
-          style={styles.icon}
+          style={styles.innerIcon}
         />
         <IconButton
           icon='repeat'
           size={32}
           onPress={switchRepeat}
           accessibilityLabel={t('switchRepeat')}
-          style={styles.icon}
         />
       </View>
     </>

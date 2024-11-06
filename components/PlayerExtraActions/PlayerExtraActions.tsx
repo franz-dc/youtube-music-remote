@@ -13,7 +13,8 @@ const styles = StyleSheet.create({
   actionsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginHorizontal: -12,
+    marginLeft: -12,
+    marginRight: -16,
   },
   stack: {
     flexDirection: 'row',
