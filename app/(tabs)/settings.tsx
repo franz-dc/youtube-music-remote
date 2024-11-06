@@ -1,24 +1,66 @@
 import { useTranslation } from 'react-i18next';
-import { Platform, ScrollView, StyleSheet, View } from 'react-native';
-import { Appbar, Text } from 'react-native-paper';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { Appbar, List, Switch } from 'react-native-paper';
+
+import { SettingsListItem, SettingsSubheader } from '@/components';
 
 const styles = StyleSheet.create({
-  scrollView: {
-    // @ts-ignore: ScrollView does not render a scrollbar on web
-    height: Platform.OS === 'web' ? 'calc(100vh - 144px)' : 'auto',
+  container: {
+    flex: 1,
   },
 });
 
 const Settings = () => {
-  const { t } = useTranslation('translation', { keyPrefix: 'settings' });
+  const { t, i18n } = useTranslation('translation', { keyPrefix: 'settings' });
 
   return (
-    <View>
+    <View style={styles.container}>
       <Appbar.Header>
         <Appbar.Content title={t('title')} />
       </Appbar.Header>
-      <ScrollView style={styles.scrollView}>
-        <Text>UNDER CONSTRUCTION</Text>
+      <ScrollView>
+        <List.Section>
+          <SettingsSubheader>{t('connection.title')}</SettingsSubheader>
+          <SettingsListItem
+            title={t('connection.host')}
+            description='-'
+            onPress={() => {}}
+          />
+          <SettingsListItem
+            title={t('connection.port')}
+            description='-'
+            onPress={() => {}}
+          />
+        </List.Section>
+        <List.Section>
+          <SettingsSubheader>{t('appearance.title')}</SettingsSubheader>
+          <SettingsListItem
+            title={t('appearance.theme')}
+            description='-'
+            onPress={() => {}}
+          />
+          <SettingsListItem
+            title={t('appearance.showAlbumArtColor')}
+            onPress={() => {}}
+            right={() => <Switch />}
+          />
+        </List.Section>
+        <List.Section>
+          <SettingsSubheader>{t('general.title')}</SettingsSubheader>
+          <SettingsListItem
+            title={t('general.language')}
+            description={t(`general.languages.${i18n.language}`)}
+            onPress={() => {}}
+          />
+        </List.Section>
+        <List.Section>
+          <SettingsSubheader>{t('advanced.title')}</SettingsSubheader>
+          <SettingsListItem
+            title={t('advanced.pollingRate')}
+            description='-'
+            onPress={() => {}}
+          />
+        </List.Section>
       </ScrollView>
     </View>
   );

@@ -22,6 +22,31 @@
     "nothingIsInQueue": "キューには何もありません"
   },
   "settings": {
-    "title": "設定"
+    "title": "設定",
+    "connection": {
+      "title": "接続",
+      "host": "ホスト",
+      "port": "ポート",
+      "connectionId": "接続ID"
+    },
+    "appearance": {
+      "title": "外観",
+      "theme": "テーマ",
+      "showAlbumArtColor": "アルバムアートの色を表示"
+    },
+    "general": {
+      "title": "一般",
+      "language": "言語",
+      "languages": {
+        "en": "英語",
+        "ja": "日本語"
+      }
+    },
+    "advanced": {
+      "title": "詳細",
+      "pollingRate": "ポーリングレート",
+      "seconds_one": "{{value}} 秒",
+      "seconds_other": "{{value}} 秒"
+    }
   }
 }

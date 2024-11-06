@@ -22,6 +22,31 @@
     "nothingIsInQueue": "Nothing is in queue"
   },
   "settings": {
-    "title": "Settings"
+    "title": "Settings",
+    "connection": {
+      "title": "Connection",
+      "host": "Host",
+      "port": "Port",
+      "connectionId": "Connection ID"
+    },
+    "appearance": {
+      "title": "Appearance",
+      "theme": "Theme",
+      "showAlbumArtColor": "Show album art color"
+    },
+    "general": {
+      "title": "General",
+      "language": "Language",
+      "languages": {
+        "en": "English",
+        "ja": "Japanese"
+      }
+    },
+    "advanced": {
+      "title": "Advanced",
+      "pollingRate": "Polling rate",
+      "seconds_one": "{{value}} second",
+      "seconds_other": "{{value}} seconds"
+    }
   }
 }
