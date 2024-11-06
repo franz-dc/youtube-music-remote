@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
     backgroundColor: DOMINANT_COLOR_FALLBACK,
   },
   container: {
-    position: 'relative',
     flex: 1,
     gap: 8,
     justifyContent: 'flex-end',
@@ -27,8 +26,14 @@ const styles = StyleSheet.create({
     margin: 'auto',
     // resizeMode: 'contain',
   },
+  titleAndControlsContainer: {
+    justifyContent: 'flex-end',
+  },
+  titleAndControlsContainerLandscape: {
+    flex: 1,
+  },
   titleContainer: {
-    marginBottom: 8,
+    marginBottom: 24,
   },
   title: {
     fontSize: 16 * 1.25,
@@ -91,16 +96,23 @@ const NowPlaying = () => {
             source={{ uri: songInfo.imageSrc }}
           />
         )}
-        <View style={styles.titleContainer}>
-          <Text numberOfLines={1} style={styles.title}>
-            {songInfo.title}
-          </Text>
-          <Text variant='bodyLarge' style={styles.artist}>
-            {songInfo.artist}
-          </Text>
+        <View
+          style={[
+            styles.titleAndControlsContainer,
+            height < 600 && styles.titleAndControlsContainerLandscape,
+          ]}
+        >
+          <View style={styles.titleContainer}>
+            <Text numberOfLines={1} style={styles.title}>
+              {songInfo.title}
+            </Text>
+            <Text variant='bodyLarge' style={styles.artist}>
+              {songInfo.artist}
+            </Text>
+          </View>
+          <PlayerControls songInfo={songInfo} />
+          <PlayerExtraActions />
         </View>
-        <PlayerControls songInfo={songInfo} />
-        <PlayerExtraActions />
       </SafeAreaView>
     </LinearGradient>
   );
