@@ -106,7 +106,7 @@ const NowPlaying = () => {
             <Text numberOfLines={1} style={styles.title}>
               {songInfo.title}
             </Text>
-            <Text variant='bodyLarge' style={styles.artist}>
+            <Text numberOfLines={1} variant='bodyLarge' style={styles.artist}>
               {songInfo.artist}
             </Text>
           </View>
