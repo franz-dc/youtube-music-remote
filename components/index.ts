@@ -1,4 +1,3 @@
-export { default as Container } from './Container';
 export { default as PlayerControls } from './PlayerControls';
 export { default as PlayerExtraActions } from './PlayerExtraActions';
 export { default as PlayerSeekBar } from './PlayerSeekBar';
