@@ -1,0 +1,27 @@
+{
+  "player": {
+    "title": "Player",
+    "seek": "Seek",
+    "play": "Play",
+    "pause": "Pause",
+    "playPrevious": "Play previous track",
+    "playNext": "Play next track",
+    "toggleShuffle": "Toggle shuffle",
+    "switchRepeat": "Switch between repeat modes",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "adjustVolume": "Adjust volume",
+    "enterFullScreen": "Enter full screen",
+    "exitFullScreen": "Exit full screen",
+    "nothingIsPlaying": "Nothing is playing"
+  },
+  "queue": {
+    "title": "Queue",
+    "unknownTitle": "Unknown title",
+    "unknownArtist": "Unknown artist",
+    "nothingIsInQueue": "Nothing is in queue"
+  },
+  "settings": {
+    "title": "Settings"
+  }
+}
