@@ -17,26 +17,22 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   isPlayingListItemContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    backgroundColor: '#ffffff0d',
   },
   albumArtContainer: {
     position: 'relative',
     width: 48,
     height: 48,
+    overflow: 'hidden',
+    backgroundColor: '#000000',
+    borderRadius: 4,
   },
   albumArt: {
-    position: 'relative',
-    borderRadius: 4,
     width: 48,
     height: 48,
   },
-  albumArtPlayingOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.85)',
+  albumArtPlaying: {
+    opacity: 0.15,
   },
   albumArtPlayingIcon: {
     position: 'absolute',
@@ -74,11 +70,13 @@ const SongListItem = ({ song }: SongListItemProps) => {
         isPlaying && styles.isPlayingListItemContainer,
       ]}
     >
-      <View>
-        <Image source={{ uri: smallestThumbnailUrl }} style={styles.albumArt} />
+      <View style={styles.albumArtContainer}>
+        <Image
+          source={{ uri: smallestThumbnailUrl }}
+          style={[styles.albumArt, isPlaying && styles.albumArtPlaying]}
+        />
         {isPlaying && (
           <>
-            <View style={styles.albumArtPlayingOverlay} />
             <View style={styles.albumArtPlayingIcon}>
               <Icon
                 source='equalizer'
