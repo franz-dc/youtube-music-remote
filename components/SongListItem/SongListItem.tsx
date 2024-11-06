@@ -21,14 +21,14 @@ const styles = StyleSheet.create({
   },
   albumArtContainer: {
     position: 'relative',
-    width: 40,
-    height: 40,
+    width: 48,
+    height: 48,
   },
   albumArt: {
     position: 'relative',
     borderRadius: 4,
-    width: 40,
-    height: 40,
+    width: 48,
+    height: 48,
   },
   albumArtPlayingOverlay: {
     position: 'absolute',
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     left: 0,
     bottom: 0,
     right: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.85)',
   },
   albumArtPlayingIcon: {
     position: 'absolute',
