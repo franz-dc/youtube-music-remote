@@ -1,8 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Appbar, List, Switch } from 'react-native-paper';
+import { Appbar, List } from 'react-native-paper';
 
 import { SettingsListItem, SettingsSubheader } from '@/components';
+import { useSettings } from '@/hooks';
 
 const styles = StyleSheet.create({
   container: {
@@ -11,7 +12,25 @@ const styles = StyleSheet.create({
 });
 
 const Settings = () => {
-  const { t, i18n } = useTranslation('translation', { keyPrefix: 'settings' });
+  const { t } = useTranslation('translation', { keyPrefix: 'settings' });
+
+  const { settings, setSetting } = useSettings();
+
+  if (!settings) return null;
+
+  const {
+    // connection
+    host,
+    port,
+    // appearance
+    theme,
+    showAlbumArtColor,
+    showLikeAndDislikeButtons,
+    showVolumeControl,
+    showFullScreenButton,
+    // general
+    language,
+  } = settings;
 
   return (
     <View style={styles.container}>
@@ -23,12 +42,15 @@ const Settings = () => {
           <SettingsSubheader>{t('connection.title')}</SettingsSubheader>
           <SettingsListItem
             title={t('connection.host')}
-            description='-'
+            value={host}
+            description={host || '-'}
+            type='text'
             onPress={() => {}}
           />
           <SettingsListItem
             title={t('connection.port')}
-            description='-'
+            value={port}
+            type='text'
             onPress={() => {}}
           />
         </List.Section>
@@ -36,28 +58,43 @@ const Settings = () => {
           <SettingsSubheader>{t('appearance.title')}</SettingsSubheader>
           <SettingsListItem
             title={t('appearance.theme')}
-            description='-'
+            value={theme}
+            description={t(`appearance.themes.${theme}`)}
+            type='text'
             onPress={() => {}}
           />
           <SettingsListItem
             title={t('appearance.showAlbumArtColor')}
-            onPress={() => {}}
-            right={() => <Switch />}
+            value={showAlbumArtColor}
+            type='switch'
+            onPress={(v) => setSetting('showAlbumArtColor', !v)}
+          />
+          <SettingsListItem
+            title={t('appearance.showLikeAndDislikeButtons')}
+            value={showLikeAndDislikeButtons}
+            type='switch'
+            onPress={(v) => setSetting('showLikeAndDislikeButtons', !v)}
+          />
+          <SettingsListItem
+            title={t('appearance.showVolumeControl')}
+            value={showVolumeControl}
+            type='switch'
+            onPress={(v) => setSetting('showVolumeControl', !v)}
+          />
+          <SettingsListItem
+            title={t('appearance.showFullScreenButton')}
+            value={showFullScreenButton}
+            type='switch'
+            onPress={(v) => setSetting('showFullScreenButton', !v)}
           />
         </List.Section>
         <List.Section>
           <SettingsSubheader>{t('general.title')}</SettingsSubheader>
           <SettingsListItem
             title={t('general.language')}
-            description={t(`general.languages.${i18n.language}`)}
-            onPress={() => {}}
-          />
-        </List.Section>
-        <List.Section>
-          <SettingsSubheader>{t('advanced.title')}</SettingsSubheader>
-          <SettingsListItem
-            title={t('advanced.pollingRate')}
-            description='-'
+            value={language}
+            description={t(`general.languages.${language}`)}
+            type='text'
             onPress={() => {}}
           />
         </List.Section>

@@ -9,6 +9,7 @@ import {
 import 'react-native-reanimated';
 import 'intl-pluralrules';
 import '@/i18n';
+import { SettingsProvider } from '@/contexts';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -17,10 +18,12 @@ const queryClient = new QueryClient();
 const RootLayout = () => (
   <QueryClientProvider client={queryClient}>
     <PaperProvider theme={DefaultTheme}>
-      <Stack>
-        <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
-        <Stack.Screen name='+not-found' options={{ headerShown: false }} />
-      </Stack>
+      <SettingsProvider>
+        <Stack>
+          <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+          <Stack.Screen name='+not-found' options={{ headerShown: false }} />
+        </Stack>
+      </SettingsProvider>
     </PaperProvider>
   </QueryClientProvider>
 );

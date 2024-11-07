@@ -32,12 +32,21 @@
     "appearance": {
       "title": "Appearance",
       "theme": "Theme",
-      "showAlbumArtColor": "Show album art color"
+      "themes": {
+        "system": "System theme",
+        "light": "Light",
+        "dark": "Dark"
+      },
+      "showAlbumArtColor": "Show album art color",
+      "showLikeAndDislikeButtons": "Show like and dislike buttons",
+      "showVolumeControl": "Show volume control",
+      "showFullScreenButton": "Show full screen button"
     },
     "general": {
       "title": "General",
       "language": "Language",
       "languages": {
+        "system": "System language",
         "en": "English",
         "ja": "Japanese"
       }

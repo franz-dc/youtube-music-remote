@@ -32,12 +32,21 @@
     "appearance": {
       "title": "外観",
       "theme": "テーマ",
-      "showAlbumArtColor": "アルバムアートの色を表示"
+      "themes": {
+        "system": "システムテーマ",
+        "light": "ライト",
+        "dark": "ダーク"
+      },
+      "showAlbumArtColor": "アルバムアートの色を表示",
+      "showLikeAndDislikeButtons": "好きと嫌いのボタンを表示",
+      "showVolumeControl": "音量コントロールを表示",
+      "showFullScreenButton": "全画面ボタンを表示"
     },
     "general": {
       "title": "一般",
       "language": "言語",
       "languages": {
+        "system": "システム言語",
         "en": "英語",
         "ja": "日本語"
       }

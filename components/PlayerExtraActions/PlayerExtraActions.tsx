@@ -6,7 +6,7 @@ import { Platform, StyleSheet, View } from 'react-native';
 import { IconButton, useTheme } from 'react-native-paper';
 
 import { SAFE_LOW_VOLUME } from '@/constants';
-import { useIsFullScreen, useSetFullScreen } from '@/hooks';
+import { useIsFullScreen, useSetFullScreen, useSettings } from '@/hooks';
 import { toggleDislikeSong, toggleLikeSong, updateVolume } from '@/services';
 
 const styles = StyleSheet.create({
@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
 const PlayerExtraActions = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'player' });
   const theme = useTheme();
+  const { settings } = useSettings();
 
   // Fullscreen state (optimistic)
   const [isFullScreen, setIsFullscreen] = useState(false);
@@ -97,46 +98,59 @@ const PlayerExtraActions = () => {
   return (
     <View style={styles.actionsContainer}>
       <View style={styles.stack}>
-        <IconButton
-          icon='thumb-up-outline'
-          size={20}
-          onPress={toggleLikeSong}
-          accessibilityLabel={t('like')}
-        />
-        <IconButton
-          icon='thumb-down-outline'
-          size={20}
-          onPress={toggleDislikeSong}
-          accessibilityLabel={t('dislike')}
-        />
+        {settings?.showLikeAndDislikeButtons && (
+          <>
+            <IconButton
+              icon='thumb-up-outline'
+              size={20}
+              onPress={toggleLikeSong}
+              accessibilityLabel={t('like')}
+            />
+            <IconButton
+              icon='thumb-down-outline'
+              size={20}
+              onPress={toggleDislikeSong}
+              accessibilityLabel={t('dislike')}
+            />
+          </>
+        )}
       </View>
       <View style={styles.stack}>
-        <View style={styles.volumeContainer}>
+        {settings?.showVolumeControl && (
+          <View style={styles.volumeContainer}>
+            <IconButton
+              icon={volumeIcon}
+              size={20}
+              onPress={toggleMute}
+              accessibilityLabel={t(isMuted ? 'unmute' : 'mute')}
+            />
+            <Slider
+              style={[
+                styles.volumeSlider,
+                !settings?.showFullScreenButton && {
+                  marginRight: Platform.OS === 'web' ? 16 : 0,
+                },
+              ]}
+              step={0.01}
+              minimumTrackTintColor='#ffffff'
+              thumbTintColor='#ffffff'
+              maximumTrackTintColor={theme.colors.inverseSurface}
+              value={isMuted ? 0 : volume}
+              onValueChange={(value) => setVolumeState(value)}
+              accessibilityLabel={t('adjustVolume')}
+            />
+          </View>
+        )}
+        {settings?.showFullScreenButton && (
           <IconButton
-            icon={volumeIcon}
+            icon={isFullScreen ? 'fullscreen-exit' : 'fullscreen'}
             size={20}
-            onPress={toggleMute}
-            accessibilityLabel={t(isMuted ? 'unmute' : 'mute')}
+            onPress={toggleFullScreen}
+            accessibilityLabel={t(
+              isFullScreen ? 'exitFullscreen' : 'enterFullscreen'
+            )}
           />
-          <Slider
-            style={styles.volumeSlider}
-            step={0.01}
-            minimumTrackTintColor='#ffffff'
-            thumbTintColor='#ffffff'
-            maximumTrackTintColor={theme.colors.inverseSurface}
-            value={isMuted ? 0 : volume}
-            onValueChange={(value) => setVolumeState(value)}
-            accessibilityLabel={t('adjustVolume')}
-          />
-        </View>
-        <IconButton
-          icon={isFullScreen ? 'fullscreen-exit' : 'fullscreen'}
-          size={20}
-          onPress={toggleFullScreen}
-          accessibilityLabel={t(
-            isFullScreen ? 'exitFullscreen' : 'enterFullscreen'
-          )}
-        />
+        )}
       </View>
     </View>
   );

@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { PlayerControls, PlayerExtraActions } from '@/components';
 import { DOMINANT_COLOR_FALLBACK } from '@/constants';
-import { useDominantColor, useNowPlaying } from '@/hooks';
+import { useDominantColor, useNowPlaying, useSettings } from '@/hooks';
 
 const styles = StyleSheet.create({
   linearGradient: {
@@ -50,6 +50,7 @@ const NowPlaying = () => {
   const { width, height } = useWindowDimensions();
   const albumArtWidth = Math.min(width - 64, height - 450);
 
+  const { settings } = useSettings();
   const { data: songInfo, isLoading, isError } = useNowPlaying();
 
   const { color: dominantColor, isBright: isDominantColorBright } =
@@ -61,7 +62,7 @@ const NowPlaying = () => {
     ? `${dominantColor}${isDominantColorBright ? '18' : '40'}`
     : DOMINANT_COLOR_FALLBACK;
 
-  if (isLoading)
+  if (isLoading || !settings)
     return (
       <SafeAreaView style={styles.container}>
         <ActivityIndicator animating size='large' />
@@ -76,7 +77,11 @@ const NowPlaying = () => {
 
   return (
     <LinearGradient
-      colors={[dominantColorGradientStart, dominantColorGradientEnd]}
+      colors={
+        settings.showAlbumArtColor
+          ? [dominantColorGradientStart, dominantColorGradientEnd]
+          : [DOMINANT_COLOR_FALLBACK, DOMINANT_COLOR_FALLBACK]
+      }
       style={styles.linearGradient}
     >
       <StatusBar style='light' />
