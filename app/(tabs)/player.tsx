@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const NowPlaying = () => {
+const Player = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'player' });
 
   const { width, height } = useWindowDimensions();
@@ -118,4 +118,4 @@ const NowPlaying = () => {
   );
 };
 
-export default NowPlaying;
+export default Player;
