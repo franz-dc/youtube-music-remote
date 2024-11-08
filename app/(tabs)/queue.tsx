@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { Appbar, Text } from 'react-native-paper';
 
-import { LoadingView, SongListItem } from '@/components';
+import { LoadingView, QueueListItem } from '@/components';
 import { useQueue } from '@/hooks/useQueue';
 
 const styles = StyleSheet.create({
@@ -34,7 +34,7 @@ const Queue = () => {
       <FlashList
         data={queue.items}
         renderItem={({ item }) => (
-          <SongListItem song={item.playlistPanelVideoRenderer} />
+          <QueueListItem song={item.playlistPanelVideoRenderer} />
         )}
         keyExtractor={(item) => item.playlistPanelVideoRenderer.videoId}
         estimatedItemSize={64}

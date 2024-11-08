@@ -18,5 +18,5 @@ export { default as SettingsSubheader } from './SettingsSubheader';
 
 export { default as Slider } from './Slider';
 
-export { default as SongListItem } from './SongListItem';
-export * from './SongListItem';
+export { default as QueueListItem } from './QueueListItem';
+export * from './QueueListItem';

@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const SongListItem = ({ song }: SongListItemProps) => {
+const QueueListItem = ({ song }: SongListItemProps) => {
   const theme = useTheme();
 
   const { t } = useTranslation('translation', { keyPrefix: 'queue' });
@@ -102,4 +102,4 @@ const SongListItem = ({ song }: SongListItemProps) => {
   );
 };
 
-export default SongListItem;
+export default QueueListItem;
