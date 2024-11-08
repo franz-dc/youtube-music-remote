@@ -50,7 +50,13 @@ const PlayerSeekBar = ({ songInfo, isPlaying }: PlayerSeekBarProps) => {
       // TODO: Remove line above and replace with the line below
       // Math.abs(clientElapsedSeconds - elapsedSeconds) > ELAPSED_SECONDS_INACCURACY_THRESHOLD
     ) {
-      setClientElapsedSeconds(songInfo.elapsedSeconds);
+      // If the song is paused/resumed, update the client elapsed seconds after
+      // a delay (due to race conditions with the server).
+      const timeout = setTimeout(() => {
+        setClientElapsedSeconds(songInfo.elapsedSeconds);
+      }, 1000);
+
+      return () => clearTimeout(timeout);
     }
   }, [
     songInfo,
