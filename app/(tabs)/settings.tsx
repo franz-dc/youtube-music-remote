@@ -27,35 +27,22 @@ const Settings = () => {
     keyof SettingsSchema | null
   >(null);
   const [selectedSettingValue, setSelectedSettingValue] = useState<string>('');
-
-  // Text settings
-  const [isDialogVisible, setIsDialogVisible] = useState(false);
+  const [isTextDialogVisible, setIsTextDialogVisible] = useState(false);
+  // const [isSelectDialogVisible, setIsSelectDialogVisible] = useState(false);
 
   const { settings, setSetting } = useSettings();
 
   if (!settings) return <LoadingView />;
 
-  const {
-    // connection
-    ipAddress,
-    port,
-    // appearance
-    theme,
-    showAlbumArtColor,
-    showLikeAndDislikeButtons,
-    showVolumeControl,
-    showFullScreenButton,
-    // general
-    language,
-  } = settings;
+  const { ipAddress, theme, language } = settings;
 
   const openTextDialog = (setting: keyof SettingsSchema) => {
     setSelectedSetting(setting);
     setSelectedSettingValue(settings[setting] as string);
-    setIsDialogVisible(true);
+    setIsTextDialogVisible(true);
   };
 
-  const closeTextDialog = () => setIsDialogVisible(false);
+  const closeTextDialog = () => setIsTextDialogVisible(false);
 
   return (
     <View style={styles.container}>
@@ -66,15 +53,15 @@ const Settings = () => {
         <List.Section>
           <SettingsSubheader>{t('connection.title')}</SettingsSubheader>
           <SettingsListItem
-            title={t('connection.ipAddress')}
-            value={ipAddress}
+            category='connection'
+            setting='ipAddress'
             description={ipAddress || '-'}
             type='text'
             onPress={() => openTextDialog('ipAddress')}
           />
           <SettingsListItem
-            title={t('connection.port')}
-            value={port}
+            category='connection'
+            setting='port'
             type='text'
             onPress={() => openTextDialog('port')}
           />
@@ -82,51 +69,47 @@ const Settings = () => {
         <List.Section>
           <SettingsSubheader>{t('appearance.title')}</SettingsSubheader>
           <SettingsListItem
-            title={t('appearance.theme')}
-            value={theme}
+            category='appearance'
+            setting='theme'
             description={t(`appearance.themes.${theme}`)}
-            type='text'
+            type='select'
             onPress={() => {}}
           />
           <SettingsListItem
-            title={t('appearance.showAlbumArtColor')}
-            value={showAlbumArtColor}
+            category='appearance'
+            setting='showAlbumArtColor'
             type='switch'
-            onPress={(v) => setSetting('showAlbumArtColor', !v)}
           />
           <SettingsListItem
-            title={t('appearance.showLikeAndDislikeButtons')}
-            value={showLikeAndDislikeButtons}
+            category='appearance'
+            setting='showLikeAndDislikeButtons'
             type='switch'
-            onPress={(v) => setSetting('showLikeAndDislikeButtons', !v)}
           />
           <SettingsListItem
-            title={t('appearance.showVolumeControl')}
-            value={showVolumeControl}
+            category='appearance'
+            setting='showVolumeControl'
             type='switch'
-            onPress={(v) => setSetting('showVolumeControl', !v)}
           />
           <SettingsListItem
-            title={t('appearance.showFullScreenButton')}
-            value={showFullScreenButton}
+            category='appearance'
+            setting='showFullScreenButton'
             type='switch'
-            onPress={(v) => setSetting('showFullScreenButton', !v)}
           />
         </List.Section>
         <List.Section>
           <SettingsSubheader>{t('general.title')}</SettingsSubheader>
           <SettingsListItem
-            title={t('general.language')}
-            value={language}
+            category='general'
+            setting='language'
             description={t(`general.languages.${language}`)}
-            type='text'
+            type='select'
             onPress={() => {}}
           />
         </List.Section>
       </ScrollView>
       {selectedSetting && (
         <TextDialog
-          visible={isDialogVisible}
+          visible={isTextDialogVisible}
           onDismiss={closeTextDialog}
           label={t(
             `${TEXT_SETTINGS[selectedSetting].category}.${selectedSetting}`
