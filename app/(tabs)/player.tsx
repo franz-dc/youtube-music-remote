@@ -2,10 +2,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, View, useWindowDimensions } from 'react-native';
-import { ActivityIndicator, Text } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { PlayerControls, PlayerExtraActions } from '@/components';
+import { LoadingView, PlayerControls, PlayerExtraActions } from '@/components';
 import { DOMINANT_COLOR_FALLBACK } from '@/constants';
 import { useDominantColor, useNowPlaying, useSettings } from '@/hooks';
 
@@ -62,12 +62,7 @@ const NowPlaying = () => {
     ? `${dominantColor}${isDominantColorBright ? '18' : '40'}`
     : DOMINANT_COLOR_FALLBACK;
 
-  if (isLoading || !settings)
-    return (
-      <SafeAreaView style={styles.container}>
-        <ActivityIndicator animating size='large' />
-      </SafeAreaView>
-    );
+  if (isLoading || !settings) return <LoadingView />;
 
   // TODO: Error UI
   if (isError) return <Text>Something went wrong</Text>;

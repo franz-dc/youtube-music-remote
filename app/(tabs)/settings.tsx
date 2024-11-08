@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Appbar, List } from 'react-native-paper';
 
-import { SettingsListItem, SettingsSubheader } from '@/components';
+import { LoadingView, SettingsListItem, SettingsSubheader } from '@/components';
 import { useSettings } from '@/hooks';
 
 const styles = StyleSheet.create({
@@ -16,7 +16,7 @@ const Settings = () => {
 
   const { settings, setSetting } = useSettings();
 
-  if (!settings) return null;
+  if (!settings) return <LoadingView />;
 
   const {
     // connection

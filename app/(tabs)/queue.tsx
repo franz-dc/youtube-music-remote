@@ -1,19 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { ActivityIndicator, Appbar, Text } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Appbar, Text } from 'react-native-paper';
 
-import { SongListItem } from '@/components';
+import { LoadingView, SongListItem } from '@/components';
 import { useQueue } from '@/hooks/useQueue';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  loadingView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
 
@@ -22,12 +16,7 @@ const Queue = () => {
 
   const { data: queue, isLoading, isError } = useQueue();
 
-  if (isLoading)
-    return (
-      <SafeAreaView style={styles.loadingView}>
-        <ActivityIndicator animating size='large' />
-      </SafeAreaView>
-    );
+  if (isLoading) return <LoadingView />;
 
   // TODO: Error UI
   if (isError) return <Text>Something went wrong</Text>;
