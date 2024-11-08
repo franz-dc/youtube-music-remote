@@ -11,6 +11,9 @@ export { default as PlayerExtraActions } from './PlayerExtraActions';
 export { default as PlayerSeekBar } from './PlayerSeekBar';
 export * from './PlayerSeekBar';
 
+export { default as SelectDialog } from './SelectDialog';
+export * from './SelectDialog';
+
 export { default as SettingsListItem } from './SettingsListItem';
 export * from './SettingsListItem';
 
