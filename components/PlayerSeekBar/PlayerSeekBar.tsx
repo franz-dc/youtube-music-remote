@@ -10,7 +10,7 @@ import { formatSecondsToDuration } from '@/utils';
 
 import Slider from '../Slider';
 
-type PlayerSeekBarProps = {
+export type PlayerSeekBarProps = {
   songInfo: NonNullable<SongInfoSchema>;
   isPlaying: boolean;
 };

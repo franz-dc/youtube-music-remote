@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   },
 });
 
-type SettingsListItemProps = ListItemProps & {
+export type SettingsListItemProps = ListItemProps & {
   type: 'switch' | 'text';
   value: string | boolean;
   onPress?: (value: any) => void | Promise<void>;

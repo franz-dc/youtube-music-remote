@@ -4,7 +4,7 @@ import { Icon, Text, useTheme } from 'react-native-paper';
 
 import { QueueSchema } from '@/schemas';
 
-type SongListItemProps = {
+export type SongListItemProps = {
   song: QueueSchema['items'][0]['playlistPanelVideoRenderer'];
 };
 

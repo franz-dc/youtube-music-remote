@@ -15,7 +15,7 @@ import {
 
 import PlayerSeekBar from '../PlayerSeekBar';
 
-type PlayerControlsProps = {
+export type PlayerControlsProps = {
   songInfo: NonNullable<SongInfoSchema>;
 };
 
