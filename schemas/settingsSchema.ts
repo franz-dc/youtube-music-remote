@@ -1,6 +1,6 @@
 export type SettingsSchema = {
   // connection
-  host: string;
+  ipAddress: string;
   port: string;
   // appearance
   theme: string;

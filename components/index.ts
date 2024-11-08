@@ -1,3 +1,6 @@
+export { default as TextDialog } from './TextDialog';
+export * from './TextDialog';
+
 export { default as LoadingView } from './LoadingView';
 
 export { default as PlayerControls } from './PlayerControls';

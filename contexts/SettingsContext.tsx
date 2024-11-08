@@ -50,7 +50,7 @@ export const SettingsProvider = ({ children }: PropsWithChildren) => {
 
       setSettings({
         // connection
-        host: parseText('host'),
+        ipAddress: parseText('ipAddress'),
         port: parseText('port'),
         // appearance
         theme: parseOption('theme'),

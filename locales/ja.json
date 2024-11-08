@@ -1,4 +1,9 @@
 {
+  "common": {
+    "ok": "OK",
+    "cancel": "キャンセル",
+    "required": "必須"
+  },
   "player": {
     "title": "プレーヤー",
     "seek": "シーク",
@@ -25,8 +30,11 @@
     "title": "設定",
     "connection": {
       "title": "接続",
-      "host": "ホスト",
+      "ipAddress": "IPアドレス",
+      "invalidIpAddress": "無効なIPアドレス",
       "port": "ポート",
+      "invalidPort": "ポートは数字である必要があります",
+      "invalidPortRange": "ポートは1から65535の間である必要があります",
       "connectionId": "接続ID"
     },
     "appearance": {

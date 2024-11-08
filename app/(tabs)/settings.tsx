@@ -1,9 +1,18 @@
+import { useState } from 'react';
+
 import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Appbar, List } from 'react-native-paper';
 
-import { LoadingView, SettingsListItem, SettingsSubheader } from '@/components';
+import {
+  LoadingView,
+  SettingsListItem,
+  SettingsSubheader,
+  TextDialog,
+} from '@/components';
+import { TEXT_SETTINGS } from '@/constants';
 import { useSettings } from '@/hooks';
+import { SettingsSchema } from '@/schemas';
 
 const styles = StyleSheet.create({
   container: {
@@ -14,13 +23,21 @@ const styles = StyleSheet.create({
 const Settings = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
 
+  const [selectedSetting, setSelectedSetting] = useState<
+    keyof SettingsSchema | null
+  >(null);
+  const [selectedSettingValue, setSelectedSettingValue] = useState<string>('');
+
+  // Text settings
+  const [isDialogVisible, setIsDialogVisible] = useState(false);
+
   const { settings, setSetting } = useSettings();
 
   if (!settings) return <LoadingView />;
 
   const {
     // connection
-    host,
+    ipAddress,
     port,
     // appearance
     theme,
@@ -32,6 +49,14 @@ const Settings = () => {
     language,
   } = settings;
 
+  const openTextDialog = (setting: keyof SettingsSchema) => {
+    setSelectedSetting(setting);
+    setSelectedSettingValue(settings[setting] as string);
+    setIsDialogVisible(true);
+  };
+
+  const closeTextDialog = () => setIsDialogVisible(false);
+
   return (
     <View style={styles.container}>
       <Appbar.Header>
@@ -41,17 +66,17 @@ const Settings = () => {
         <List.Section>
           <SettingsSubheader>{t('connection.title')}</SettingsSubheader>
           <SettingsListItem
-            title={t('connection.host')}
-            value={host}
-            description={host || '-'}
+            title={t('connection.ipAddress')}
+            value={ipAddress}
+            description={ipAddress || '-'}
             type='text'
-            onPress={() => {}}
+            onPress={() => openTextDialog('ipAddress')}
           />
           <SettingsListItem
             title={t('connection.port')}
             value={port}
             type='text'
-            onPress={() => {}}
+            onPress={() => openTextDialog('port')}
           />
         </List.Section>
         <List.Section>
@@ -99,6 +124,22 @@ const Settings = () => {
           />
         </List.Section>
       </ScrollView>
+      {selectedSetting && (
+        <TextDialog
+          visible={isDialogVisible}
+          onDismiss={closeTextDialog}
+          label={t(
+            `${TEXT_SETTINGS[selectedSetting].category}.${selectedSetting}`
+          )}
+          value={selectedSettingValue}
+          required={TEXT_SETTINGS[selectedSetting].required}
+          validation={TEXT_SETTINGS[selectedSetting].validation}
+          numeric={TEXT_SETTINGS[selectedSetting].numeric}
+          onSubmit={(value) => {
+            setSetting(selectedSetting as keyof SettingsSchema, value);
+          }}
+        />
+      )}
     </View>
   );
 };

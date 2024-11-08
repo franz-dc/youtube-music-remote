@@ -1,4 +1,9 @@
 {
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "required": "Required"
+  },
   "player": {
     "title": "Player",
     "seek": "Seek",
@@ -25,8 +30,11 @@
     "title": "Settings",
     "connection": {
       "title": "Connection",
-      "host": "Host",
+      "ipAddress": "IP Address",
+      "invalidIpAddress": "Invalid IP address",
       "port": "Port",
+      "invalidPort": "Port must be a number",
+      "invalidPortRange": "Port must be between 1 and 65535",
       "connectionId": "Connection ID"
     },
     "appearance": {
