@@ -1,5 +1,6 @@
+import { FlashList } from '@shopify/flash-list';
 import { useTranslation } from 'react-i18next';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Appbar, Text } from 'react-native-paper';
 
 import { LoadingView, SongListItem } from '@/components';
@@ -30,12 +31,14 @@ const Queue = () => {
       <Appbar.Header>
         <Appbar.Content title={t('title')} />
       </Appbar.Header>
-      <ScrollView>
-        {queue.items.map((item) => {
-          const song = item.playlistPanelVideoRenderer;
-          return <SongListItem key={song.videoId} song={song} />;
-        })}
-      </ScrollView>
+      <FlashList
+        data={queue.items}
+        renderItem={({ item }) => (
+          <SongListItem song={item.playlistPanelVideoRenderer} />
+        )}
+        keyExtractor={(item) => item.playlistPanelVideoRenderer.videoId}
+        estimatedItemSize={64}
+      />
     </View>
   );
 };
