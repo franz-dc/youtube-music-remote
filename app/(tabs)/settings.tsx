@@ -6,11 +6,12 @@ import { Appbar, List } from 'react-native-paper';
 
 import {
   LoadingView,
+  SelectDialog,
   SettingsListItem,
   SettingsSubheader,
   TextDialog,
 } from '@/components';
-import { TEXT_SETTINGS } from '@/constants';
+import { SELECT_SETTINGS, TEXT_SETTINGS } from '@/constants';
 import { useSettings } from '@/hooks';
 import { SettingsSchema } from '@/schemas';
 
@@ -26,9 +27,8 @@ const Settings = () => {
   const [selectedSetting, setSelectedSetting] = useState<
     keyof SettingsSchema | null
   >(null);
-  const [selectedSettingValue, setSelectedSettingValue] = useState<string>('');
   const [isTextDialogVisible, setIsTextDialogVisible] = useState(false);
-  // const [isSelectDialogVisible, setIsSelectDialogVisible] = useState(false);
+  const [isSelectDialogVisible, setIsSelectDialogVisible] = useState(false);
 
   const { settings, setSetting } = useSettings();
 
@@ -38,11 +38,17 @@ const Settings = () => {
 
   const openTextDialog = (setting: keyof SettingsSchema) => {
     setSelectedSetting(setting);
-    setSelectedSettingValue(settings[setting] as string);
     setIsTextDialogVisible(true);
   };
 
   const closeTextDialog = () => setIsTextDialogVisible(false);
+
+  const openSelectDialog = (setting: keyof SettingsSchema) => {
+    setSelectedSetting(setting);
+    setIsSelectDialogVisible(true);
+  };
+
+  const closeSelectDialog = () => setIsSelectDialogVisible(false);
 
   return (
     <View style={styles.container}>
@@ -73,7 +79,7 @@ const Settings = () => {
             setting='theme'
             description={t(`appearance.themes.${theme}`)}
             type='select'
-            onPress={() => {}}
+            onPress={() => openSelectDialog('theme')}
           />
           <SettingsListItem
             category='appearance'
@@ -103,24 +109,41 @@ const Settings = () => {
             setting='language'
             description={t(`general.languages.${language}`)}
             type='select'
-            onPress={() => {}}
+            onPress={() => openSelectDialog('language')}
           />
         </List.Section>
       </ScrollView>
-      {selectedSetting && (
+      {!!selectedSetting && !!TEXT_SETTINGS[selectedSetting] && (
         <TextDialog
           visible={isTextDialogVisible}
           onDismiss={closeTextDialog}
           label={t(
             `${TEXT_SETTINGS[selectedSetting].category}.${selectedSetting}`
           )}
-          value={selectedSettingValue}
+          value={settings[selectedSetting] as string}
           required={TEXT_SETTINGS[selectedSetting].required}
           validation={TEXT_SETTINGS[selectedSetting].validation}
           numeric={TEXT_SETTINGS[selectedSetting].numeric}
-          onSubmit={(value) => {
-            setSetting(selectedSetting as keyof SettingsSchema, value);
-          }}
+          onSubmit={(value) => setSetting(selectedSetting, value)}
+        />
+      )}
+      {!!selectedSetting && !!SELECT_SETTINGS[selectedSetting] && (
+        <SelectDialog
+          visible={isSelectDialogVisible}
+          onDismiss={closeSelectDialog}
+          label={t(
+            `${SELECT_SETTINGS[selectedSetting].category}.${selectedSetting}`
+          )}
+          value={settings[selectedSetting] as string}
+          options={SELECT_SETTINGS[selectedSetting].options.map((option) => ({
+            id: option,
+            label: t(
+              `${SELECT_SETTINGS[selectedSetting].category}.${
+                SELECT_SETTINGS[selectedSetting].optionI18nPrefix
+              }.${option}`
+            ),
+          }))}
+          onSubmit={(value) => setSetting(selectedSetting, value)}
         />
       )}
     </View>

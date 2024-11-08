@@ -72,6 +72,26 @@ export const TEXT_SETTINGS: Record<
   },
 };
 
+export const SELECT_SETTINGS: Record<
+  string,
+  {
+    category: string;
+    options: string[];
+    optionI18nPrefix: string;
+  }
+> = {
+  theme: {
+    category: 'appearance',
+    options: SETTINGS_OPTIONS.theme,
+    optionI18nPrefix: 'themes',
+  },
+  language: {
+    category: 'general',
+    options: SETTINGS_OPTIONS.language,
+    optionI18nPrefix: 'languages',
+  },
+};
+
 // App
 export const DOMINANT_COLOR_FALLBACK = '#000000';
 export const SAFE_LOW_VOLUME = 0.1;
