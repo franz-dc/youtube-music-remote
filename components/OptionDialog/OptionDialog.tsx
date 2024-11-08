@@ -45,7 +45,7 @@ export type SelectDialogProps = Omit<DialogProps, 'children'> & {
   onSubmit: (value: string) => void | Promise<void>;
 };
 
-const SelectDialog = ({
+const OptionDialog = ({
   label,
   value: initialValue,
   options,
@@ -97,4 +97,4 @@ const SelectDialog = ({
   );
 };
 
-export default SelectDialog;
+export default OptionDialog;

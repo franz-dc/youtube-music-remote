@@ -6,12 +6,12 @@ import { Appbar, List } from 'react-native-paper';
 
 import {
   LoadingView,
-  SelectDialog,
+  OptionDialog,
   SettingsListItem,
   SettingsSubheader,
   TextDialog,
 } from '@/components';
-import { SELECT_SETTINGS, TEXT_SETTINGS } from '@/constants';
+import { OPTION_SETTINGS, TEXT_SETTINGS } from '@/constants';
 import { useSettings } from '@/hooks';
 import { SettingsSchema } from '@/schemas';
 
@@ -127,19 +127,19 @@ const Settings = () => {
           onSubmit={(value) => setSetting(selectedSetting, value)}
         />
       )}
-      {!!selectedSetting && !!SELECT_SETTINGS[selectedSetting] && (
-        <SelectDialog
+      {!!selectedSetting && !!OPTION_SETTINGS[selectedSetting] && (
+        <OptionDialog
           visible={isSelectDialogVisible}
           onDismiss={closeSelectDialog}
           label={t(
-            `${SELECT_SETTINGS[selectedSetting].category}.${selectedSetting}`
+            `${OPTION_SETTINGS[selectedSetting].category}.${selectedSetting}`
           )}
           value={settings[selectedSetting] as string}
-          options={SELECT_SETTINGS[selectedSetting].options.map((option) => ({
+          options={OPTION_SETTINGS[selectedSetting].options.map((option) => ({
             id: option,
             label: t(
-              `${SELECT_SETTINGS[selectedSetting].category}.${
-                SELECT_SETTINGS[selectedSetting].optionI18nPrefix
+              `${OPTION_SETTINGS[selectedSetting].category}.${
+                OPTION_SETTINGS[selectedSetting].optionI18nPrefix
               }.${option}`
             ),
           }))}

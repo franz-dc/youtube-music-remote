@@ -72,7 +72,7 @@ export const TEXT_SETTINGS: Record<
   },
 };
 
-export const SELECT_SETTINGS: Record<
+export const OPTION_SETTINGS: Record<
   string,
   {
     category: string;
