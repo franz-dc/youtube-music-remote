@@ -74,4 +74,4 @@ export const TEXT_SETTINGS: Record<
 
 // App
 export const DOMINANT_COLOR_FALLBACK = '#000000';
-export const SAFE_LOW_VOLUME = 10;
+export const SAFE_LOW_VOLUME = 0.1;
