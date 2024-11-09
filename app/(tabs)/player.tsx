@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
   ConnectionError,
+  InfoView,
   LoadingView,
   PlayerControls,
   PlayerExtraActions,
@@ -80,7 +81,14 @@ const Player = () => {
 
   if (isError) return <ConnectionError type='serverError' onRetry={refetch} />;
 
-  if (!songInfo) return <Text>{t('nothingIsPlaying')}</Text>;
+  if (!songInfo)
+    return (
+      <InfoView
+        title={t('nothingIsPlaying')}
+        message={t('nothingIsPlayingMessage')}
+        icon='music-off'
+      />
+    );
 
   return (
     <LinearGradient
