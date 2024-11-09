@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
+import { StyleSheet } from 'react-native';
 import {
   Button,
   Dialog,
@@ -9,6 +10,12 @@ import {
   Portal,
   TextInput,
 } from 'react-native-paper';
+
+const styles = StyleSheet.create({
+  dialogContent: {
+    paddingBottom: 16,
+  },
+});
 
 export type TextDialogProps = Omit<DialogProps, 'children'> & {
   /**
@@ -83,7 +90,7 @@ const TextDialog = ({
     <Portal>
       <Dialog {...DialogProps} onDismiss={handleCancel}>
         <Dialog.Title>{label}</Dialog.Title>
-        <Dialog.Content>
+        <Dialog.Content style={styles.dialogContent}>
           <TextInput
             value={value}
             onChangeText={setValue}

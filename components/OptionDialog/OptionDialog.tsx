@@ -13,6 +13,7 @@ import {
 const styles = StyleSheet.create({
   dialogContent: {
     paddingHorizontal: 0,
+    paddingBottom: 8,
   },
   label: {
     marginLeft: 8,
