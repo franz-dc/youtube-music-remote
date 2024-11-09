@@ -97,6 +97,7 @@ const TextDialog = ({
             error={!!error}
             autoFocus
             inputMode={numeric ? 'numeric' : 'text'}
+            onSubmitEditing={handleOk}
           />
           {(error || helperText) && (
             <HelperText type={error ? 'error' : 'info'}>
