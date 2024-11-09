@@ -1,3 +1,9 @@
+export { default as ConnectionError } from './ConnectionError';
+export * from './ConnectionError';
+
+export { default as InfoView } from './InfoView';
+export * from './InfoView';
+
 export { default as TextDialog } from './TextDialog';
 export * from './TextDialog';
 
