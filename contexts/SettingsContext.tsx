@@ -1,11 +1,14 @@
 import { PropsWithChildren, createContext, useEffect, useState } from 'react';
 
+import RNLanguageDetector from '@os-team/i18next-react-native-language-detector';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SplashScreen } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 import { DEFAULT_SETTINGS, SETTINGS_KEYS, SETTINGS_OPTIONS } from '@/constants';
 import { SettingsSchema } from '@/schemas';
+
+const systemLanguage = RNLanguageDetector.detect() as string;
 
 export const SettingsContext = createContext<{
   settings: SettingsSchema;
@@ -22,10 +25,10 @@ export const SettingsProvider = ({ children }: PropsWithChildren) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (!isLoading) return;
+
     const fetchSettings = async () => {
       await SplashScreen.preventAutoHideAsync();
-
-      setIsLoading(true);
 
       const savedSettingsRes = await Promise.all(
         SETTINGS_KEYS.map((key) => AsyncStorage.getItem(key))
@@ -54,7 +57,7 @@ export const SettingsProvider = ({ children }: PropsWithChildren) => {
           ? (savedSettings[key] as string)
           : (DEFAULT_SETTINGS[key] as string);
 
-      setSettings({
+      const parsedSettings: SettingsSchema = {
         // connection
         ipAddress: parseText('ipAddress'),
         port: parseText('port'),
@@ -66,14 +69,31 @@ export const SettingsProvider = ({ children }: PropsWithChildren) => {
         showFullScreenButton: parseBoolean('showFullScreenButton'),
         // general
         language: parseOption('language'),
-      });
+      };
+
+      setSettings(parsedSettings);
+
+      i18n.changeLanguage(
+        parsedSettings.language === 'system'
+          ? systemLanguage
+          : parsedSettings.language
+      );
+
       setIsLoading(false);
 
       await SplashScreen.hideAsync();
     };
 
     fetchSettings();
-  }, [i18n.language]);
+  }, [isLoading, i18n]);
+
+  // update i18n language when language setting changes
+  useEffect(() => {
+    if (!settings) return;
+    i18n.changeLanguage(
+      settings.language === 'system' ? systemLanguage : settings.language
+    );
+  }, [settings, i18n]);
 
   // set setting optimistically, revert if failed
   const setSetting = (key: keyof SettingsSchema, value: string | boolean) => {

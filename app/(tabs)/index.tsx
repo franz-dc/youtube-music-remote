@@ -14,19 +14,19 @@ const TabLayout = () => {
   const [routes] = useState([
     {
       key: 'player',
-      title: t('player.title'),
+      title: 'player.title',
       focusedIcon: 'play',
       unfocusedIcon: 'play-outline',
     },
     {
       key: 'queue',
-      title: t('queue.title'),
+      title: 'queue.title',
       focusedIcon: 'playlist-music',
       unfocusedIcon: 'playlist-music-outline',
     },
     {
       key: 'settings',
-      title: t('settings.title'),
+      title: 'settings.title',
       focusedIcon: 'cog',
       unfocusedIcon: 'cog-outline',
     },
@@ -40,7 +40,10 @@ const TabLayout = () => {
 
   return (
     <BottomNavigation
-      navigationState={{ index, routes }}
+      navigationState={{
+        index,
+        routes: routes.map((route) => ({ ...route, title: t(route.title) })),
+      }}
       onIndexChange={setIndex}
       renderScene={renderScene}
       sceneAnimationEnabled
