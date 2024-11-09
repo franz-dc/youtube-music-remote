@@ -30,7 +30,8 @@
     "title": "Queue",
     "unknownTitle": "Unknown title",
     "unknownArtist": "Unknown artist",
-    "nothingIsInQueue": "Nothing is in queue"
+    "nothingIsInQueue": "Nothing is in queue",
+    "nothingIsInQueueMessage": "Play something on YouTube Music to see it here."
   },
   "settings": {
     "title": "Settings",

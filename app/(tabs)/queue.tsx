@@ -1,9 +1,14 @@
 import { FlashList } from '@shopify/flash-list';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
-import { Appbar, Text } from 'react-native-paper';
+import { Appbar } from 'react-native-paper';
 
-import { ConnectionError, LoadingView, QueueListItem } from '@/components';
+import {
+  ConnectionError,
+  InfoView,
+  LoadingView,
+  QueueListItem,
+} from '@/components';
 import { useQueue } from '@/hooks/useQueue';
 
 const styles = StyleSheet.create({
@@ -24,9 +29,14 @@ const Queue = () => {
 
   if (isError) return <ConnectionError type='serverError' onRetry={refetch} />;
 
-  // TODO: Empty state UI
   if (!queue || !queue.items?.length)
-    return <Text>{t('nothingIsInQueue')}</Text>;
+    return (
+      <InfoView
+        title={t('nothingIsInQueue')}
+        message={t('nothingIsInQueueMessage')}
+        icon='playlist-music'
+      />
+    );
 
   return (
     <View style={styles.container}>

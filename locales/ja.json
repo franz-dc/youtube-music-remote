@@ -30,7 +30,8 @@
     "title": "キュー",
     "unknownTitle": "不明なタイトル",
     "unknownArtist": "不明なアーティスト",
-    "nothingIsInQueue": "キューには何もありません"
+    "nothingIsInQueue": "キューには何もありません",
+    "nothingIsInQueueMessage": "ここに表示するには、YouTube Musicで何かを再生してください。"
   },
   "settings": {
     "title": "設定",
