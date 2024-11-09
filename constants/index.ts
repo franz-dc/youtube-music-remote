@@ -52,7 +52,10 @@ export const TEXT_SETTINGS: Record<
     category: 'connection',
     required: true,
     validation: (value) => {
-      if (!/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(value))
+      if (
+        !/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(value) &&
+        value !== 'localhost'
+      )
         return 'settings.connection.invalidIpAddress';
       return null;
     },
