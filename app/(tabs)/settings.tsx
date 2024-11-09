@@ -24,11 +24,11 @@ const styles = StyleSheet.create({
 const Settings = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
 
-  const [selectedSetting, setSelectedSetting] = useState<
-    keyof SettingsSchema | null
-  >(null);
+  const [settingKey, setSettingKey] = useState<keyof SettingsSchema | null>(
+    null
+  );
   const [isTextDialogVisible, setIsTextDialogVisible] = useState(false);
-  const [isSelectDialogVisible, setIsSelectDialogVisible] = useState(false);
+  const [isOptionDialogVisible, setIsOptionDialogVisible] = useState(false);
 
   const { settings, setSetting } = useSettings();
 
@@ -36,19 +36,29 @@ const Settings = () => {
 
   const { ipAddress, theme, language } = settings;
 
+  const textSetting =
+    !!settingKey && !!TEXT_SETTINGS[settingKey]
+      ? TEXT_SETTINGS[settingKey]
+      : null;
+
+  const optionSetting =
+    !!settingKey && !!OPTION_SETTINGS[settingKey]
+      ? OPTION_SETTINGS[settingKey]
+      : null;
+
   const openTextDialog = (setting: keyof SettingsSchema) => {
-    setSelectedSetting(setting);
+    setSettingKey(setting);
     setIsTextDialogVisible(true);
   };
 
   const closeTextDialog = () => setIsTextDialogVisible(false);
 
-  const openSelectDialog = (setting: keyof SettingsSchema) => {
-    setSelectedSetting(setting);
-    setIsSelectDialogVisible(true);
+  const openOptionDialog = (setting: keyof SettingsSchema) => {
+    setSettingKey(setting);
+    setIsOptionDialogVisible(true);
   };
 
-  const closeSelectDialog = () => setIsSelectDialogVisible(false);
+  const closeOptionDialog = () => setIsOptionDialogVisible(false);
 
   return (
     <View style={styles.container}>
@@ -79,7 +89,7 @@ const Settings = () => {
             setting='theme'
             description={t(`appearance.themes.${theme}`)}
             type='select'
-            onPress={() => openSelectDialog('theme')}
+            onPress={() => openOptionDialog('theme')}
           />
           <SettingsListItem
             category='appearance'
@@ -109,43 +119,47 @@ const Settings = () => {
             setting='language'
             description={t(`general.languages.${language}`)}
             type='select'
-            onPress={() => openSelectDialog('language')}
+            onPress={() => openOptionDialog('language')}
           />
         </List.Section>
       </ScrollView>
-      {!!selectedSetting && !!TEXT_SETTINGS[selectedSetting] && (
-        <TextDialog
-          visible={isTextDialogVisible}
-          onDismiss={closeTextDialog}
-          label={t(
-            `${TEXT_SETTINGS[selectedSetting].category}.${selectedSetting}`
-          )}
-          value={settings[selectedSetting] as string}
-          required={TEXT_SETTINGS[selectedSetting].required}
-          validation={TEXT_SETTINGS[selectedSetting].validation}
-          numeric={TEXT_SETTINGS[selectedSetting].numeric}
-          onSubmit={(value) => setSetting(selectedSetting, value)}
-        />
-      )}
-      {!!selectedSetting && !!OPTION_SETTINGS[selectedSetting] && (
-        <OptionDialog
-          visible={isSelectDialogVisible}
-          onDismiss={closeSelectDialog}
-          label={t(
-            `${OPTION_SETTINGS[selectedSetting].category}.${selectedSetting}`
-          )}
-          value={settings[selectedSetting] as string}
-          options={OPTION_SETTINGS[selectedSetting].options.map((option) => ({
-            id: option,
-            label: t(
-              `${OPTION_SETTINGS[selectedSetting].category}.${
-                OPTION_SETTINGS[selectedSetting].optionI18nPrefix
-              }.${option}`
-            ),
-          }))}
-          onSubmit={(value) => setSetting(selectedSetting, value)}
-        />
-      )}
+      <TextDialog
+        visible={!!textSetting && isTextDialogVisible}
+        onDismiss={closeTextDialog}
+        label={textSetting ? t(`${textSetting.category}.${settingKey}`) : ''}
+        value={settingKey ? (settings[settingKey] as string) : ''}
+        required={textSetting ? textSetting.required : false}
+        validation={textSetting ? textSetting.validation : undefined}
+        numeric={textSetting ? textSetting.numeric : false}
+        onSubmit={(value) => {
+          if (!settingKey) return;
+          setSetting(settingKey, value);
+        }}
+      />
+      <OptionDialog
+        visible={!!optionSetting && isOptionDialogVisible}
+        onDismiss={closeOptionDialog}
+        label={
+          optionSetting ? t(`${optionSetting.category}.${settingKey}`) : ''
+        }
+        value={settingKey ? (settings[settingKey] as string) : ''}
+        options={
+          optionSetting
+            ? optionSetting.options.map((option) => ({
+                id: option,
+                label: t(
+                  `${optionSetting.category}.${
+                    optionSetting.optionI18nPrefix
+                  }.${option}`
+                ),
+              }))
+            : []
+        }
+        onSubmit={(value) => {
+          if (!settingKey) return;
+          setSetting(settingKey, value);
+        }}
+      />
     </View>
   );
 };
