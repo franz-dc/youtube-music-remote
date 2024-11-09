@@ -5,7 +5,6 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { Appbar, List } from 'react-native-paper';
 
 import {
-  LoadingView,
   OptionDialog,
   SettingsListItem,
   SettingsSubheader,
@@ -31,8 +30,6 @@ const Settings = () => {
   const [isOptionDialogVisible, setIsOptionDialogVisible] = useState(false);
 
   const { settings, setSetting } = useSettings();
-
-  if (!settings) return <LoadingView />;
 
   const { ipAddress, theme, language } = settings;
 

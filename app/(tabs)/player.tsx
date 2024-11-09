@@ -62,7 +62,7 @@ const Player = () => {
     ? `${dominantColor}${isDominantColorBright ? '18' : '40'}`
     : DOMINANT_COLOR_FALLBACK;
 
-  if (isLoading || !settings) return <LoadingView />;
+  if (isLoading) return <LoadingView />;
 
   // TODO: Error UI
   if (isError) return <Text>Something went wrong</Text>;

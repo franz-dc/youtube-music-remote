@@ -42,15 +42,13 @@ const SettingsListItem = ({
 
   const { settings, setSetting } = useSettings();
 
-  const value = settings![setting];
+  const value = settings[setting];
 
   return (
     <List.Item
       {...rest}
       title={title || t(`${category}.${setting}`)}
-      description={
-        description || (type !== 'switch' ? settings![setting] : undefined)
-      }
+      description={description || (type !== 'switch' ? value : undefined)}
       right={() =>
         type === 'switch' && shouldRenderSwitch ? (
           <Switch

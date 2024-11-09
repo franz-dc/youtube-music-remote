@@ -98,7 +98,7 @@ const PlayerExtraActions = () => {
   return (
     <View style={styles.actionsContainer}>
       <View style={styles.stack}>
-        {settings?.showLikeAndDislikeButtons && (
+        {settings.showLikeAndDislikeButtons && (
           <>
             <IconButton
               icon='thumb-up-outline'
@@ -116,7 +116,7 @@ const PlayerExtraActions = () => {
         )}
       </View>
       <View style={styles.stack}>
-        {settings?.showVolumeControl && (
+        {settings.showVolumeControl && (
           <View style={styles.volumeContainer}>
             <IconButton
               icon={volumeIcon}
@@ -127,7 +127,7 @@ const PlayerExtraActions = () => {
             <Slider
               style={[
                 styles.volumeSlider,
-                !settings?.showFullScreenButton && {
+                !settings.showFullScreenButton && {
                   marginRight: Platform.OS === 'web' ? 16 : 0,
                 },
               ]}
@@ -141,7 +141,7 @@ const PlayerExtraActions = () => {
             />
           </View>
         )}
-        {settings?.showFullScreenButton && (
+        {settings.showFullScreenButton && (
           <IconButton
             icon={isFullScreen ? 'fullscreen-exit' : 'fullscreen'}
             size={20}

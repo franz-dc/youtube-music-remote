@@ -1,6 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
+import { SplashScreen, Stack } from 'expo-router';
 import {
   MD3DarkTheme as DefaultTheme,
   PaperProvider,
@@ -16,16 +15,16 @@ SplashScreen.preventAutoHideAsync();
 const queryClient = new QueryClient();
 
 const RootLayout = () => (
-  <QueryClientProvider client={queryClient}>
-    <PaperProvider theme={DefaultTheme}>
-      <SettingsProvider>
+  <SettingsProvider>
+    <QueryClientProvider client={queryClient}>
+      <PaperProvider theme={DefaultTheme}>
         <Stack>
           <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
           <Stack.Screen name='+not-found' options={{ headerShown: false }} />
         </Stack>
-      </SettingsProvider>
-    </PaperProvider>
-  </QueryClientProvider>
+      </PaperProvider>
+    </QueryClientProvider>
+  </SettingsProvider>
 );
 
 export default RootLayout;
