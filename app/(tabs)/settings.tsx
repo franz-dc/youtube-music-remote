@@ -73,13 +73,13 @@ const Settings = () => {
             setting='ipAddress'
             description={ipAddress || '-'}
             type='text'
-            onPress={() => openTextDialog('ipAddress')}
+            onPress={openTextDialog}
           />
           <SettingsListItem
             category='connection'
             setting='port'
             type='text'
-            onPress={() => openTextDialog('port')}
+            onPress={openTextDialog}
           />
         </List.Section>
         <List.Section>
@@ -89,7 +89,7 @@ const Settings = () => {
             setting='theme'
             description={t(`appearance.themes.${theme}`)}
             type='select'
-            onPress={() => openOptionDialog('theme')}
+            onPress={openOptionDialog}
           />
           <SettingsListItem
             category='appearance'
@@ -119,7 +119,7 @@ const Settings = () => {
             setting='language'
             description={t(`general.languages.${language}`)}
             type='select'
-            onPress={() => openOptionDialog('language')}
+            onPress={openOptionDialog}
           />
         </List.Section>
       </ScrollView>

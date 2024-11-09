@@ -14,13 +14,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export type SettingsListItemProps = Omit<ListItemProps, 'title'> & {
+export type SettingsListItemProps = Omit<ListItemProps, 'title' | 'onPress'> & {
   category: string;
   setting: keyof SettingsSchema;
   type: 'switch' | 'text' | 'select';
   // value: string | boolean;
   title?: string;
-  onPress?: (value: any) => void | Promise<void>;
+  onPress?: (setting: keyof SettingsSchema) => void | Promise<void>;
 };
 
 const SettingsListItem = ({
@@ -60,7 +60,7 @@ const SettingsListItem = ({
         ) : undefined
       }
       onPress={() =>
-        type === 'switch' ? setSetting(setting, !value) : onPress?.(value)
+        type === 'switch' ? setSetting(setting, !value) : onPress?.(setting)
       }
       style={styles.listItem}
       descriptionStyle={styles.description}
