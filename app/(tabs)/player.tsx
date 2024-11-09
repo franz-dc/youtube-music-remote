@@ -1,11 +1,15 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { LoadingView, PlayerControls, PlayerExtraActions } from '@/components';
+import {
+  ConnectionError,
+  LoadingView,
+  PlayerControls,
+  PlayerExtraActions,
+} from '@/components';
 import { DOMINANT_COLOR_FALLBACK } from '@/constants';
 import { useDominantColor, useNowPlaying, useSettings } from '@/hooks';
 
@@ -51,7 +55,14 @@ const Player = () => {
   const albumArtWidth = Math.min(width - 64, height - 450);
 
   const { settings } = useSettings();
-  const { data: songInfo, isLoading, isError } = useNowPlaying();
+
+  const {
+    data: songInfo,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useNowPlaying();
 
   const { color: dominantColor, isBright: isDominantColorBright } =
     useDominantColor(songInfo?.imageSrc);
@@ -62,12 +73,13 @@ const Player = () => {
     ? `${dominantColor}${isDominantColorBright ? '18' : '40'}`
     : DOMINANT_COLOR_FALLBACK;
 
+  if (error?.message === 'Network Error')
+    return <ConnectionError type='noConnection' onRetry={refetch} />;
+
   if (isLoading) return <LoadingView />;
 
-  // TODO: Error UI
-  if (isError) return <Text>Something went wrong</Text>;
+  if (isError) return <ConnectionError type='serverError' onRetry={refetch} />;
 
-  // TODO: Empty state UI
   if (!songInfo) return <Text>{t('nothingIsPlaying')}</Text>;
 
   return (
@@ -79,7 +91,6 @@ const Player = () => {
       }
       style={styles.linearGradient}
     >
-      <StatusBar style='light' />
       <SafeAreaView style={styles.container}>
         {songInfo.imageSrc && (
           <Image

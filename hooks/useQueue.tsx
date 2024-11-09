@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getQueue } from '@/services';
 
+import { useSettings } from './useSettings';
+
 /**
  * Fetches the current queue of songs.
  * The queue cache is re-fetched on song change.
@@ -9,8 +11,17 @@ import { getQueue } from '@/services';
  * Song info is not polled here as `BottomNavigation` keeps the player
  * screen (with `useNowPlaying`) rendered.
  */
-export const useQueue = () =>
-  useQuery({
+export const useQueue = () => {
+  const { settings } = useSettings();
+
+  const enabled = !!settings.ipAddress && !!settings.port;
+
+  const useQueryResult = useQuery({
     queryKey: ['queue'],
     queryFn: getQueue,
+    retry: false,
+    enabled,
   });
+
+  return useQueryResult;
+};

@@ -8,6 +8,9 @@ const API_URL = `${HOST}/api/${API_VERSION}`;
 
 axios.defaults.baseURL = API_URL;
 
+// explicitly set the timeout to 5s due to React Native not failing requests
+axios.defaults.timeout = 5000;
+
 const authenticate = async () => {
   const { data } = await axios.post<{ accessToken: string }>(`${HOST}/auth/1`);
   await AsyncStorage.setItem('accessToken', data.accessToken);

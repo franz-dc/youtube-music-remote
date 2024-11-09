@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SplashScreen, Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import {
   MD3DarkTheme as DefaultTheme,
   PaperProvider,
@@ -18,6 +19,7 @@ const RootLayout = () => (
   <SettingsProvider>
     <QueryClientProvider client={queryClient}>
       <PaperProvider theme={DefaultTheme}>
+        <StatusBar style='light' />
         <Stack>
           <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
           <Stack.Screen name='+not-found' options={{ headerShown: false }} />

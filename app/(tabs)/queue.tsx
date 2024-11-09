@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { Appbar, Text } from 'react-native-paper';
 
-import { LoadingView, QueueListItem } from '@/components';
+import { ConnectionError, LoadingView, QueueListItem } from '@/components';
 import { useQueue } from '@/hooks/useQueue';
 
 const styles = StyleSheet.create({
@@ -15,12 +15,14 @@ const styles = StyleSheet.create({
 const Queue = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'queue' });
 
-  const { data: queue, isLoading, isError } = useQueue();
+  const { data: queue, isLoading, isError, error, refetch } = useQueue();
+
+  if (error?.message === 'Network Error')
+    return <ConnectionError type='noConnection' onRetry={refetch} />;
 
   if (isLoading) return <LoadingView />;
 
-  // TODO: Error UI
-  if (isError) return <Text>Something went wrong</Text>;
+  if (isError) return <ConnectionError type='serverError' onRetry={refetch} />;
 
   // TODO: Empty state UI
   if (!queue || !queue.items?.length)

@@ -2,7 +2,12 @@
   "common": {
     "ok": "OK",
     "cancel": "キャンセル",
-    "required": "必須"
+    "required": "必須",
+    "retry": "再試行",
+    "cantConnectToServer": "サーバーに接続できません",
+    "noConnectionMessage": "接続設定を確認するか、サーバーが実行されているかどうかを確認してください。",
+    "somethingWentWrong": "問題が発生しました",
+    "serverError": "問題が解決しない場合は、再試行するか、YouTube Musicを再起動してください。"
   },
   "player": {
     "title": "プレーヤー",
@@ -18,7 +23,8 @@
     "switchRepeat": "リピートモードを切り替え",
     "enterFullScreen": "全画面表示",
     "exitFullScreen": "全画面を終了",
-    "nothingIsPlaying": "再生中の曲はありません"
+    "nothingIsPlaying": "再生中の曲はありません",
+    "nothingIsPlayingMessage": "ここからコントロールするには、YouTube Musicで何かを再生してください。"
   },
   "queue": {
     "title": "キュー",

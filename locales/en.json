@@ -2,7 +2,12 @@
   "common": {
     "ok": "OK",
     "cancel": "Cancel",
-    "required": "Required"
+    "required": "Required",
+    "retry": "Retry",
+    "cantConnectToServer": "Can't connect to server",
+    "noConnectionMessage": "Please check your connection settings or check if the server is running.",
+    "somethingWentWrong": "Something went wrong",
+    "serverError": "Press retry or restart YouTube Music if the problem persists."
   },
   "player": {
     "title": "Player",
@@ -18,7 +23,8 @@
     "adjustVolume": "Adjust volume",
     "enterFullScreen": "Enter full screen",
     "exitFullScreen": "Exit full screen",
-    "nothingIsPlaying": "Nothing is playing"
+    "nothingIsPlaying": "Nothing is playing",
+    "nothingIsPlayingMessage": "Play something on YouTube Music to control it from here."
   },
   "queue": {
     "title": "Queue",
