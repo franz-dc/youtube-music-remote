@@ -47,8 +47,9 @@ export const useNowPlaying = () => {
 
   // Refetch the queue when the song changes
   useEffect(() => {
+    if (!enabled) return;
     refetchQueue();
-  }, [currentSongId, refetchQueue]);
+  }, [currentSongId, refetchQueue, enabled]);
 
   return useQueryResult;
 };
