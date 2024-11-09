@@ -88,7 +88,7 @@ const Settings = () => {
             category='appearance'
             setting='theme'
             description={t(`appearance.themes.${theme}`)}
-            type='select'
+            type='option'
             onPress={openOptionDialog}
           />
           <SettingsListItem
@@ -118,7 +118,7 @@ const Settings = () => {
             category='general'
             setting='language'
             description={t(`general.languages.${language}`)}
-            type='select'
+            type='option'
             onPress={openOptionDialog}
           />
         </List.Section>

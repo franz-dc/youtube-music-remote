@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 export type SettingsListItemProps = Omit<ListItemProps, 'title' | 'onPress'> & {
   category: string;
   setting: keyof SettingsSchema;
-  type: 'switch' | 'text' | 'select';
+  type: 'switch' | 'text' | 'option';
   // value: string | boolean;
   title?: string;
   onPress?: (setting: keyof SettingsSchema) => void | Promise<void>;
