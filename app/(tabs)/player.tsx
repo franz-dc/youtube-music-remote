@@ -1,7 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, View, useWindowDimensions } from 'react-native';
-import { Text } from 'react-native-paper';
+import { Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
@@ -17,7 +17,6 @@ import { useDominantColor, useNowPlaying, useSettings } from '@/hooks';
 const styles = StyleSheet.create({
   linearGradient: {
     height: '100%',
-    backgroundColor: DOMINANT_COLOR_FALLBACK,
   },
   container: {
     flex: 1,
@@ -50,6 +49,10 @@ const styles = StyleSheet.create({
 });
 
 const Player = () => {
+  const theme = useTheme();
+  const backgroundColor =
+    DOMINANT_COLOR_FALLBACK[theme.dark ? 'dark' : 'light'];
+
   const { t } = useTranslation('translation', { keyPrefix: 'player' });
 
   const { width, height } = useWindowDimensions();
@@ -65,14 +68,15 @@ const Player = () => {
     refetch,
   } = useNowPlaying();
 
+  // TODO: Use right gradient colors for light theme
   const { color: dominantColor, isBright: isDominantColorBright } =
     useDominantColor(songInfo?.imageSrc);
   const dominantColorGradientStart = dominantColor
     ? `${dominantColor}${isDominantColorBright ? '50' : 'ff'}`
-    : DOMINANT_COLOR_FALLBACK;
+    : backgroundColor;
   const dominantColorGradientEnd = dominantColor
     ? `${dominantColor}${isDominantColorBright ? '18' : '40'}`
-    : DOMINANT_COLOR_FALLBACK;
+    : backgroundColor;
 
   if (error?.message === 'Network Error')
     return <ConnectionError type='noConnection' onRetry={refetch} />;
@@ -95,9 +99,9 @@ const Player = () => {
       colors={
         settings.showAlbumArtColor
           ? [dominantColorGradientStart, dominantColorGradientEnd]
-          : [DOMINANT_COLOR_FALLBACK, DOMINANT_COLOR_FALLBACK]
+          : [backgroundColor, backgroundColor]
       }
-      style={styles.linearGradient}
+      style={[styles.linearGradient, { backgroundColor }]}
     >
       <SafeAreaView style={styles.container}>
         {songInfo.imageSrc && (

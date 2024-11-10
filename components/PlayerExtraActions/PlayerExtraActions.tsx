@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 
-import Slider from '@react-native-community/slider';
 import { useTranslation } from 'react-i18next';
 import { Platform, StyleSheet, View } from 'react-native';
-import { IconButton, useTheme } from 'react-native-paper';
+import { IconButton } from 'react-native-paper';
 
 import { SAFE_LOW_VOLUME } from '@/constants';
 import { useIsFullScreen, useSetFullScreen, useSettings } from '@/hooks';
 import { toggleDislikeSong, toggleLikeSong, updateVolume } from '@/services';
+
+import Slider from '../Slider';
 
 const styles = StyleSheet.create({
   actionsContainer: {
@@ -25,13 +26,11 @@ const styles = StyleSheet.create({
   },
   volumeSlider: {
     width: 100,
-    marginHorizontal: Platform.OS === 'web' ? 0 : -16,
   },
 });
 
 const PlayerExtraActions = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'player' });
-  const theme = useTheme();
   const { settings } = useSettings();
 
   // Fullscreen state (optimistic)
@@ -132,9 +131,6 @@ const PlayerExtraActions = () => {
                 },
               ]}
               step={0.01}
-              minimumTrackTintColor='#ffffff'
-              thumbTintColor='#ffffff'
-              maximumTrackTintColor={theme.colors.inverseSurface}
               value={isMuted ? 0 : volume}
               onValueChange={(value) => setVolumeState(value)}
               accessibilityLabel={t('adjustVolume')}

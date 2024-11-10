@@ -3,11 +3,14 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BottomNavigation } from 'react-native-paper';
 
+import { useSettings } from '@/hooks';
+
 import Player from './player';
 import Queue from './queue';
 import Settings from './settings';
 
 const TabLayout = () => {
+  const { settings } = useSettings();
   const { t } = useTranslation();
 
   const [index, setIndex] = useState(0);
@@ -47,6 +50,9 @@ const TabLayout = () => {
       onIndexChange={setIndex}
       renderScene={renderScene}
       sceneAnimationEnabled
+      barStyle={
+        settings.theme === 'black' ? { backgroundColor: '#000000' } : undefined
+      }
       // sceneAnimationType='shifting'
     />
   );

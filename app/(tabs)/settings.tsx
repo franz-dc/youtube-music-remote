@@ -90,6 +90,12 @@ const Settings = () => {
           />
           <SettingsListItem
             category='appearance'
+            setting='useMaterialYouColors'
+            type='switch'
+            description={t('appearance.useMaterialYouColorsDescription')}
+          />
+          <SettingsListItem
+            category='appearance'
             setting='showAlbumArtColor'
             type='switch'
           />

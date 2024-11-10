@@ -50,8 +50,11 @@
       "themes": {
         "system": "システムテーマ",
         "light": "ライト",
-        "dark": "ダーク"
+        "dark": "ダーク",
+        "black": "ブラック"
       },
+      "useMaterialYouColors": "Material Youの色を使用",
+      "useMaterialYouColorsDescription": "Android 12以降に適用されます",
       "showAlbumArtColor": "アルバムアートの色を表示",
       "showLikeAndDislikeButtons": "好きと嫌いのボタンを表示",
       "showVolumeControl": "音量コントロールを表示",

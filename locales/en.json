@@ -50,8 +50,11 @@
       "themes": {
         "system": "System theme",
         "light": "Light",
-        "dark": "Dark"
+        "dark": "Dark",
+        "black": "Black"
       },
+      "useMaterialYouColors": "Use Material You colors",
+      "useMaterialYouColorsDescription": "Applies to Android 12 and later",
       "showAlbumArtColor": "Show album art color",
       "showLikeAndDislikeButtons": "Show like and dislike buttons",
       "showVolumeControl": "Show volume control",

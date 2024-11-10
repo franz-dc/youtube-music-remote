@@ -1,14 +1,20 @@
 import { PropsWithChildren, createContext, useEffect, useState } from 'react';
 
 import RNLanguageDetector from '@os-team/i18next-react-native-language-detector';
+import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SplashScreen } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
+import { Appearance } from 'react-native';
+import { MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
+import { ThemeProp } from 'react-native-paper/lib/typescript/types';
 
 import { DEFAULT_SETTINGS, SETTINGS_KEYS, SETTINGS_OPTIONS } from '@/constants';
 import { SettingsSchema } from '@/schemas';
 
 const systemLanguage = RNLanguageDetector.detect() as string;
+const systemColorScheme = Appearance.getColorScheme() || 'dark';
 
 export const SettingsContext = createContext<{
   settings: SettingsSchema;
@@ -23,6 +29,42 @@ export const SettingsProvider = ({ children }: PropsWithChildren) => {
 
   const [settings, setSettings] = useState<SettingsSchema | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const { theme: systemDynamicTheme } = useMaterial3Theme();
+
+  const baseThemes: Record<
+    Exclude<(typeof SETTINGS_OPTIONS)['theme'][number], 'system'>,
+    ThemeProp
+  > = {
+    light: {
+      ...MD3LightTheme,
+      colors: settings?.useMaterialYouColors
+        ? systemDynamicTheme.light
+        : MD3LightTheme.colors,
+    },
+    dark: {
+      ...MD3DarkTheme,
+      colors: settings?.useMaterialYouColors
+        ? systemDynamicTheme.dark
+        : MD3DarkTheme.colors,
+    },
+    black: {
+      ...MD3DarkTheme,
+      colors: {
+        ...(settings?.useMaterialYouColors
+          ? systemDynamicTheme.dark
+          : MD3DarkTheme.colors),
+        background: '#000000',
+        surface: '#000000',
+        backdrop: '#00000066', // 40% opacity
+      },
+    },
+  };
+
+  const themes = {
+    ...baseThemes,
+    system: systemColorScheme === 'dark' ? baseThemes.dark : baseThemes.light,
+  };
 
   useEffect(() => {
     if (!isLoading) return;
@@ -47,10 +89,15 @@ export const SettingsProvider = ({ children }: PropsWithChildren) => {
           ? savedSettings[key] === 'true'
           : (DEFAULT_SETTINGS[key] as boolean);
 
-      const parseOption = (key: keyof typeof SETTINGS_OPTIONS) =>
-        savedSettings[key] && SETTINGS_OPTIONS[key].includes(savedSettings[key])
+      const parseOption = <K extends keyof typeof SETTINGS_OPTIONS>(key: K) =>
+        (savedSettings[key] &&
+        (SETTINGS_OPTIONS[key] as string[]).includes(
+          savedSettings[key] as string
+        )
           ? (savedSettings[key] as string)
-          : (DEFAULT_SETTINGS[key] as string);
+          : (DEFAULT_SETTINGS[
+              key
+            ] as string)) as (typeof SETTINGS_OPTIONS)[K][number];
 
       const parseText = (key: keyof SettingsSchema) =>
         savedSettings[key] !== null
@@ -63,6 +110,7 @@ export const SettingsProvider = ({ children }: PropsWithChildren) => {
         port: parseText('port'),
         // appearance
         theme: parseOption('theme'),
+        useMaterialYouColors: parseBoolean('useMaterialYouColors'),
         showAlbumArtColor: parseBoolean('showAlbumArtColor'),
         showLikeAndDislikeButtons: parseBoolean('showLikeAndDislikeButtons'),
         showVolumeControl: parseBoolean('showVolumeControl'),
@@ -126,7 +174,10 @@ export const SettingsProvider = ({ children }: PropsWithChildren) => {
         setSetting,
       }}
     >
-      {children}
+      <PaperProvider theme={themes[settings.theme] || themes.system}>
+        <StatusBar style={themes[settings.theme].dark ? 'light' : 'dark'} />
+        {children}
+      </PaperProvider>
     </SettingsContext.Provider>
   );
 };

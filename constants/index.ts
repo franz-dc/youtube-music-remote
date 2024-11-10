@@ -20,9 +20,9 @@ export const SETTINGS_KEYS = [
 ] as const satisfies (keyof SettingsSchema)[];
 
 export const SETTINGS_OPTIONS = {
-  theme: ['system', 'light', 'dark'],
+  theme: ['system', 'light', 'dark', 'black'],
   language: ['system', ...LANGUAGES],
-} satisfies Partial<Record<keyof SettingsSchema, string[]>>;
+} as const satisfies Partial<Record<keyof SettingsSchema, string[]>>;
 
 export const DEFAULT_SETTINGS = {
   // connection
@@ -30,6 +30,7 @@ export const DEFAULT_SETTINGS = {
   port: '26538',
   // appearance
   theme: 'system',
+  useMaterialYouColors: false,
   showAlbumArtColor: true,
   showLikeAndDislikeButtons: true,
   showVolumeControl: true,
@@ -96,5 +97,8 @@ export const OPTION_SETTINGS: Record<
 };
 
 // App
-export const DOMINANT_COLOR_FALLBACK = '#000000';
+export const DOMINANT_COLOR_FALLBACK = {
+  light: '#ffffff',
+  dark: '#000000',
+} as const;
 export const SAFE_LOW_VOLUME = 0.1;

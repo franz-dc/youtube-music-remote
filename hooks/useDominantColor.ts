@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { getColors } from 'react-native-image-colors';
+import { useTheme } from 'react-native-paper';
 
 import { DOMINANT_COLOR_FALLBACK } from '@/constants';
 import { isHexColorBright } from '@/utils';
@@ -11,14 +12,19 @@ type UseDominantColorResult = {
   imageUrl: string;
 };
 
-const FALLBACK_DATA: UseDominantColorResult = {
-  color: DOMINANT_COLOR_FALLBACK,
-  isBright: false,
-  imageUrl: '',
-};
-
 export const useDominantColor = (imageUrl?: string | null) => {
-  const [data, setData] = useState<UseDominantColorResult>(FALLBACK_DATA);
+  const theme = useTheme();
+
+  const fallbackData: UseDominantColorResult = useMemo(
+    () => ({
+      color: DOMINANT_COLOR_FALLBACK[theme.dark ? 'dark' : 'light'],
+      isBright: false,
+      imageUrl: '',
+    }),
+    [theme.dark]
+  );
+
+  const [data, setData] = useState<UseDominantColorResult>(fallbackData);
 
   useEffect(() => {
     if (!imageUrl) return;
@@ -35,16 +41,16 @@ export const useDominantColor = (imageUrl?: string | null) => {
                 isBright: isHexColorBright(dominantColor),
                 imageUrl,
               }
-            : FALLBACK_DATA
+            : fallbackData
         );
       } catch (error) {
         console.error(error);
-        setData(FALLBACK_DATA);
+        setData(fallbackData);
       }
     };
 
     getDominantColor();
-  }, [imageUrl]);
+  }, [imageUrl, fallbackData]);
 
   return data;
 };

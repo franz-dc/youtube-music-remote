@@ -10,12 +10,13 @@ const styles = StyleSheet.create({
 
 const Slider = ({ style, ...SliderProps }: SliderProps) => {
   const theme = useTheme();
+
   return (
     <RNSlider
       {...SliderProps}
       style={[styles.slider, style]}
-      minimumTrackTintColor='#ffffff'
-      thumbTintColor='#ffffff'
+      minimumTrackTintColor={theme.colors.onSurface}
+      thumbTintColor={theme.colors.onSurface}
       maximumTrackTintColor={theme.colors.inverseSurface}
     />
   );
