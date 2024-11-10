@@ -2219,6 +2219,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@material/material-color-utilities@npm:^0.2.7":
+  version: 0.2.7
+  resolution: "@material/material-color-utilities@npm:0.2.7"
+  checksum: 10c0/7734f8d7cffe6a92d47fcca82b4846e39ffd79be9c057f3299466696dcdee5379b8a8a3aa6a9692d40bd6900905f689105d9a8ce47882ab22348df10621f70cd
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -2282,6 +2289,20 @@ __metadata:
     i18next: "*"
     react-native: "*"
   checksum: 10c0/76d044e0b406368cc8d3ac80b0ee94a925b9319629009c1802ec1bed8fdf9cdbbd70360f0c6c9778fe4faf41ff53f4f498242f956c4a21b851f4f11536eab94f
+  languageName: node
+  linkType: hard
+
+"@pchmn/expo-material3-theme@npm:^1.3.2":
+  version: 1.3.2
+  resolution: "@pchmn/expo-material3-theme@npm:1.3.2"
+  dependencies:
+    "@material/material-color-utilities": "npm:^0.2.7"
+    color: "npm:^4.2.3"
+  peerDependencies:
+    expo: "*"
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/89aa0a65b04f4a7f709c35bbdc2f7830dff73e0335877d36a091c55fb174ce82e4b2c67690657978b03fc563ab4c20565ded0ed7faec94d0a384a9c5085dfe19
   languageName: node
   linkType: hard
 
@@ -13630,6 +13651,7 @@ __metadata:
     "@babel/core": "npm:^7.20.0"
     "@expo/vector-icons": "npm:^14.0.2"
     "@os-team/i18next-react-native-language-detector": "npm:^1.0.34"
+    "@pchmn/expo-material3-theme": "npm:^1.3.2"
     "@react-native-async-storage/async-storage": "npm:1.23.1"
     "@react-native-community/slider": "npm:^4.5.5"
     "@react-navigation/native": "npm:^6.0.2"
