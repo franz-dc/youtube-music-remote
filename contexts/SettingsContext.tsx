@@ -1,4 +1,10 @@
-import { PropsWithChildren, createContext, useEffect, useState } from 'react';
+import {
+  PropsWithChildren,
+  createContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -32,39 +38,40 @@ export const SettingsProvider = ({ children }: PropsWithChildren) => {
 
   const { theme: systemDynamicTheme } = useMaterial3Theme();
 
-  const baseThemes: Record<
-    Exclude<(typeof SETTINGS_OPTIONS)['theme'][number], 'system'>,
-    ThemeProp
-  > = {
-    light: {
-      ...MD3LightTheme,
-      colors: settings?.useMaterialYouColors
-        ? systemDynamicTheme.light
-        : MD3LightTheme.colors,
-    },
-    dark: {
-      ...MD3DarkTheme,
-      colors: settings?.useMaterialYouColors
-        ? systemDynamicTheme.dark
-        : MD3DarkTheme.colors,
-    },
-    black: {
-      ...MD3DarkTheme,
-      colors: {
-        ...(settings?.useMaterialYouColors
-          ? systemDynamicTheme.dark
-          : MD3DarkTheme.colors),
-        background: '#000000',
-        surface: '#000000',
-        backdrop: '#00000066', // 40% opacity
+  const themes = useMemo<
+    Record<(typeof SETTINGS_OPTIONS)['theme'][number], ThemeProp>
+  >(() => {
+    const baseThemes = {
+      light: {
+        ...MD3LightTheme,
+        colors: settings?.useMaterialYouColors
+          ? systemDynamicTheme.light
+          : MD3LightTheme.colors,
       },
-    },
-  };
+      dark: {
+        ...MD3DarkTheme,
+        colors: settings?.useMaterialYouColors
+          ? systemDynamicTheme.dark
+          : MD3DarkTheme.colors,
+      },
+      black: {
+        ...MD3DarkTheme,
+        colors: {
+          ...(settings?.useMaterialYouColors
+            ? systemDynamicTheme.dark
+            : MD3DarkTheme.colors),
+          background: '#000000',
+          surface: '#000000',
+          backdrop: '#00000066', // 40% opacity
+        },
+      },
+    };
 
-  const themes = {
-    ...baseThemes,
-    system: systemColorScheme === 'dark' ? baseThemes.dark : baseThemes.light,
-  };
+    return {
+      ...baseThemes,
+      system: systemColorScheme === 'dark' ? baseThemes.dark : baseThemes.light,
+    };
+  }, [settings?.useMaterialYouColors, systemDynamicTheme]);
 
   useEffect(() => {
     if (!isLoading) return;
