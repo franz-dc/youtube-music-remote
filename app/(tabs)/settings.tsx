@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Appbar, List } from 'react-native-paper';
 
 import {
@@ -88,12 +88,14 @@ const Settings = () => {
             type='option'
             onPress={openOptionDialog}
           />
-          <SettingsListItem
-            category='appearance'
-            setting='useMaterialYouColors'
-            type='switch'
-            description={t('appearance.useMaterialYouColorsDescription')}
-          />
+          {Platform.OS === 'android' && (
+            <SettingsListItem
+              category='appearance'
+              setting='useMaterialYouColors'
+              type='switch'
+              description={t('appearance.useMaterialYouColorsDescription')}
+            />
+          )}
           <SettingsListItem
             category='appearance'
             setting='showAlbumArtColor'
