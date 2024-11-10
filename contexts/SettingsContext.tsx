@@ -1,6 +1,5 @@
 import { PropsWithChildren, createContext, useEffect, useState } from 'react';
 
-import RNLanguageDetector from '@os-team/i18next-react-native-language-detector';
 import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SplashScreen } from 'expo-router';
@@ -13,7 +12,6 @@ import { ThemeProp } from 'react-native-paper/lib/typescript/types';
 import { DEFAULT_SETTINGS, SETTINGS_KEYS, SETTINGS_OPTIONS } from '@/constants';
 import { SettingsSchema } from '@/schemas';
 
-const systemLanguage = RNLanguageDetector.detect() as string;
 const systemColorScheme = Appearance.getColorScheme() || 'dark';
 
 export const SettingsContext = createContext<{
@@ -26,6 +24,8 @@ export const SettingsContext = createContext<{
 
 export const SettingsProvider = ({ children }: PropsWithChildren) => {
   const { i18n } = useTranslation('translation');
+
+  const [systemLanguage] = useState(i18n.language);
 
   const [settings, setSettings] = useState<SettingsSchema | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -133,7 +133,7 @@ export const SettingsProvider = ({ children }: PropsWithChildren) => {
     };
 
     fetchSettings();
-  }, [isLoading, i18n]);
+  }, [isLoading, i18n, systemLanguage]);
 
   // update i18n language when language setting changes
   useEffect(() => {
@@ -141,7 +141,7 @@ export const SettingsProvider = ({ children }: PropsWithChildren) => {
     i18n.changeLanguage(
       settings.language === 'system' ? systemLanguage : settings.language
     );
-  }, [settings, i18n]);
+  }, [settings, i18n, systemLanguage]);
 
   // set setting optimistically, revert if failed
   const setSetting = (key: keyof SettingsSchema, value: string | boolean) => {
