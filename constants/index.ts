@@ -11,6 +11,7 @@ export const SETTINGS_KEYS = [
   'port',
   // appearance
   'theme',
+  'useMaterialYouColors',
   'showAlbumArtColor',
   'showLikeAndDislikeButtons',
   'showVolumeControl',
