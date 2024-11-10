@@ -30,7 +30,7 @@ export const DEFAULT_SETTINGS = {
   port: '26538',
   // appearance
   theme: 'system',
-  useMaterialYouColors: false,
+  useMaterialYouColors: true,
   showAlbumArtColor: true,
   showLikeAndDislikeButtons: true,
   showVolumeControl: true,
