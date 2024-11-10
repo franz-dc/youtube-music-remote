@@ -39,19 +39,3 @@ export const getQueue = async () => {
   if (status === 204) return null;
   return data;
 };
-
-// TODO: Remove these
-export const getImageAsBase64 = async (url: string) => {
-  const response = await fetch(url, {
-    mode: 'no-cors',
-  });
-  const blob = await response.blob();
-  const reader = new FileReader();
-  reader.readAsDataURL(blob);
-  return new Promise<string>((resolve) => {
-    reader.onloadend = () => {
-      const base64data = reader.result as string;
-      resolve(base64data);
-    };
-  });
-};
