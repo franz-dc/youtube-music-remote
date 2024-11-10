@@ -17,7 +17,11 @@ const Slider = ({ style, ...SliderProps }: SliderProps) => {
       style={[styles.slider, style]}
       minimumTrackTintColor={theme.colors.onSurface}
       thumbTintColor={theme.colors.onSurface}
-      maximumTrackTintColor={theme.colors.inverseSurface}
+      maximumTrackTintColor={
+        Platform.OS === 'web'
+          ? `${theme.colors.inverseSurface}40` // 25% opacity - opacity is not working in web
+          : theme.colors.inverseSurface
+      }
     />
   );
 };
