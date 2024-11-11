@@ -24,7 +24,9 @@
     "enterFullScreen": "全画面表示",
     "exitFullScreen": "全画面を終了",
     "nothingIsPlaying": "再生中の曲はありません",
-    "nothingIsPlayingMessage": "ここからコントロールするには、YouTube Musicで何かを再生してください。"
+    "nothingIsPlayingMessage": "ここからコントロールするには、YouTube Musicで何かを再生してください。",
+    "minimizePlayer": "プレーヤーを最小化",
+    "maximizePlayer": "プレーヤーを最大化"
   },
   "queue": {
     "title": "キュー",
