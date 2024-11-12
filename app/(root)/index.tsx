@@ -19,7 +19,7 @@ const Queue = () => {
 
   const { bottom: bottomInset } = useSafeAreaInsets();
 
-  const paddingBottom = MINI_PLAYER_HEIGHT + bottomInset + 4;
+  const paddingBottom = MINI_PLAYER_HEIGHT + bottomInset;
 
   if (error?.message === 'Network Error')
     return <ConnectionError type='noConnection' onRetry={refetch} />;
@@ -55,7 +55,7 @@ const Queue = () => {
           )}
           keyExtractor={(item) => item.playlistPanelVideoRenderer.videoId}
           estimatedItemSize={64}
-          contentContainerStyle={{ paddingBottom: 4 }}
+          contentContainerStyle={{ paddingBottom: 8 }}
         />
       </View>
     </>
