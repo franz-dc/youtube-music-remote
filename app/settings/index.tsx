@@ -1,8 +1,9 @@
 import { useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { Platform, ScrollView, StyleSheet, View } from 'react-native';
-import { Appbar, List } from 'react-native-paper';
+import { Platform, ScrollView } from 'react-native';
+import { List } from 'react-native-paper';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
   OptionDialog,
@@ -14,14 +15,10 @@ import { OPTION_SETTINGS, TEXT_SETTINGS } from '@/constants';
 import { useSettings } from '@/hooks';
 import { SettingsSchema } from '@/schemas';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
-
 const Settings = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
+
+  const { bottom: bottomInset } = useSafeAreaInsets();
 
   const [settingKey, setSettingKey] = useState<keyof SettingsSchema | null>(
     null
@@ -58,10 +55,7 @@ const Settings = () => {
   const closeOptionDialog = () => setIsOptionDialogVisible(false);
 
   return (
-    <View style={styles.container}>
-      <Appbar.Header>
-        <Appbar.Content title={t('title')} />
-      </Appbar.Header>
+    <>
       <ScrollView>
         <List.Section>
           <SettingsSubheader>{t('connection.title')}</SettingsSubheader>
@@ -117,7 +111,7 @@ const Settings = () => {
             type='switch'
           />
         </List.Section>
-        <List.Section>
+        <List.Section style={{ marginBottom: bottomInset }}>
           <SettingsSubheader>{t('general.title')}</SettingsSubheader>
           <SettingsListItem
             category='general'
@@ -165,7 +159,7 @@ const Settings = () => {
           setSetting(settingKey, value);
         }}
       />
-    </View>
+    </>
   );
 };
 

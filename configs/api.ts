@@ -11,7 +11,7 @@ axios.defaults.timeout = 5000;
 const getHost = async () => {
   const ipAddress = (await AsyncStorage.getItem('ipAddress')) || '0.0.0.0';
   const port = (await AsyncStorage.getItem('port')) || DEFAULT_SETTINGS.port;
-  return `http://${ipAddress}:${port}/api/${API_VERSION}`;
+  return `http://${ipAddress}:${port}`;
 };
 
 const authenticate = async () => {
@@ -23,7 +23,7 @@ const authenticate = async () => {
 
 axios.interceptors.request.use(async (config) => {
   const host = await getHost();
-  config.baseURL = host;
+  config.baseURL = `${host}/api/${API_VERSION}`;
   const accessToken = await AsyncStorage.getItem('accessToken');
   if (accessToken) {
     config.headers['Authorization'] = accessToken;

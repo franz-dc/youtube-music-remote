@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native';
 import { List, ListItemProps, Switch } from 'react-native-paper';
 
-import { useDelay, useSettings } from '@/hooks';
+import { useSettings } from '@/hooks';
 import { SettingsSchema } from '@/schemas';
 
 const styles = StyleSheet.create({
@@ -35,11 +35,6 @@ const SettingsListItem = ({
 }: SettingsListItemProps) => {
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
 
-  // https://stackoverflow.com/questions/63181142
-  // This is so dumb, but it works.
-  // Why does React Native have such a weird bug in the first place?
-  const shouldRenderSwitch = useDelay(10);
-
   const { settings, setSetting } = useSettings();
 
   const value = settings[setting];
@@ -50,7 +45,7 @@ const SettingsListItem = ({
       title={title || t(`${category}.${setting}`)}
       description={description || (type !== 'switch' ? value : undefined)}
       right={() =>
-        type === 'switch' && shouldRenderSwitch ? (
+        type === 'switch' ? (
           <Switch
             value={value as boolean}
             onValueChange={() => setSetting(setting, !value)}

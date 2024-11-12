@@ -8,10 +8,11 @@ import {
 
 import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as NavigationBar from 'expo-navigation-bar';
 import { SplashScreen } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
-import { Appearance } from 'react-native';
+import { Appearance, View } from 'react-native';
 import { MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
 import { ThemeProp } from 'react-native-paper/lib/typescript/types';
 
@@ -134,13 +135,19 @@ export const SettingsProvider = ({ children }: PropsWithChildren) => {
           : parsedSettings.language
       );
 
+      await NavigationBar.setPositionAsync('absolute');
+      // await NavigationBar.setBackgroundColorAsync(
+      //   themes[parsedSettings.theme].colors!.background! + 'fa' // 98% opacity
+      // );
+      await NavigationBar.setBackgroundColorAsync('transparent');
+
       setIsLoading(false);
 
       await SplashScreen.hideAsync();
     };
 
     fetchSettings();
-  }, [isLoading, i18n, systemLanguage]);
+  }, [isLoading, i18n, systemLanguage, themes]);
 
   // update i18n language when language setting changes
   useEffect(() => {
@@ -153,7 +160,17 @@ export const SettingsProvider = ({ children }: PropsWithChildren) => {
   // set setting optimistically, revert if failed
   const setSetting = (key: keyof SettingsSchema, value: string | boolean) => {
     if (!settings) return;
+
     const currentSetting = settings[key];
+
+    // update navigation bar color on theme change
+    // if (key === 'theme') {
+    //   NavigationBar.setBackgroundColorAsync(
+    //     themes[value as (typeof SETTINGS_OPTIONS)['theme'][number]].colors!
+    //       .background! + 'fa' // 98% opacity
+    //   );
+    // }
+
     setSettings((prev) => {
       if (!prev) return prev;
       return {
@@ -161,6 +178,7 @@ export const SettingsProvider = ({ children }: PropsWithChildren) => {
         [key]: value,
       };
     });
+
     AsyncStorage.setItem(key, value.toString()).catch(() => {
       setSettings((prev) => {
         if (!prev) return prev;
@@ -174,6 +192,8 @@ export const SettingsProvider = ({ children }: PropsWithChildren) => {
 
   if (!settings || isLoading) return null;
 
+  const activeTheme = themes[settings.theme] || themes.system;
+
   return (
     <SettingsContext.Provider
       value={{
@@ -181,9 +201,13 @@ export const SettingsProvider = ({ children }: PropsWithChildren) => {
         setSetting,
       }}
     >
-      <PaperProvider theme={themes[settings.theme] || themes.system}>
-        <StatusBar style={themes[settings.theme].dark ? 'light' : 'dark'} />
-        {children}
+      <PaperProvider theme={activeTheme}>
+        <StatusBar style={activeTheme ? 'light' : 'dark'} />
+        <View
+          style={{ flex: 1, backgroundColor: activeTheme.colors!.background }}
+        >
+          {children}
+        </View>
       </PaperProvider>
     </SettingsContext.Provider>
   );

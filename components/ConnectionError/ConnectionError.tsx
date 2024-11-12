@@ -1,10 +1,12 @@
 import { useTranslation } from 'react-i18next';
+import { StyleProp, ViewStyle } from 'react-native';
 
 import InfoView from '../InfoView';
 
 export type ConnectionErrorProps = {
   type: 'noConnection' | 'serverError';
   onRetry?: () => void;
+  style?: StyleProp<ViewStyle>;
 };
 
 const errorTexts = {
@@ -18,7 +20,7 @@ const errorTexts = {
   },
 } as const;
 
-const ConnectionError = ({ type, onRetry }: ConnectionErrorProps) => {
+const ConnectionError = ({ type, onRetry, style }: ConnectionErrorProps) => {
   const { t } = useTranslation('translation', { keyPrefix: 'common' });
 
   return (
@@ -28,6 +30,7 @@ const ConnectionError = ({ type, onRetry }: ConnectionErrorProps) => {
       icon='cellphone-link-off'
       onActionPress={onRetry}
       actionLabel={t('retry')}
+      style={style}
     />
   );
 };
