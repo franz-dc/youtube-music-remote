@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { DEFAULT_SETTINGS } from '@/constants';
 
-import { accessTokenAtom, settingAtom, store } from './storage';
+import { accessTokenAtom, settingAtomFamily, store } from './storage';
 
 const API_VERSION = 'v1';
 
@@ -11,9 +11,9 @@ axios.defaults.timeout = 5000;
 
 const getHost = () => {
   const ipAddress =
-    (store.get(settingAtom('ipAddress')) as string) || '0.0.0.0';
+    (store.get(settingAtomFamily('ipAddress')) as string) || '0.0.0.0';
   const port =
-    (store.get(settingAtom('port')) as string) || DEFAULT_SETTINGS.port;
+    (store.get(settingAtomFamily('port')) as string) || DEFAULT_SETTINGS.port;
   return `http://${ipAddress}:${port}`;
 };
 

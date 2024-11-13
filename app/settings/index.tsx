@@ -11,7 +11,7 @@ import {
   SettingsSubheader,
   TextDialog,
 } from '@/components';
-import { settingAtom, store, useSettingAtom } from '@/configs';
+import { settingAtomFamily, store, useSettingAtom } from '@/configs';
 import { OPTION_SETTINGS, TEXT_SETTINGS } from '@/constants';
 import { SettingsSchema } from '@/schemas';
 
@@ -126,13 +126,15 @@ const Settings = () => {
         visible={!!textSetting && isTextDialogVisible}
         onDismiss={closeTextDialog}
         label={textSetting ? t(`${textSetting.category}.${settingKey}`) : ''}
-        value={settingKey ? (store.get(settingAtom(settingKey)) as string) : ''}
+        value={
+          settingKey ? (store.get(settingAtomFamily(settingKey)) as string) : ''
+        }
         required={textSetting ? textSetting.required : false}
         validation={textSetting ? textSetting.validation : undefined}
         numeric={textSetting ? textSetting.numeric : false}
         onSubmit={(value) => {
           if (!settingKey) return;
-          store.set(settingAtom(settingKey), value);
+          store.set(settingAtomFamily(settingKey), value);
         }}
       />
       <OptionDialog
@@ -141,7 +143,9 @@ const Settings = () => {
         label={
           optionSetting ? t(`${optionSetting.category}.${settingKey}`) : ''
         }
-        value={settingKey ? (store.get(settingAtom(settingKey)) as string) : ''}
+        value={
+          settingKey ? (store.get(settingAtomFamily(settingKey)) as string) : ''
+        }
         options={
           optionSetting
             ? optionSetting.options.map((option) => ({
@@ -156,7 +160,7 @@ const Settings = () => {
         }
         onSubmit={(value) => {
           if (!settingKey) return;
-          store.set(settingAtom(settingKey), value);
+          store.set(settingAtomFamily(settingKey), value);
         }}
       />
     </>

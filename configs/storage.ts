@@ -41,14 +41,14 @@ export const atomWithMMKV = <T>(key: string, initialValue: T) =>
 
 export const accessTokenAtom = atomWithMMKV('accessToken', '');
 
-export const settingAtom = atomFamily((setting: keyof SettingsSchema) =>
+export const settingAtomFamily = atomFamily((setting: keyof SettingsSchema) =>
   atomWithMMKV(setting, DEFAULT_SETTINGS[setting] as string | boolean)
 );
 
 type SetAtom<Args extends unknown[], Result> = (...args: Args) => Result;
 
 export const useSettingAtom = <K extends keyof SettingsSchema>(setting: K) =>
-  useAtom(settingAtom(setting)) as unknown as [
+  useAtom(settingAtomFamily(setting)) as unknown as [
     SettingsSchema[K],
     SetAtom<[SetStateAction<SettingsSchema[K]>], void>,
   ];
