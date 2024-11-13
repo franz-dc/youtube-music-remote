@@ -8491,6 +8491,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jotai@npm:^2.10.2":
+  version: 2.10.2
+  resolution: "jotai@npm:2.10.2"
+  peerDependencies:
+    "@types/react": ">=17.0.0"
+    react: ">=17.0.0"
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    react:
+      optional: true
+  checksum: 10c0/4eb13ed91c669fea1df0daef1f50acb5c839772425d913dc3b03a392847a8d49e391934b18e9342743b0da1dcf92cf23c025af1c0860ff92d45f56544021d632
+  languageName: node
+  linkType: hard
+
 "jpeg-js@npm:^0.4.2":
   version: 0.4.4
   resolution: "jpeg-js@npm:0.4.4"
@@ -10869,6 +10884,16 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10c0/d9c8a3f2853cab556cfb41cc9493cfae7b5498c7604cf3ffaf2a71e44c9b330bb9dc940e8d5fe1ad342fd8bd864b0b75f74fb91b6af9b356ccd801def30a7666
+  languageName: node
+  linkType: hard
+
+"react-native-mmkv@npm:^2.12.2":
+  version: 2.12.2
+  resolution: "react-native-mmkv@npm:2.12.2"
+  peerDependencies:
+    react: "*"
+    react-native: ">=0.71.0"
+  checksum: 10c0/751b92d60b3526c9bbeac652b840c048b7f1cc4f48179f4e24a45cf14bdcdd08bfc7f3c65fb50c686cae41356ac0d15a21e6da034e2f0907459036dacb67fcbd
   languageName: node
   linkType: hard
 
@@ -13730,6 +13755,7 @@ __metadata:
     intl-pluralrules: "npm:^2.0.1"
     jest: "npm:^29.2.1"
     jest-expo: "npm:~51.0.3"
+    jotai: "npm:^2.10.2"
     prettier: "npm:^3.3.3"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
@@ -13737,6 +13763,7 @@ __metadata:
     react-native: "npm:0.74.5"
     react-native-gesture-handler: "npm:~2.16.1"
     react-native-image-colors: "npm:^2.4.0"
+    react-native-mmkv: "npm:^2.12.2"
     react-native-paper: "npm:^5.12.5"
     react-native-reanimated: "npm:~3.10.1"
     react-native-safe-area-context: "npm:4.10.5"
