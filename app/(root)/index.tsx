@@ -9,11 +9,14 @@ import {
   LoadingView,
   QueueListItem,
 } from '@/components';
+import { useSettingAtom } from '@/configs';
 import { MINI_PLAYER_HEIGHT } from '@/constants';
 import { useQueue } from '@/hooks/useQueue';
 
 const Queue = () => {
   const { t } = useTranslation('translation');
+
+  const [ipAddress] = useSettingAtom('ipAddress');
 
   const {
     data: queue,
@@ -28,8 +31,17 @@ const Queue = () => {
 
   const paddingBottom = MINI_PLAYER_HEIGHT + bottomInset;
 
+  if (!ipAddress)
+    return <ConnectionError type='noConnection' style={{ paddingBottom }} />;
+
   if (error?.message === 'Network Error')
-    return <ConnectionError type='noConnection' onRetry={refetch} />;
+    return (
+      <ConnectionError
+        type='noConnection'
+        onRetry={refetch}
+        style={{ paddingBottom }}
+      />
+    );
 
   if (isLoading || !isFetched) return <LoadingView />;
 
