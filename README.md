@@ -2,6 +2,11 @@
 
 Control [YouTube Music](https://github.com/th-ch/youtube-music) from your phone, tablet, or another computer.
 
+## Screenshots
+
+<img src="https://github.com/franz-dc/youtube-music-remote/blob/main/images/player.webp" width="200" style="max-width: 100%; margin-right: 8px;" alt="Player">
+<img src="https://github.com/franz-dc/youtube-music-remote/blob/main/images/queue.webp" width="200" style="max-width: 100%;" alt="Queue">
+
 ## Development
 
 ```bash
