@@ -1,38 +1,19 @@
 import { useEffect, useState } from 'react';
 
-import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-paper';
-
-import { usePrevious } from '@/hooks';
 import { SongInfoSchema } from '@/schemas';
-import { formatSecondsToDuration } from '@/utils';
 
-import Slider from '../Slider';
+import { usePrevious } from './usePrevious';
 
-export type PlayerSeekBarProps = {
+export const useClientElapsedSeconds = ({
+  songInfo,
+  isPlaying,
+}: {
   songInfo: NonNullable<SongInfoSchema>;
   isPlaying: boolean;
-};
-
-const styles = StyleSheet.create({
-  seekBar: {
-    marginBottom: 2,
-  },
-  seekBarTime: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    opacity: 0.5,
-  },
-});
-
-// TODO: Use this once https://github.com/th-ch/youtube-music/pull/2577 is released
-// const ELAPSED_SECONDS_INACCURACY_THRESHOLD = 3;
-
-const PlayerSeekBar = ({ songInfo, isPlaying }: PlayerSeekBarProps) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'player' });
-
-  const [clientElapsedSeconds, setClientElapsedSeconds] = useState<number>(0);
+}) => {
+  const [clientElapsedSeconds, setClientElapsedSeconds] = useState<number>(
+    songInfo.elapsedSeconds
+  );
 
   const prevSongId = usePrevious(songInfo.videoId);
   const songId = songInfo.videoId;
@@ -91,25 +72,8 @@ const PlayerSeekBar = ({ songInfo, isPlaying }: PlayerSeekBarProps) => {
   //   setClientElapsedSeconds(seconds);
   // };
 
-  return (
-    <View>
-      <Slider
-        style={styles.seekBar}
-        value={clientElapsedSeconds / songInfo.songDuration || 0}
-        step={0.001}
-        // onValueChange={seek}
-        accessibilityLabel={t('seek')}
-      />
-      <View style={styles.seekBarTime}>
-        <Text variant='bodySmall'>
-          {formatSecondsToDuration(clientElapsedSeconds)}
-        </Text>
-        <Text variant='bodySmall'>
-          {formatSecondsToDuration(songInfo.songDuration)}
-        </Text>
-      </View>
-    </View>
-  );
+  return {
+    elapsedSeconds: clientElapsedSeconds,
+    // seek,
+  };
 };
-
-export default PlayerSeekBar;

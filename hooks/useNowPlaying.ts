@@ -2,10 +2,10 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 
+import { useSettingAtom } from '@/configs';
 import { getQueue, getSongInfo } from '@/services';
 
 import { usePrevious } from './usePrevious';
-import { useSettings } from './useSettings';
 
 const POLLING_RATE = 1000; // 1 second
 
@@ -14,11 +14,12 @@ const POLLING_RATE = 1000; // 1 second
  * Polling is done due to the nature of the REST API.
  */
 export const useNowPlaying = () => {
-  const { settings } = useSettings();
+  const [ipAddress] = useSettingAtom('ipAddress');
+  const [port] = useSettingAtom('port');
 
-  const enabled = !!settings.ipAddress && !!settings.port;
-  const prevIpAddress = usePrevious(settings.ipAddress);
-  const prevPort = usePrevious(settings.port);
+  const enabled = !!ipAddress && !!port;
+  const prevIpAddress = usePrevious(ipAddress);
+  const prevPort = usePrevious(port);
 
   const [refetchInterval, setRefetchInterval] = useState(POLLING_RATE);
 
@@ -30,9 +31,9 @@ export const useNowPlaying = () => {
     enabled,
   });
 
-  const { data, isSuccess, error, refetch, isRefetchError } = useQueryResult;
+  const { data, isSuccess, isError, refetch, isRefetchError } = useQueryResult;
 
-  const { refetch: refetchQueue } = useQuery({
+  const { isError: isErrorQueue, refetch: refetchQueue } = useQuery({
     queryKey: ['queue'],
     queryFn: getQueue,
     retry: false,
@@ -40,16 +41,20 @@ export const useNowPlaying = () => {
   });
 
   useEffect(() => {
-    if (error) {
-      setRefetchInterval(Infinity);
+    setRefetchInterval(isError ? Infinity : POLLING_RATE);
+  }, [isError]);
+
+  // Refetch song info when queue came from isError to !isError
+  useEffect(() => {
+    if (!isErrorQueue) {
+      refetch();
     }
-  }, [error]);
+  }, [isErrorQueue, refetch]);
 
   // Refetch everything when connection settings change
   useEffect(() => {
     if (isRefetchError) return;
-    if (prevIpAddress === settings.ipAddress && prevPort === settings.port)
-      return;
+    if (prevIpAddress === ipAddress && prevPort === port) return;
 
     const refetchQueries = async () => {
       await refetchQueue();
@@ -58,8 +63,8 @@ export const useNowPlaying = () => {
 
     refetchQueries();
   }, [
-    settings.ipAddress,
-    settings.port,
+    ipAddress,
+    port,
     prevIpAddress,
     prevPort,
     refetchQueue,

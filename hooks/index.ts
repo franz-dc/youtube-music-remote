@@ -1,6 +1,5 @@
-export * from './useDelay';
+export * from './useClientElapsedSeconds';
 export * from './useDominantColor';
 export * from './useFullScreen';
 export * from './useNowPlaying';
 export * from './usePrevious';
-export * from './useSettings';

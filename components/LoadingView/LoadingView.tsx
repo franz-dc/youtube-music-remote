@@ -1,6 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const styles = StyleSheet.create({
   loadingView: {
@@ -10,10 +10,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const LoadingView = () => (
-  <SafeAreaView style={styles.loadingView}>
-    <ActivityIndicator animating size='large' />
-  </SafeAreaView>
-);
+const LoadingView = () => {
+  const { bottom: bottomInset } = useSafeAreaInsets();
+
+  return (
+    <View style={[styles.loadingView, { marginBottom: bottomInset }]}>
+      <ActivityIndicator animating size='large' />
+    </View>
+  );
+};
 
 export default LoadingView;

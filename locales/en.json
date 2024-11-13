@@ -24,7 +24,9 @@
     "enterFullScreen": "Enter full screen",
     "exitFullScreen": "Exit full screen",
     "nothingIsPlaying": "Nothing is playing",
-    "nothingIsPlayingMessage": "Play something on YouTube Music to control it from here."
+    "nothingIsPlayingMessage": "Play something on YouTube Music to control it from here.",
+    "minimizePlayer": "Minimize player",
+    "maximizePlayer": "Maximize player"
   },
   "queue": {
     "title": "Queue",

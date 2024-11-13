@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+
 import { TextDialogProps } from '@/components';
 import { SettingsSchema } from '@/schemas';
 
@@ -103,3 +105,7 @@ export const DOMINANT_COLOR_FALLBACK = {
   dark: '#000000',
 } as const;
 export const SAFE_LOW_VOLUME = 0.1;
+export const MINI_PLAYER_HEIGHT = 64;
+export const MINI_PLAYER_ALBUM_ART_WIDTH = MINI_PLAYER_HEIGHT - 20; // 10 vertical padding
+export const MORE_ICON =
+  Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical';
