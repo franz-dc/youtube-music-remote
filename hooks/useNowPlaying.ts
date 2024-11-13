@@ -30,9 +30,9 @@ export const useNowPlaying = () => {
     enabled,
   });
 
-  const { data, isSuccess, error, refetch, isRefetchError } = useQueryResult;
+  const { data, isSuccess, isError, refetch, isRefetchError } = useQueryResult;
 
-  const { refetch: refetchQueue } = useQuery({
+  const { isError: isErrorQueue, refetch: refetchQueue } = useQuery({
     queryKey: ['queue'],
     queryFn: getQueue,
     retry: false,
@@ -40,10 +40,15 @@ export const useNowPlaying = () => {
   });
 
   useEffect(() => {
-    if (error) {
-      setRefetchInterval(Infinity);
+    setRefetchInterval(isError ? Infinity : POLLING_RATE);
+  }, [isError]);
+
+  // Refetch song info when queue came from isError to !isError
+  useEffect(() => {
+    if (!isErrorQueue) {
+      refetch();
     }
-  }, [error]);
+  }, [isErrorQueue, refetch]);
 
   // Refetch everything when connection settings change
   useEffect(() => {
