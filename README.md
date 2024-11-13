@@ -15,6 +15,7 @@ Note that this will not work on Expo Go, as some libraries used are not supporte
 
 There are some limitations to the app mostly due to the limitations of the API server:
 
+- Authorization strategy must be set to `No authorization` in the plugin configuration (for now).
 - [Seeking](https://github.com/th-ch/youtube-music/issues/2582) is not yet supported.
 - Queue is for viewing only.
 - Some player button states (repeat, like/dislike, etc.) are indeterminate.
