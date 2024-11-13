@@ -11,8 +11,8 @@ import {
   SettingsSubheader,
   TextDialog,
 } from '@/components';
+import { settingAtom, store, useSettingAtom } from '@/configs';
 import { OPTION_SETTINGS, TEXT_SETTINGS } from '@/constants';
-import { useSettings } from '@/hooks';
 import { SettingsSchema } from '@/schemas';
 
 const Settings = () => {
@@ -26,9 +26,9 @@ const Settings = () => {
   const [isTextDialogVisible, setIsTextDialogVisible] = useState(false);
   const [isOptionDialogVisible, setIsOptionDialogVisible] = useState(false);
 
-  const { settings, setSetting } = useSettings();
-
-  const { ipAddress, theme, language } = settings;
+  const [ipAddress] = useSettingAtom('ipAddress');
+  const [theme] = useSettingAtom('theme');
+  const [language] = useSettingAtom('language');
 
   const textSetting =
     !!settingKey && !!TEXT_SETTINGS[settingKey]
@@ -56,7 +56,7 @@ const Settings = () => {
 
   return (
     <>
-      <ScrollView>
+      <ScrollView style={{ flex: 1 }}>
         <List.Section>
           <SettingsSubheader>{t('connection.title')}</SettingsSubheader>
           <SettingsListItem
@@ -126,13 +126,13 @@ const Settings = () => {
         visible={!!textSetting && isTextDialogVisible}
         onDismiss={closeTextDialog}
         label={textSetting ? t(`${textSetting.category}.${settingKey}`) : ''}
-        value={settingKey ? (settings[settingKey] as string) : ''}
+        value={settingKey ? (store.get(settingAtom(settingKey)) as string) : ''}
         required={textSetting ? textSetting.required : false}
         validation={textSetting ? textSetting.validation : undefined}
         numeric={textSetting ? textSetting.numeric : false}
         onSubmit={(value) => {
           if (!settingKey) return;
-          setSetting(settingKey, value);
+          store.set(settingAtom(settingKey), value);
         }}
       />
       <OptionDialog
@@ -141,7 +141,7 @@ const Settings = () => {
         label={
           optionSetting ? t(`${optionSetting.category}.${settingKey}`) : ''
         }
-        value={settingKey ? (settings[settingKey] as string) : ''}
+        value={settingKey ? (store.get(settingAtom(settingKey)) as string) : ''}
         options={
           optionSetting
             ? optionSetting.options.map((option) => ({
@@ -156,7 +156,7 @@ const Settings = () => {
         }
         onSubmit={(value) => {
           if (!settingKey) return;
-          setSetting(settingKey, value);
+          store.set(settingAtom(settingKey), value);
         }}
       />
     </>

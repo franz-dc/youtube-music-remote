@@ -18,13 +18,14 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useSettingAtom } from '@/configs';
 import {
   DOMINANT_COLOR_FALLBACK,
   MINI_PLAYER_ALBUM_ART_WIDTH,
   MINI_PLAYER_HEIGHT,
   MORE_ICON,
 } from '@/constants';
-import { useDominantColor, useNowPlaying, useSettings } from '@/hooks';
+import { useDominantColor, useNowPlaying } from '@/hooks';
 import { togglePlayPause } from '@/services';
 
 import InfoView from '../InfoView';
@@ -125,7 +126,7 @@ const Player = () => {
     height / 2
   );
 
-  const { settings } = useSettings();
+  const [showAlbumArtColor] = useSettingAtom('showAlbumArtColor');
 
   const { data: songInfo, isLoading, isError } = useNowPlaying();
 
@@ -223,7 +224,7 @@ const Player = () => {
       <BottomSheetView style={styles.bottomSheetView}>
         <LinearGradient
           colors={
-            settings.showAlbumArtColor
+            showAlbumArtColor
               ? [dominantColorGradientStart, dominantColorGradientEnd]
               : [backgroundColor, backgroundColor]
           }

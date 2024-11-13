@@ -15,7 +15,14 @@ import { useQueue } from '@/hooks/useQueue';
 const Queue = () => {
   const { t } = useTranslation('translation');
 
-  const { data: queue, isLoading, isError, error, refetch } = useQueue();
+  const {
+    data: queue,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    isFetched,
+  } = useQueue();
 
   const { bottom: bottomInset } = useSafeAreaInsets();
 
@@ -24,7 +31,7 @@ const Queue = () => {
   if (error?.message === 'Network Error')
     return <ConnectionError type='noConnection' onRetry={refetch} />;
 
-  if (isLoading) return <LoadingView />;
+  if (isLoading || !isFetched) return <LoadingView />;
 
   if (isError)
     return (

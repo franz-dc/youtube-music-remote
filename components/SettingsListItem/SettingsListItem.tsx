@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native';
 import { List, ListItemProps, Switch } from 'react-native-paper';
 
-import { useSettings } from '@/hooks';
+import { useSettingAtom } from '@/configs';
 import { SettingsSchema } from '@/schemas';
 
 const styles = StyleSheet.create({
@@ -18,42 +18,43 @@ export type SettingsListItemProps = Omit<ListItemProps, 'title' | 'onPress'> & {
   category: string;
   setting: keyof SettingsSchema;
   type: 'switch' | 'text' | 'option';
-  // value: string | boolean;
   title?: string;
   onPress?: (setting: keyof SettingsSchema) => void | Promise<void>;
+  valueI18nPrefix?: string;
 };
 
 const SettingsListItem = ({
   category,
   setting,
   type,
-  // value,
   description,
   title,
   onPress,
+  valueI18nPrefix,
   ...rest
 }: SettingsListItemProps) => {
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
 
-  const { settings, setSetting } = useSettings();
+  const [value, setValue] = useSettingAtom(setting);
 
-  const value = settings[setting];
+  const i18nValue = valueI18nPrefix
+    ? t(`${valueI18nPrefix}.${value}`)
+    : undefined;
 
   return (
     <List.Item
       {...rest}
       title={title || t(`${category}.${setting}`)}
-      description={description || (type !== 'switch' ? value : undefined)}
+      description={
+        description || i18nValue || (type !== 'switch' ? value : undefined)
+      }
       right={() =>
         type === 'switch' ? (
-          <Switch
-            value={value as boolean}
-            onValueChange={() => setSetting(setting, !value)}
-          />
+          <Switch value={value as boolean} onValueChange={setValue} />
         ) : undefined
       }
       onPress={() =>
-        type === 'switch' ? setSetting(setting, !value) : onPress?.(setting)
+        type === 'switch' ? setValue((prev) => !prev) : onPress?.(setting)
       }
       style={styles.listItem}
       descriptionStyle={styles.description}

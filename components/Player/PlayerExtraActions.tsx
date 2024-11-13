@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { Platform, StyleSheet, View } from 'react-native';
 import { IconButton } from 'react-native-paper';
 
+import { useSettingAtom } from '@/configs';
 import { SAFE_LOW_VOLUME } from '@/constants';
-import { useIsFullScreen, useSetFullScreen, useSettings } from '@/hooks';
+import { useIsFullScreen, useSetFullScreen } from '@/hooks';
 import { toggleDislikeSong, toggleLikeSong, updateVolume } from '@/services';
 
 import Slider from '../Slider';
@@ -31,7 +32,12 @@ const styles = StyleSheet.create({
 
 const PlayerExtraActions = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'player' });
-  const { settings } = useSettings();
+
+  const [showLikeAndDislikeButtons] = useSettingAtom(
+    'showLikeAndDislikeButtons'
+  );
+  const [showVolumeControl] = useSettingAtom('showVolumeControl');
+  const [showFullScreenButton] = useSettingAtom('showFullScreenButton');
 
   // Fullscreen state (optimistic)
   const [isFullScreen, setIsFullscreen] = useState(false);
@@ -97,7 +103,7 @@ const PlayerExtraActions = () => {
   return (
     <View style={styles.actionsContainer}>
       <View style={styles.stack}>
-        {settings.showLikeAndDislikeButtons && (
+        {showLikeAndDislikeButtons && (
           <>
             <IconButton
               icon='thumb-up-outline'
@@ -115,7 +121,7 @@ const PlayerExtraActions = () => {
         )}
       </View>
       <View style={styles.stack}>
-        {settings.showVolumeControl && (
+        {showVolumeControl && (
           <View style={styles.volumeContainer}>
             <IconButton
               icon={volumeIcon}
@@ -126,7 +132,7 @@ const PlayerExtraActions = () => {
             <Slider
               style={[
                 styles.volumeSlider,
-                !settings.showFullScreenButton && {
+                !showFullScreenButton && {
                   marginRight: Platform.OS === 'web' ? 16 : 0,
                 },
               ]}
@@ -137,7 +143,7 @@ const PlayerExtraActions = () => {
             />
           </View>
         )}
-        {settings.showFullScreenButton && (
+        {showFullScreenButton && (
           <IconButton
             icon={isFullScreen ? 'fullscreen-exit' : 'fullscreen'}
             size={20}
