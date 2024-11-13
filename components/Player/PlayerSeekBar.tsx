@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react';
-
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 
-import { usePrevious } from '@/hooks';
+import { useClientElapsedSeconds } from '@/hooks';
 import { SongInfoSchema } from '@/schemas';
 import { formatSecondsToDuration } from '@/utils';
 
@@ -32,77 +30,23 @@ const styles = StyleSheet.create({
 const PlayerSeekBar = ({ songInfo, isPlaying }: PlayerSeekBarProps) => {
   const { t } = useTranslation('translation', { keyPrefix: 'player' });
 
-  const [clientElapsedSeconds, setClientElapsedSeconds] = useState<number>(0);
-
-  const prevSongId = usePrevious(songInfo.videoId);
-  const songId = songInfo.videoId;
-  const prevIsPlaying = usePrevious(isPlaying);
-  const prevElapsedSeconds = usePrevious(songInfo.elapsedSeconds);
-  const elapsedSeconds = songInfo.elapsedSeconds;
-
-  useEffect(() => {
-    if (prevSongId !== songId) {
-      setClientElapsedSeconds(0);
-    }
-    if (
-      prevIsPlaying !== isPlaying ||
-      prevElapsedSeconds !== elapsedSeconds
-      // TODO: Remove line above and replace with the line below
-      // Math.abs(clientElapsedSeconds - elapsedSeconds) > ELAPSED_SECONDS_INACCURACY_THRESHOLD
-    ) {
-      // If the song is paused/resumed, update the client elapsed seconds after
-      // a delay (due to race conditions with the server).
-      const timeout = setTimeout(() => {
-        setClientElapsedSeconds(songInfo.elapsedSeconds);
-      }, 1000);
-
-      return () => clearTimeout(timeout);
-    }
-  }, [
+  const { elapsedSeconds } = useClientElapsedSeconds({
     songInfo,
-    prevSongId,
-    songId,
-    prevIsPlaying,
     isPlaying,
-    prevElapsedSeconds,
-    elapsedSeconds,
-  ]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (songInfo.isPaused) return;
-      setClientElapsedSeconds((prev) => prev + 1);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [songInfo]);
-
-  // TODO: Implement seek
-  // For now, the seek bar is read-only due to the lack of an absolute seek API.
-  // This causes issues as `/go-back` and `/go-forward` are relative seek APIs.
-  // This works fine for tapping on the seek bar but not for dragging.
-  // const seek = async (sliderValue: number) => {
-  //   // Slider returns a value between 0 and 1 so it needs to be multiplied by
-  //   // the song duration to get the actual seconds
-  //   const seconds = Math.floor(sliderValue * songInfo.songDuration);
-
-  //   // update optimistically (no need to wait for the server)
-  //   seekSeconds(seconds - songInfo.elapsedSeconds);
-  //   setClientElapsedSeconds(seconds);
-  // };
+  });
 
   return (
     <View>
       <Slider
         style={styles.seekBar}
-        value={clientElapsedSeconds / songInfo.songDuration || 0}
+        value={elapsedSeconds / songInfo.songDuration || 0}
         step={0.001}
         // onValueChange={seek}
         accessibilityLabel={t('seek')}
       />
       <View style={styles.seekBarTime}>
         <Text variant='bodySmall'>
-          {formatSecondsToDuration(clientElapsedSeconds)}
+          {formatSecondsToDuration(elapsedSeconds)}
         </Text>
         <Text variant='bodySmall'>
           {formatSecondsToDuration(songInfo.songDuration)}
