@@ -1,4 +1,4 @@
-import { createStore } from 'jotai';
+import { SetStateAction, createStore } from 'jotai';
 import { useAtom } from 'jotai/react';
 import { atomFamily, atomWithStorage, createJSONStorage } from 'jotai/utils';
 import { MMKV } from 'react-native-mmkv';
@@ -45,5 +45,10 @@ export const settingAtom = atomFamily((setting: keyof SettingsSchema) =>
   atomWithMMKV(setting, DEFAULT_SETTINGS[setting] as string | boolean)
 );
 
-export const useSettingAtom = (setting: keyof SettingsSchema) =>
-  useAtom(settingAtom(setting));
+type SetAtom<Args extends unknown[], Result> = (...args: Args) => Result;
+
+export const useSettingAtom = <K extends keyof SettingsSchema>(setting: K) =>
+  useAtom(settingAtom(setting)) as unknown as [
+    SettingsSchema[K],
+    SetAtom<[SetStateAction<SettingsSchema[K]>], void>,
+  ];
