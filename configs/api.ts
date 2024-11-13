@@ -1,30 +1,33 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 import { DEFAULT_SETTINGS } from '@/constants';
+
+import { accessTokenAtom, settingAtom, store } from './storage';
 
 const API_VERSION = 'v1';
 
 // explicitly set the timeout to 5s due to React Native not failing requests
 axios.defaults.timeout = 5000;
 
-const getHost = async () => {
-  const ipAddress = (await AsyncStorage.getItem('ipAddress')) || '0.0.0.0';
-  const port = (await AsyncStorage.getItem('port')) || DEFAULT_SETTINGS.port;
+const getHost = () => {
+  const ipAddress =
+    (store.get(settingAtom('ipAddress')) as string) || '0.0.0.0';
+  const port =
+    (store.get(settingAtom('port')) as string) || DEFAULT_SETTINGS.port;
   return `http://${ipAddress}:${port}`;
 };
 
 const authenticate = async () => {
-  const host = await getHost();
+  const host = getHost();
   const { data } = await axios.post<{ accessToken: string }>(`${host}/auth/1`);
-  await AsyncStorage.setItem('accessToken', data.accessToken);
+  store.set(accessTokenAtom, data.accessToken);
   return data.accessToken;
 };
 
-axios.interceptors.request.use(async (config) => {
-  const host = await getHost();
+axios.interceptors.request.use((config) => {
+  const host = getHost();
   config.baseURL = `${host}/api/${API_VERSION}`;
-  const accessToken = await AsyncStorage.getItem('accessToken');
+  const accessToken = store.get(accessTokenAtom);
   if (accessToken) {
     config.headers['Authorization'] = accessToken;
   }

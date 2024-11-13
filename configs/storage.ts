@@ -39,6 +39,8 @@ export const atomWithMMKV = <T>(key: string, initialValue: T) =>
     }))
   );
 
+export const accessTokenAtom = atomWithMMKV('accessToken', '');
+
 export const settingAtom = atomFamily((setting: keyof SettingsSchema) =>
   atomWithMMKV(setting, DEFAULT_SETTINGS[setting] as string | boolean)
 );
