@@ -46,11 +46,11 @@ const PlayerControls = ({ isPlaying, onPlayPause }: PlayerControlsProps) => {
         style={styles.innerIcon}
       />
       <IconButton
-        icon={isPlaying ? 'play-circle' : 'pause-circle'}
+        icon={isPlaying ? 'pause-circle' : 'play-circle'}
         size={80}
         animated
         onPress={onPlayPause}
-        accessibilityLabel={t(isPlaying ? 'play' : 'pause')}
+        accessibilityLabel={t(isPlaying ? 'pause' : 'play')}
         style={styles.innerIcon}
       />
       <IconButton

@@ -44,7 +44,7 @@ const InfoView = ({
   const { bottom: bottomInset } = useSafeAreaInsets();
 
   return (
-    <View style={[styles.container, style, { marginBottom: bottomInset }]}>
+    <View style={[styles.container, { marginBottom: bottomInset }, style]}>
       <View style={styles.icon}>
         <Icon source={icon} size={64} />
       </View>
