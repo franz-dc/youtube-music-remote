@@ -1,5 +1,5 @@
 <h1 align='center'>
-  <img src="https://github.com/franz-dc/youtube-music-remote/blob/main/images/logo.webp" width="120px" style="max-width: 100%" alt="Player">
+  <img src="https://github.com/franz-dc/youtube-music-remote/blob/main/images/logo.webp" width="120px" style="max-width: 100%" alt="YouTube Music Remote">
   <br>
   YouTube Music Remote
 </h1>
