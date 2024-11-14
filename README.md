@@ -1,4 +1,8 @@
-# YouTube Music Remote
+<h1 align='center'>
+  <img src="https://github.com/franz-dc/youtube-music-remote/blob/main/images/logo.webp" width="120px" style="max-width: 100%" alt="Player">
+  <br>
+  YouTube Music Remote
+</h1>
 
 Control [YouTube Music](https://github.com/th-ch/youtube-music) from your phone, tablet, or another computer.
 
