@@ -8,7 +8,7 @@ import {
 } from '@gorhom/bottom-sheet';
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { Button, List, Text, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
   actionsContainer: {
     gap: 8,
     marginHorizontal: 32,
+    marginBottom: Platform.OS === 'web' ? 24 : 8,
   },
   addTimerContainer: {
     marginTop: 8,
@@ -144,7 +145,11 @@ const SleepTimerMenu = forwardRef<SleepTimerMenuMethods, SleepTimerMenuProps>(
             />
           )}
         >
-          <BottomSheetView style={{ paddingBottom: bottomInset + 8 }}>
+          <BottomSheetView
+            style={{
+              paddingBottom: bottomInset + 8,
+            }}
+          >
             <Text variant='titleMedium' style={styles.title}>
               {t('sleepTimer')}
             </Text>
