@@ -35,11 +35,19 @@ const TIMER_OPTIONS: TimerOption[] = [
   },
   {
     type: 'minutes',
+    value: 10,
+  },
+  {
+    type: 'minutes',
     value: 15,
   },
   {
     type: 'minutes',
     value: 30,
+  },
+  {
+    type: 'minutes',
+    value: 45,
   },
   {
     type: 'hours',
