@@ -30,6 +30,10 @@ const StackWithConfig = () => {
   const { i18n } = useTranslation('translation');
   const [systemLanguage] = useState(i18n.language);
 
+  // initialize ip address and port for queue ui
+  useSettingAtom('ipAddress');
+  useSettingAtom('port');
+
   const [language] = useSettingAtom('language');
   const [theme] = useSettingAtom('theme');
   const [useMaterialYouColors] = useSettingAtom('useMaterialYouColors');
