@@ -34,7 +34,9 @@
     "minutes_other": "{{count}} minutes",
     "hours_one": "{{count}} hour",
     "hours_other": "{{count}} hours",
-    "share": "Share"
+    "share": "Share",
+    "like": "Like",
+    "dislike": "Dislike"
   },
   "queue": {
     "title": "Queue",

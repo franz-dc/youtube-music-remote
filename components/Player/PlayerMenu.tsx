@@ -7,13 +7,15 @@ import {
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
 import { useTranslation } from 'react-i18next';
-import { Alert, Share, StyleSheet } from 'react-native';
-import { List, useTheme } from 'react-native-paper';
+import { Alert, Platform, Share, StyleSheet } from 'react-native';
+import { Divider, List, Text, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ANIMATION_CONFIGS } from '@/constants';
 import { useBottomSheetModalBackHandler } from '@/hooks';
 import { SongInfoSchema } from '@/schemas';
+import { toggleDislikeSong, toggleLikeSong } from '@/services';
+import { formatSecondsToDuration } from '@/utils';
 
 import SleepTimer from './SleepTimer';
 
@@ -36,6 +38,10 @@ const styles = StyleSheet.create({
   },
   listItem: {
     paddingHorizontal: 16,
+  },
+  divider: {
+    marginTop: 16,
+    marginBottom: 8,
   },
 });
 
@@ -74,6 +80,16 @@ const PlayerMenu = forwardRef<PlayerMenuMethods, PlayerMenuProps>(
       }
     };
 
+    const likeSong = async () => {
+      handleDismissModalPress();
+      await toggleLikeSong();
+    };
+
+    const dislikeSong = async () => {
+      handleDismissModalPress();
+      await toggleDislikeSong();
+    };
+
     return (
       <BottomSheetModalProvider>
         <BottomSheetModal
@@ -92,7 +108,41 @@ const PlayerMenu = forwardRef<PlayerMenuMethods, PlayerMenuProps>(
           )}
           enableDismissOnClose={false}
         >
-          <BottomSheetView style={{ paddingBottom: bottomInset }}>
+          <BottomSheetView
+            style={{
+              paddingBottom: bottomInset + (Platform.OS === 'web' ? 8 : 0),
+            }}
+          >
+            <Text
+              style={{
+                paddingHorizontal: 16,
+                fontWeight: 'bold',
+              }}
+            >
+              {songInfo.title}
+            </Text>
+            <Text
+              style={{
+                paddingHorizontal: 16,
+                opacity: 0.5,
+              }}
+            >
+              {songInfo.artist} ⦁{' '}
+              {formatSecondsToDuration(songInfo.songDuration)}
+            </Text>
+            <Divider style={styles.divider} />
+            <List.Item
+              title={t('like')}
+              left={() => <List.Icon icon='thumb-up-outline' />}
+              onPress={likeSong}
+              style={styles.listItem}
+            />
+            <List.Item
+              title={t('dislike')}
+              left={() => <List.Icon icon='thumb-down-outline' />}
+              onPress={dislikeSong}
+              style={styles.listItem}
+            />
             <List.Item
               title={t('share')}
               left={() => <List.Icon icon='share' />}
