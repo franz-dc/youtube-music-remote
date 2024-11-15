@@ -26,7 +26,14 @@
     "nothingIsPlaying": "再生中の曲はありません",
     "nothingIsPlayingMessage": "ここからコントロールするには、YouTube Musicで何かを再生してください。",
     "minimizePlayer": "プレーヤーを最小化",
-    "maximizePlayer": "プレーヤーを最大化"
+    "maximizePlayer": "プレーヤーを最大化",
+    "sleepTimer": "スリープタイマー",
+    "addFiveMinutes": "5分追加",
+    "cancelTimer": "タイマーをキャンセル",
+    "minutes_one": "{{value}}分",
+    "minutes_other": "{{value}}分",
+    "hours_one": "{{value}}時間",
+    "hours_other": "{{value}}時間"
   },
   "queue": {
     "title": "キュー",
@@ -70,12 +77,6 @@
         "en": "英語",
         "ja": "日本語"
       }
-    },
-    "advanced": {
-      "title": "詳細",
-      "pollingRate": "ポーリングレート",
-      "seconds_one": "{{value}} 秒",
-      "seconds_other": "{{value}} 秒"
     }
   }
 }

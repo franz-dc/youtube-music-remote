@@ -26,7 +26,14 @@
     "nothingIsPlaying": "Nothing is playing",
     "nothingIsPlayingMessage": "Play something on YouTube Music to control it from here.",
     "minimizePlayer": "Minimize player",
-    "maximizePlayer": "Maximize player"
+    "maximizePlayer": "Maximize player",
+    "sleepTimer": "Sleep timer",
+    "addFiveMinutes": "Add 5 minutes",
+    "cancelTimer": "Cancel timer",
+    "minutes_one": "{{count}} minute",
+    "minutes_other": "{{count}} minutes",
+    "hours_one": "{{count}} hour",
+    "hours_other": "{{count}} hours"
   },
   "queue": {
     "title": "Queue",
@@ -70,12 +77,6 @@
         "en": "English",
         "ja": "Japanese"
       }
-    },
-    "advanced": {
-      "title": "Advanced",
-      "pollingRate": "Polling rate",
-      "seconds_one": "{{value}} second",
-      "seconds_other": "{{value}} seconds"
     }
   }
 }
