@@ -3,7 +3,7 @@ import { QueueSchema, SongInfoSchema } from '@/schemas';
 
 // Player
 // export const play = async () => await api.post('/play');
-// export const pause = async () => await api.post('/pause');
+export const pause = async () => await api.post('/pause');
 export const togglePlayPause = async () => await api.post('/toggle-play');
 export const playPreviousTrack = async () => await api.post('/previous');
 export const playNextTrack = async () => await api.post('/next');
