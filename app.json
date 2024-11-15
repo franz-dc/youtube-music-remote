@@ -13,6 +13,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
+      "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true
+        }
+      },
       "supportsTablet": true
     },
     "android": {
@@ -48,6 +53,9 @@
             "enableProguardInReleaseBuilds": true,
             "enableShrinkResourceslnReleaseBuilds": true,
             "useLegacyPackaging": true
+          },
+          "ios": {
+            "flipper": true
           }
         }
       ]
