@@ -15,7 +15,6 @@ import { ANIMATION_CONFIGS } from '@/constants';
 import { useBottomSheetModalBackHandler } from '@/hooks';
 import { SongInfoSchema } from '@/schemas';
 import { toggleDislikeSong, toggleLikeSong } from '@/services';
-import { formatSecondsToDuration } from '@/utils';
 
 import SleepTimer from './SleepTimer';
 
@@ -127,8 +126,8 @@ const PlayerMenu = forwardRef<PlayerMenuMethods, PlayerMenuProps>(
                 opacity: 0.5,
               }}
             >
-              {songInfo.artist} ⦁{' '}
-              {formatSecondsToDuration(songInfo.songDuration)}
+              {songInfo.artist}
+              {songInfo.album && ` • ${songInfo.album}`}
             </Text>
             <Divider style={styles.divider} />
             <List.Item
