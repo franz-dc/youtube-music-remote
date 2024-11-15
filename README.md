@@ -17,10 +17,11 @@ Control [YouTube Music](https://github.com/th-ch/youtube-music) from your phone,
 
 ```bash
 yarn
-yarn start
+yarn android # or yarn web
 ```
 
-Note that this will not work on Expo Go, as some libraries used are not supported by it.
+- Note that this will not work on Expo Go, as some libraries used are not supported by it.
+- iOS is not yet tested to work due to no access to an Apple device.
 
 ## Limitations
 
@@ -29,4 +30,4 @@ There are some limitations to the app mostly due to the limitations of the API s
 - Authorization strategy must be set to `No authorization` in the plugin configuration (for now).
 - [Seeking](https://github.com/th-ch/youtube-music/issues/2582) is not yet supported.
 - Queue is for viewing only.
-- Some player button states (repeat, like/dislike, etc.) are indeterminate.
+- Some player button states ([repeat](https://github.com/th-ch/youtube-music/issues/2504), like/dislike, etc.) are indeterminate.
