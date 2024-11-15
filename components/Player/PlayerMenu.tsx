@@ -110,7 +110,7 @@ const PlayerMenu = forwardRef<PlayerMenuMethods, PlayerMenuProps>(
         >
           <BottomSheetView
             style={{
-              paddingBottom: bottomInset + (Platform.OS === 'web' ? 8 : 0),
+              paddingBottom: bottomInset + (Platform.OS === 'web' ? 16 : 8),
             }}
           >
             <Text
