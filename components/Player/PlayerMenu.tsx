@@ -6,16 +6,19 @@ import {
   BottomSheetModalProvider,
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
-import { StyleSheet } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
+import { Alert, Share, StyleSheet } from 'react-native';
+import { List, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ANIMATION_CONFIGS } from '@/constants';
 import { useBottomSheetModalBackHandler } from '@/hooks';
+import { SongInfoSchema } from '@/schemas';
 
 import SleepTimer from './SleepTimer';
 
 export type PlayerMenuProps = {
+  songInfo: NonNullable<SongInfoSchema>;
   onPause: () => Promise<void>;
   onSleepTimerMenuOpen: () => void;
 };
@@ -31,10 +34,15 @@ const styles = StyleSheet.create({
   bottomSheetModal: {
     marginHorizontal: 24,
   },
+  listItem: {
+    paddingHorizontal: 16,
+  },
 });
 
 const PlayerMenu = forwardRef<PlayerMenuMethods, PlayerMenuProps>(
-  ({ onPause, onSleepTimerMenuOpen }, ref) => {
+  ({ songInfo, onPause, onSleepTimerMenuOpen }, ref) => {
+    const { t } = useTranslation('translation', { keyPrefix: 'player' });
+
     const { bottom: bottomInset } = useSafeAreaInsets();
 
     const theme = useTheme();
@@ -53,6 +61,18 @@ const PlayerMenu = forwardRef<PlayerMenuMethods, PlayerMenuProps>(
 
     const { handleSheetPositionChange } =
       useBottomSheetModalBackHandler(bottomSheetModalRef);
+
+    const shareSong = async () => {
+      try {
+        await Share.share({
+          message: songInfo.url,
+        });
+      } catch (error: any) {
+        Alert.alert(error.message);
+      } finally {
+        handleDismissModalPress();
+      }
+    };
 
     return (
       <BottomSheetModalProvider>
@@ -73,6 +93,12 @@ const PlayerMenu = forwardRef<PlayerMenuMethods, PlayerMenuProps>(
           enableDismissOnClose={false}
         >
           <BottomSheetView style={{ paddingBottom: bottomInset }}>
+            <List.Item
+              title={t('share')}
+              left={() => <List.Icon icon='share' />}
+              onPress={shareSong}
+              style={styles.listItem}
+            />
             <SleepTimer
               onPause={onPause}
               onPlayerMenuDismiss={handleDismissModalPress}

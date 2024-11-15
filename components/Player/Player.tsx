@@ -367,12 +367,17 @@ const Player = () => {
           </LinearGradient>
         </BottomSheetView>
       </BottomSheet>
-      <PlayerMenu
-        ref={playerMenuRef}
-        onSleepTimerMenuOpen={handleSleepTimerMenuOpen}
-        onPause={handlePause}
-      />
-      <SleepTimerMenu ref={sleepTimerMenuRef} />
+      {!!songInfo && (
+        <>
+          <PlayerMenu
+            ref={playerMenuRef}
+            songInfo={songInfo}
+            onSleepTimerMenuOpen={handleSleepTimerMenuOpen}
+            onPause={handlePause}
+          />
+          <SleepTimerMenu ref={sleepTimerMenuRef} />
+        </>
+      )}
     </>
   );
 };
