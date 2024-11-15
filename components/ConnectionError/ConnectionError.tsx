@@ -3,12 +3,6 @@ import { StyleProp, ViewStyle } from 'react-native';
 
 import InfoView from '../InfoView';
 
-export type ConnectionErrorProps = {
-  type: 'noConnection' | 'serverError';
-  onRetry?: () => void;
-  style?: StyleProp<ViewStyle>;
-};
-
 const errorTexts = {
   noConnection: {
     title: 'cantConnectToServer',
@@ -18,9 +12,25 @@ const errorTexts = {
     title: 'somethingWentWrong',
     message: 'serverError',
   },
+  notConfigured: {
+    title: 'notConfigured',
+    message: 'notConfiguredMessage',
+  },
 } as const;
 
-const ConnectionError = ({ type, onRetry, style }: ConnectionErrorProps) => {
+export type ConnectionErrorProps = {
+  type: keyof typeof errorTexts;
+  onActionPress?: () => void;
+  actionLabel?: string;
+  style?: StyleProp<ViewStyle>;
+};
+
+const ConnectionError = ({
+  type,
+  onActionPress,
+  actionLabel,
+  style,
+}: ConnectionErrorProps) => {
   const { t } = useTranslation('translation', { keyPrefix: 'common' });
 
   return (
@@ -28,8 +38,8 @@ const ConnectionError = ({ type, onRetry, style }: ConnectionErrorProps) => {
       title={t(errorTexts[type].title)}
       message={t(errorTexts[type].message)}
       icon='cellphone-link-off'
-      onActionPress={onRetry}
-      actionLabel={t('retry')}
+      onActionPress={onActionPress}
+      actionLabel={actionLabel || t('retry')}
       style={style}
     />
   );

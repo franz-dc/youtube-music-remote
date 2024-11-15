@@ -7,7 +7,10 @@
     "cantConnectToServer": "サーバーに接続できません",
     "noConnectionMessage": "接続設定を確認するか、サーバーが実行されているかどうかを確認してください。",
     "somethingWentWrong": "問題が発生しました",
-    "serverError": "問題が解決しない場合は、再試行するか、YouTube Musicを再起動してください。"
+    "serverError": "問題が解決しない場合は、再試行するか、YouTube Musicを再起動してください。",
+    "notConfigured": "アプリが構成されていません",
+    "notConfiguredMessage": "最初に接続設定を構成してください。",
+    "goToSettings": "設定に移動"
   },
   "player": {
     "title": "プレーヤー",

@@ -1,4 +1,5 @@
 import { FlashList } from '@shopify/flash-list';
+import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -32,13 +33,20 @@ const Queue = () => {
   const paddingBottom = MINI_PLAYER_HEIGHT + bottomInset;
 
   if (!ipAddress)
-    return <ConnectionError type='noConnection' style={{ paddingBottom }} />;
+    return (
+      <ConnectionError
+        type='notConfigured'
+        style={{ paddingBottom }}
+        onActionPress={() => router.push('/settings')}
+        actionLabel={t('common.goToSettings')}
+      />
+    );
 
   if (error?.message === 'Network Error')
     return (
       <ConnectionError
         type='noConnection'
-        onRetry={refetch}
+        onActionPress={refetch}
         style={{ paddingBottom }}
       />
     );
@@ -49,7 +57,7 @@ const Queue = () => {
     return (
       <ConnectionError
         type='serverError'
-        onRetry={refetch}
+        onActionPress={refetch}
         style={{ paddingBottom }}
       />
     );

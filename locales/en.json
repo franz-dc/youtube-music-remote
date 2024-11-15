@@ -7,7 +7,10 @@
     "cantConnectToServer": "Can't connect to server",
     "noConnectionMessage": "Please check your connection settings or check if the server is running.",
     "somethingWentWrong": "Something went wrong",
-    "serverError": "Press retry or restart YouTube Music if the problem persists."
+    "serverError": "Press retry or restart YouTube Music if the problem persists.",
+    "notConfigured": "App not configured",
+    "notConfiguredMessage": "Please configure the connection settings first.",
+    "goToSettings": "Go to settings"
   },
   "player": {
     "title": "Player",
