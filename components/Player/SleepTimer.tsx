@@ -72,7 +72,9 @@ const SleepTimer = ({
       title={
         t('sleepTimer') + (timeRemaining > 0 ? `  ⦁  ${timeRemainingText}` : '')
       }
-      left={() => <List.Icon icon='power-sleep' />}
+      left={() => (
+        <List.Icon icon={isSleepTimerActive ? 'timer' : 'timer-outline'} />
+      )}
       onPress={onPress}
       style={styles.listItem}
     />
