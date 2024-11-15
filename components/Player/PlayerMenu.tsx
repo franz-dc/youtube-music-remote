@@ -4,7 +4,7 @@ import {
   BottomSheetBackdrop,
   BottomSheetModal,
   BottomSheetModalProvider,
-  BottomSheetView,
+  BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 import { useTranslation } from 'react-i18next';
 import { Alert, Platform, Share, StyleSheet } from 'react-native';
@@ -108,8 +108,8 @@ const PlayerMenu = forwardRef<PlayerMenuMethods, PlayerMenuProps>(
           )}
           enableDismissOnClose={false}
         >
-          <BottomSheetView
-            style={{
+          <BottomSheetScrollView
+            contentContainerStyle={{
               paddingBottom: bottomInset + (Platform.OS === 'web' ? 16 : 8),
             }}
           >
@@ -154,7 +154,7 @@ const PlayerMenu = forwardRef<PlayerMenuMethods, PlayerMenuProps>(
               onPlayerMenuDismiss={handleDismissModalPress}
               onSleepTimerMenuOpen={onSleepTimerMenuOpen}
             />
-          </BottomSheetView>
+          </BottomSheetScrollView>
         </BottomSheetModal>
       </BottomSheetModalProvider>
     );

@@ -4,7 +4,7 @@ import {
   BottomSheetBackdrop,
   BottomSheetModal,
   BottomSheetModalProvider,
-  BottomSheetView,
+  BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
@@ -125,7 +125,7 @@ const Content = ({ onDismiss }: { onDismiss: () => void }) => {
 
   if (isSleepTimerActive)
     return (
-      <>
+      <View>
         <Text style={styles.durationText}>{timeRemainingText}</Text>
         <View style={styles.actionsContainer}>
           <Button
@@ -150,7 +150,7 @@ const Content = ({ onDismiss }: { onDismiss: () => void }) => {
             {t('cancelTimer')}
           </Button>
         </View>
-      </>
+      </View>
     );
 
   return (
@@ -205,8 +205,8 @@ const SleepTimerMenu = forwardRef<SleepTimerMenuMethods, SleepTimerMenuProps>(
             />
           )}
         >
-          <BottomSheetView
-            style={{
+          <BottomSheetScrollView
+            contentContainerStyle={{
               paddingBottom: bottomInset + 8,
             }}
           >
@@ -214,7 +214,7 @@ const SleepTimerMenu = forwardRef<SleepTimerMenuMethods, SleepTimerMenuProps>(
               {t('sleepTimer')}
             </Text>
             <Content onDismiss={handleDismissModalPress} />
-          </BottomSheetView>
+          </BottomSheetScrollView>
         </BottomSheetModal>
       </BottomSheetModalProvider>
     );
