@@ -10,10 +10,10 @@ import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { Button, List, Text, useTheme } from 'react-native-paper';
-import { Easing } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { sleepTimerActiveAtom, sleepTimerAtom } from '@/configs';
+import { ANIMATION_CONFIGS } from '@/constants';
 import { useBottomSheetModalBackHandler } from '@/hooks';
 import { formatSecondsToDuration } from '@/utils';
 
@@ -21,11 +21,6 @@ export type SleepTimerMenuProps = {};
 
 export type SleepTimerMenuMethods = {
   show: () => void;
-};
-
-const ANIMATION_CONFIGS = {
-  duration: 350,
-  easing: Easing.out(Easing.exp),
 };
 
 type TimerOption = {

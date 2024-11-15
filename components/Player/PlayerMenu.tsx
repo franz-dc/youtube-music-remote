@@ -8,9 +8,9 @@ import {
 } from '@gorhom/bottom-sheet';
 import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import { Easing } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { ANIMATION_CONFIGS } from '@/constants';
 import { useBottomSheetModalBackHandler } from '@/hooks';
 
 import SleepTimer from './SleepTimer';
@@ -22,11 +22,6 @@ export type PlayerMenuProps = {
 
 export type PlayerMenuMethods = {
   show: () => void;
-};
-
-const ANIMATION_CONFIGS = {
-  duration: 350,
-  easing: Easing.out(Easing.exp),
 };
 
 const styles = StyleSheet.create({

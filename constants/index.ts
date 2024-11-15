@@ -1,4 +1,5 @@
 import { Platform } from 'react-native';
+import { Easing } from 'react-native-reanimated';
 
 import { TextDialogProps } from '@/components';
 import { SettingsSchema } from '@/schemas';
@@ -109,3 +110,7 @@ export const MINI_PLAYER_HEIGHT = 64;
 export const MINI_PLAYER_ALBUM_ART_WIDTH = MINI_PLAYER_HEIGHT - 20; // 10 vertical padding
 export const MORE_ICON =
   Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical';
+export const ANIMATION_CONFIGS = {
+  duration: 350,
+  easing: Easing.out(Easing.exp),
+};
