@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import { Icon, IconButton, Text, useTheme } from 'react-native-paper';
 import Animated, {
-  Easing,
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
@@ -20,6 +19,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useSettingAtom } from '@/configs';
 import {
+  ANIMATION_CONFIGS,
   DOMINANT_COLOR_FALLBACK,
   MINI_PLAYER_ALBUM_ART_WIDTH,
   MINI_PLAYER_HEIGHT,
@@ -44,11 +44,6 @@ import SleepTimerMenu, { SleepTimerMenuMethods } from './SleepTimerMenu';
 const PLAYER_HORIZONTAL_PADDING = 24;
 const MINI_PLAYER_VISIBILITY_THRESHOLD = 0.8;
 const PLAYER_VISIBILITY_THRESHOLD = 0.2;
-const ANIMATION_CONFIGS = {
-  duration: 350,
-  easing: Easing.out(Easing.exp),
-};
-
 const styles = StyleSheet.create({
   linearGradient: {
     height: '100%',
@@ -372,12 +367,17 @@ const Player = () => {
           </LinearGradient>
         </BottomSheetView>
       </BottomSheet>
-      <PlayerMenu
-        ref={playerMenuRef}
-        onSleepTimerMenuOpen={handleSleepTimerMenuOpen}
-        onPause={handlePause}
-      />
-      <SleepTimerMenu ref={sleepTimerMenuRef} />
+      {!!songInfo && (
+        <>
+          <PlayerMenu
+            ref={playerMenuRef}
+            songInfo={songInfo}
+            onSleepTimerMenuOpen={handleSleepTimerMenuOpen}
+            onPause={handlePause}
+          />
+          <SleepTimerMenu ref={sleepTimerMenuRef} />
+        </>
+      )}
     </>
   );
 };

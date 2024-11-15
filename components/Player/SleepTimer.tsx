@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
+import { StyleSheet } from 'react-native';
 import { List } from 'react-native-paper';
 
 import { sleepTimerActiveAtom, sleepTimerAtom } from '@/configs';
@@ -12,6 +13,12 @@ export type SleepTimerProps = {
   onPlayerMenuDismiss: () => void;
   onSleepTimerMenuOpen: () => void;
 };
+
+const styles = StyleSheet.create({
+  listItem: {
+    paddingHorizontal: 16,
+  },
+});
 
 const SleepTimer = ({
   onPause,
@@ -67,7 +74,7 @@ const SleepTimer = ({
       }
       left={() => <List.Icon icon='power-sleep' />}
       onPress={onPress}
-      style={{ paddingHorizontal: 16 }}
+      style={styles.listItem}
     />
   );
 };

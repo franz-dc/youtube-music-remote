@@ -52,7 +52,9 @@ export const useClientElapsedSeconds = ({
   useEffect(() => {
     const interval = setInterval(() => {
       if (songInfo.isPaused) return;
-      setClientElapsedSeconds((prev) => prev + 1);
+      setClientElapsedSeconds((prev) =>
+        Math.min(prev + 1, songInfo.songDuration)
+      );
     }, 1000);
 
     return () => clearInterval(interval);

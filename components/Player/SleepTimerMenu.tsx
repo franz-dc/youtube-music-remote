@@ -4,16 +4,16 @@ import {
   BottomSheetBackdrop,
   BottomSheetModal,
   BottomSheetModalProvider,
-  BottomSheetView,
+  BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { Button, List, Text, useTheme } from 'react-native-paper';
-import { Easing } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { sleepTimerActiveAtom, sleepTimerAtom } from '@/configs';
+import { ANIMATION_CONFIGS } from '@/constants';
 import { useBottomSheetModalBackHandler } from '@/hooks';
 import { formatSecondsToDuration } from '@/utils';
 
@@ -21,11 +21,6 @@ export type SleepTimerMenuProps = {};
 
 export type SleepTimerMenuMethods = {
   show: () => void;
-};
-
-const ANIMATION_CONFIGS = {
-  duration: 350,
-  easing: Easing.out(Easing.exp),
 };
 
 type TimerOption = {
@@ -40,11 +35,19 @@ const TIMER_OPTIONS: TimerOption[] = [
   },
   {
     type: 'minutes',
+    value: 10,
+  },
+  {
+    type: 'minutes',
     value: 15,
   },
   {
     type: 'minutes',
     value: 30,
+  },
+  {
+    type: 'minutes',
+    value: 45,
   },
   {
     type: 'hours',
@@ -70,7 +73,8 @@ const styles = StyleSheet.create({
   },
   actionsContainer: {
     gap: 8,
-    marginHorizontal: 32,
+    marginHorizontal: 48,
+    marginBottom: Platform.OS === 'web' ? 24 : 8,
   },
   addTimerContainer: {
     marginTop: 8,
@@ -79,6 +83,89 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
 });
+
+// separate content to prevent stutters when timer is active
+const Content = ({ onDismiss }: { onDismiss: () => void }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'player' });
+
+  const theme = useTheme();
+
+  const [isSleepTimerActive, setIsSleepTimerActive] =
+    useAtom(sleepTimerActiveAtom);
+  const [timeRemaining, setTimeRemaining] = useAtom(sleepTimerAtom);
+
+  // format duration with proper padding to minutes and seconds
+  const timeRemainingText = formatSecondsToDuration(timeRemaining);
+
+  const addTimer = ({ type, value }: TimerOption) => {
+    switch (type) {
+      case 'hours':
+        setTimeRemaining(value * 3600);
+        break;
+      case 'minutes':
+        setTimeRemaining(value * 60);
+        break;
+    }
+
+    setIsSleepTimerActive(true);
+    onDismiss();
+  };
+
+  const addFiveMinutes = () => {
+    setTimeRemaining((prev) => prev + 300);
+    // reinstate active state to prevent race conditions
+    setIsSleepTimerActive(true);
+  };
+
+  const cancelTimer = () => {
+    setIsSleepTimerActive(false);
+    setTimeRemaining(0);
+    onDismiss();
+  };
+
+  if (isSleepTimerActive)
+    return (
+      <View>
+        <Text style={styles.durationText}>{timeRemainingText}</Text>
+        <View style={styles.actionsContainer}>
+          <Button
+            style={{
+              borderColor: theme.colors.onSurface,
+            }}
+            buttonColor={theme.colors.onSurface}
+            textColor={theme.colors.surface}
+            icon='plus'
+            onPress={addFiveMinutes}
+          >
+            {t('addFiveMinutes')}
+          </Button>
+          <Button
+            style={{
+              borderWidth: 1,
+              borderColor: theme.colors.onSurface,
+            }}
+            textColor={theme.colors.onSurface}
+            onPress={cancelTimer}
+          >
+            {t('cancelTimer')}
+          </Button>
+        </View>
+      </View>
+    );
+
+  return (
+    <View style={styles.addTimerContainer}>
+      {TIMER_OPTIONS.map(({ type, value }, index) => (
+        <List.Item
+          key={index}
+          title={t(type, { count: value })}
+          onPress={() => addTimer({ type, value })}
+          titleStyle={styles.listItemOptionTitle}
+        />
+      ))}
+    </View>
+  );
+};
 
 const SleepTimerMenu = forwardRef<SleepTimerMenuMethods, SleepTimerMenuProps>(
   (props, ref) => {
@@ -91,6 +178,8 @@ const SleepTimerMenu = forwardRef<SleepTimerMenuMethods, SleepTimerMenuProps>(
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
     const handlePresentModalPress = () =>
       bottomSheetModalRef.current?.present();
+    const handleDismissModalPress = () =>
+      bottomSheetModalRef.current?.dismiss();
 
     useImperativeHandle(ref, () => ({
       show: handlePresentModalPress,
@@ -98,39 +187,6 @@ const SleepTimerMenu = forwardRef<SleepTimerMenuMethods, SleepTimerMenuProps>(
 
     const { handleSheetPositionChange } =
       useBottomSheetModalBackHandler(bottomSheetModalRef);
-
-    const [isSleepTimerActive, setIsSleepTimerActive] =
-      useAtom(sleepTimerActiveAtom);
-    const [timeRemaining, setTimeRemaining] = useAtom(sleepTimerAtom);
-
-    // format duration with proper padding to minutes and seconds
-    const timeRemainingText = formatSecondsToDuration(timeRemaining);
-
-    const addTimer = ({ type, value }: TimerOption) => {
-      switch (type) {
-        case 'hours':
-          setTimeRemaining(value * 3600);
-          break;
-        case 'minutes':
-          setTimeRemaining(value * 60);
-          break;
-      }
-
-      setIsSleepTimerActive(true);
-      bottomSheetModalRef.current?.dismiss();
-    };
-
-    const addFiveMinutes = () => {
-      setTimeRemaining((prev) => prev + 300);
-      // reinstate active state to prevent race conditions
-      setIsSleepTimerActive(true);
-    };
-
-    const cancelTimer = () => {
-      setIsSleepTimerActive(false);
-      setTimeRemaining(0);
-      bottomSheetModalRef.current?.dismiss();
-    };
 
     return (
       <BottomSheetModalProvider>
@@ -149,50 +205,16 @@ const SleepTimerMenu = forwardRef<SleepTimerMenuMethods, SleepTimerMenuProps>(
             />
           )}
         >
-          <BottomSheetView style={{ paddingBottom: bottomInset + 8 }}>
+          <BottomSheetScrollView
+            contentContainerStyle={{
+              paddingBottom: bottomInset + 8,
+            }}
+          >
             <Text variant='titleMedium' style={styles.title}>
               {t('sleepTimer')}
             </Text>
-            {isSleepTimerActive ? (
-              <>
-                <Text style={styles.durationText}>{timeRemainingText}</Text>
-                <View style={styles.actionsContainer}>
-                  <Button
-                    style={{
-                      borderColor: theme.colors.onSurface,
-                    }}
-                    buttonColor={theme.colors.onSurface}
-                    textColor={theme.colors.surface}
-                    icon='plus'
-                    onPress={addFiveMinutes}
-                  >
-                    {t('addFiveMinutes')}
-                  </Button>
-                  <Button
-                    style={{
-                      borderWidth: 1,
-                      borderColor: theme.colors.onSurface,
-                    }}
-                    textColor={theme.colors.onSurface}
-                    onPress={cancelTimer}
-                  >
-                    {t('cancelTimer')}
-                  </Button>
-                </View>
-              </>
-            ) : (
-              <View style={styles.addTimerContainer}>
-                {TIMER_OPTIONS.map(({ type, value }, index) => (
-                  <List.Item
-                    key={index}
-                    title={t(type, { count: value })}
-                    onPress={() => addTimer({ type, value })}
-                    titleStyle={styles.listItemOptionTitle}
-                  />
-                ))}
-              </View>
-            )}
-          </BottomSheetView>
+            <Content onDismiss={handleDismissModalPress} />
+          </BottomSheetScrollView>
         </BottomSheetModal>
       </BottomSheetModalProvider>
     );

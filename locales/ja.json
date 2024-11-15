@@ -33,7 +33,10 @@
     "minutes_one": "{{value}}分",
     "minutes_other": "{{value}}分",
     "hours_one": "{{value}}時間",
-    "hours_other": "{{value}}時間"
+    "hours_other": "{{value}}時間",
+    "share": "共有",
+    "like": "好き",
+    "dislike": "嫌い"
   },
   "queue": {
     "title": "キュー",
@@ -76,7 +79,8 @@
         "system": "システム言語",
         "en": "英語",
         "ja": "日本語"
-      }
+      },
+      "keepScreenOn": "画面をオンに保つ"
     }
   }
 }

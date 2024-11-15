@@ -3709,7 +3709,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:^8.0.0, ajv@npm:^8.9.0":
+"ajv@npm:^8.0.0, ajv@npm:^8.11.0, ajv@npm:^8.9.0":
   version: 8.17.1
   resolution: "ajv@npm:8.17.1"
   dependencies:
@@ -6090,6 +6090,18 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 10c0/aed3164cee4483e47fa56c8898384769d60ebb3f94553f7ad2a33a8902d73a1379aee3fc51833c8f0a4a59979ed842ba079e52c8e1903104b1ad312ad90fe1d1
+  languageName: node
+  linkType: hard
+
+"expo-build-properties@npm:~0.12.5":
+  version: 0.12.5
+  resolution: "expo-build-properties@npm:0.12.5"
+  dependencies:
+    ajv: "npm:^8.11.0"
+    semver: "npm:^7.6.0"
+  peerDependencies:
+    expo: "*"
+  checksum: 10c0/1418c94d97cc5c5ecb5ec947ca7eb218bb3d14a5c7127c6acaf9f763af5060df6e581e90b7ec210cdf4fb16d676f58500414127375b2e169646c66b5bd79e9cc
   languageName: node
   linkType: hard
 
@@ -13741,6 +13753,7 @@ __metadata:
     eslint-plugin-react: "npm:^7.37.2"
     eslint-plugin-react-hooks: "npm:^5.0.0"
     expo: "npm:^51.0.0"
+    expo-build-properties: "npm:~0.12.5"
     expo-constants: "npm:~16.0.2"
     expo-font: "npm:~12.0.9"
     expo-linear-gradient: "npm:~13.0.2"

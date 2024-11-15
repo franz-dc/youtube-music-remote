@@ -70,7 +70,7 @@ const MiniPlayer = ({ songInfo, isPlaying, onPlayPause }: MiniPlayerProps) => {
     isPlaying,
   });
 
-  // TODO: Progress bar
+  // FIXME: Buttons are still pressable when the player is maximized
 
   return (
     <View style={styles.container}>

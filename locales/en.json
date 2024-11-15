@@ -33,7 +33,10 @@
     "minutes_one": "{{count}} minute",
     "minutes_other": "{{count}} minutes",
     "hours_one": "{{count}} hour",
-    "hours_other": "{{count}} hours"
+    "hours_other": "{{count}} hours",
+    "share": "Share",
+    "like": "Like",
+    "dislike": "Dislike"
   },
   "queue": {
     "title": "Queue",
@@ -76,7 +79,8 @@
         "system": "System language",
         "en": "English",
         "ja": "Japanese"
-      }
+      },
+      "keepScreenOn": "Keep screen on"
     }
   }
 }
