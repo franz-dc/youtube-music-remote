@@ -55,5 +55,5 @@ export const useSettingAtom = <K extends keyof SettingsSchema>(setting: K) =>
 export const accessTokenAtom = atomWithMMKV('accessToken', '');
 
 // sleep timer
-export const sleepTimerAtom = atom(20); // in seconds
-export const sleepTimerActiveAtom = atom(true);
+export const sleepTimerAtom = atom(0); // in seconds
+export const sleepTimerActiveAtom = atom(false);
