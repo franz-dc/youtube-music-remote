@@ -10,7 +10,7 @@ import { playNextTrack, playPreviousTrack } from '@/services';
 export type MiniPlayerProps = {
   songInfo: NonNullable<SongInfoSchema>;
   isPlaying: boolean;
-  onPlayPause: () => void;
+  onPlayPause: () => Promise<void>;
 };
 
 const styles = StyleSheet.create({

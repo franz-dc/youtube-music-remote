@@ -1,4 +1,4 @@
-import { SetStateAction, createStore } from 'jotai';
+import { SetStateAction, atom, createStore } from 'jotai';
 import { useAtom } from 'jotai/react';
 import { atomFamily, atomWithStorage, createJSONStorage } from 'jotai/utils';
 import { MMKV } from 'react-native-mmkv';
@@ -39,8 +39,6 @@ export const atomWithMMKV = <T>(key: string, initialValue: T) =>
     }))
   );
 
-export const accessTokenAtom = atomWithMMKV('accessToken', '');
-
 export const settingAtomFamily = atomFamily((setting: keyof SettingsSchema) =>
   atomWithMMKV(setting, DEFAULT_SETTINGS[setting] as string | boolean)
 );
@@ -52,3 +50,10 @@ export const useSettingAtom = <K extends keyof SettingsSchema>(setting: K) =>
     SettingsSchema[K],
     SetAtom<[SetStateAction<SettingsSchema[K]>], void>,
   ];
+
+// access token
+export const accessTokenAtom = atomWithMMKV('accessToken', '');
+
+// sleep timer
+export const sleepTimerAtom = atom(20); // in seconds
+export const sleepTimerActiveAtom = atom(true);

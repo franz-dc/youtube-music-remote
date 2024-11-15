@@ -25,15 +25,21 @@ import {
   MINI_PLAYER_HEIGHT,
   MORE_ICON,
 } from '@/constants';
-import { useDominantColor, useNowPlaying } from '@/hooks';
-import { togglePlayPause } from '@/services';
+import {
+  useBottomSheetBackHandler,
+  useDominantColor,
+  useNowPlaying,
+} from '@/hooks';
+import { pause, togglePlayPause } from '@/services';
 
 import InfoView from '../InfoView';
 
 import MiniPlayer from './MiniPlayer';
 import PlayerControls from './PlayerControls';
 import PlayerExtraActions from './PlayerExtraActions';
+import PlayerMenu, { PlayerMenuMethods } from './PlayerMenu';
 import PlayerSeekBar from './PlayerSeekBar';
+import SleepTimerMenu, { SleepTimerMenuMethods } from './SleepTimerMenu';
 
 const PLAYER_HORIZONTAL_PADDING = 24;
 const MINI_PLAYER_VISIBILITY_THRESHOLD = 0.8;
@@ -141,6 +147,11 @@ const Player = () => {
     await togglePlayPause();
   };
 
+  const handlePause = async () => {
+    setIsPlayingOptimistic(false);
+    await pause();
+  };
+
   // TODO: Use right gradient colors for light theme
   const { color: dominantColor, isBright: isDominantColorBright } =
     useDominantColor(songInfo?.imageSrc);
@@ -185,121 +196,90 @@ const Player = () => {
     zIndex: animatedIndex.value === 1 ? 0 : -10,
   }));
 
-  // if (error?.message === 'Network Error')
-  //   return <ConnectionError type='noConnection' onRetry={refetch} />;
-
-  // if (isLoading) return <LoadingView />;
-
-  // if (isError) return <ConnectionError type='serverError' onRetry={refetch} />;
-
-  // if (isLoading || isError) return null;
-
-  // if (!songInfo)
-  //   return (
-  //     <InfoView
-  //       title={t('nothingIsPlaying')}
-  //       message={t('nothingIsPlayingMessage')}
-  //       icon='music-off'
-  //     />
-  //   );
-
   const isNotPlaying = isLoading || isError || !songInfo;
 
+  const playerMenuRef = useRef<PlayerMenuMethods>(null);
+  const handleMenuPress = () => playerMenuRef.current?.show();
+
+  const sleepTimerMenuRef = useRef<SleepTimerMenuMethods>(null);
+  const handleSleepTimerMenuOpen = () => sleepTimerMenuRef.current?.show();
+
+  const { handleSheetPositionChange } =
+    useBottomSheetBackHandler(bottomSheetRef);
+
   return (
-    <BottomSheet
-      ref={bottomSheetRef}
-      animationConfigs={ANIMATION_CONFIGS}
-      animatedIndex={animatedIndex}
-      animatedPosition={animatedPosition}
-      handleIndicatorStyle={{ backgroundColor: theme.colors.onSurface }}
-      handleComponent={null}
-      snapPoints={snapPoints}
-      enableOverDrag={false}
-      style={{ backgroundColor: theme.colors.elevation.level4 }}
-      backgroundStyle={{ backgroundColor: theme.colors.elevation.level4 }}
-      // Slider fix - https://github.com/gorhom/react-native-bottom-sheet/issues/372
-      activeOffsetY={[-1, 1]}
-      failOffsetX={[-7, 7]}
-    >
-      <BottomSheetView style={styles.bottomSheetView}>
-        <LinearGradient
-          colors={
-            showAlbumArtColor
-              ? [dominantColorGradientStart, dominantColorGradientEnd]
-              : [backgroundColor, backgroundColor]
-          }
-          style={[
-            styles.linearGradient,
-            { backgroundColor, paddingBottom: bottomInset },
-          ]}
-        >
-          <View style={[styles.container, { paddingTop: topInset }]}>
-            <Animated.View
-              style={[
-                styles.miniPlayerPressableContainer,
-                miniPlayerOpacityStyle,
-                miniPlayerZIndexStyle,
-              ]}
-            >
-              <Pressable
-                onPress={maximizePlayer}
-                style={styles.miniPlayerPressable}
-                accessibilityLabel={t('player.maximizePlayer')}
-              >
-                {isNotPlaying ? (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      gap: 12,
-                      width: '100%',
-                      height: '100%',
-                      paddingVertical: 10,
-                      paddingHorizontal: 16,
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Icon
-                      source='music-off'
-                      size={MINI_PLAYER_ALBUM_ART_WIDTH * 0.75}
-                    />
-                    <Text>{t('nothingIsPlaying')}</Text>
-                  </View>
-                ) : (
-                  <MiniPlayer
-                    songInfo={songInfo}
-                    isPlaying={isPlayingOptimistic}
-                    onPlayPause={handlePlayPause}
-                  />
-                )}
-              </Pressable>
-            </Animated.View>
-            {isNotPlaying ? (
+    <>
+      <BottomSheet
+        ref={bottomSheetRef}
+        onChange={handleSheetPositionChange}
+        animationConfigs={ANIMATION_CONFIGS}
+        animatedIndex={animatedIndex}
+        animatedPosition={animatedPosition}
+        handleIndicatorStyle={{ backgroundColor: theme.colors.onSurface }}
+        handleComponent={null}
+        snapPoints={snapPoints}
+        enableOverDrag={false}
+        style={{ backgroundColor: theme.colors.elevation.level4 }}
+        backgroundStyle={{ backgroundColor: theme.colors.elevation.level4 }}
+        // Slider fix - https://github.com/gorhom/react-native-bottom-sheet/issues/372
+        activeOffsetY={[-1, 1]}
+        failOffsetX={[-7, 7]}
+      >
+        <BottomSheetView style={styles.bottomSheetView}>
+          <LinearGradient
+            colors={
+              showAlbumArtColor
+                ? [dominantColorGradientStart, dominantColorGradientEnd]
+                : [backgroundColor, backgroundColor]
+            }
+            style={[
+              styles.linearGradient,
+              { backgroundColor, paddingBottom: bottomInset },
+            ]}
+          >
+            <View style={[styles.container, { paddingTop: topInset }]}>
               <Animated.View
-                style={[playerOpacityStyle, playerZIndexStyle, { flex: 1 }]}
+                style={[
+                  styles.miniPlayerPressableContainer,
+                  miniPlayerOpacityStyle,
+                  miniPlayerZIndexStyle,
+                ]}
               >
-                <View style={styles.playerAppBar}>
-                  <IconButton
-                    icon='chevron-down'
-                    size={24}
-                    onPress={minimizePlayer}
-                    accessibilityLabel={t('player.minimizePlayer')}
-                  />
-                </View>
-                <InfoView
-                  title={t('nothingIsPlaying')}
-                  message={t('nothingIsPlayingMessage')}
-                  icon='music-off'
-                  style={{ marginTop: topInset }}
-                />
+                <Pressable
+                  onPress={maximizePlayer}
+                  style={styles.miniPlayerPressable}
+                  accessibilityLabel={t('player.maximizePlayer')}
+                >
+                  {isNotPlaying ? (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        gap: 12,
+                        width: '100%',
+                        height: '100%',
+                        paddingVertical: 10,
+                        paddingHorizontal: 16,
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Icon
+                        source='music-off'
+                        size={MINI_PLAYER_ALBUM_ART_WIDTH * 0.75}
+                      />
+                      <Text>{t('nothingIsPlaying')}</Text>
+                    </View>
+                  ) : (
+                    <MiniPlayer
+                      songInfo={songInfo}
+                      isPlaying={isPlayingOptimistic}
+                      onPlayPause={handlePlayPause}
+                    />
+                  )}
+                </Pressable>
               </Animated.View>
-            ) : (
-              <>
+              {isNotPlaying ? (
                 <Animated.View
-                  style={[
-                    styles.albumArtContainer,
-                    playerOpacityStyle,
-                    playerZIndexStyle,
-                  ]}
+                  style={[playerOpacityStyle, playerZIndexStyle, { flex: 1 }]}
                 >
                   <View style={styles.playerAppBar}>
                     <IconButton
@@ -308,62 +288,97 @@ const Player = () => {
                       onPress={minimizePlayer}
                       accessibilityLabel={t('player.minimizePlayer')}
                     />
-                    <IconButton icon={MORE_ICON} size={24} onPress={() => {}} />
                   </View>
-                  {songInfo.imageSrc && (
-                    <Image
-                      style={[
-                        styles.albumArt,
-                        {
-                          display: height < 600 ? 'none' : 'flex',
-                          width: albumArtWidth,
-                          height: albumArtWidth,
-                          maxWidth: height / 2,
-                          maxHeight: height / 2,
-                          transform: [
-                            { translateX: -albumArtWidth / 2 },
-                            { translateY: -albumArtWidth / 2 },
-                          ],
-                        },
-                      ]}
-                      source={{ uri: songInfo.imageSrc }}
-                    />
-                  )}
+                  <InfoView
+                    title={t('nothingIsPlaying')}
+                    message={t('nothingIsPlayingMessage')}
+                    icon='music-off'
+                    style={{ marginTop: topInset }}
+                  />
                 </Animated.View>
-                <View
-                  style={[
-                    styles.titleAndControlsContainer,
-                    height < 600 && styles.titleAndControlsContainerLandscape,
-                  ]}
-                >
-                  <View style={styles.titleContainer}>
-                    <Text numberOfLines={1} style={styles.title}>
-                      {songInfo.title}
-                    </Text>
-                    <Text
-                      numberOfLines={1}
-                      variant='bodyLarge'
-                      style={styles.artist}
-                    >
-                      {songInfo.artist}
-                    </Text>
+              ) : (
+                <>
+                  <Animated.View
+                    style={[
+                      styles.albumArtContainer,
+                      playerOpacityStyle,
+                      playerZIndexStyle,
+                    ]}
+                  >
+                    <View style={styles.playerAppBar}>
+                      <IconButton
+                        icon='chevron-down'
+                        size={24}
+                        onPress={minimizePlayer}
+                        accessibilityLabel={t('player.minimizePlayer')}
+                      />
+                      <IconButton
+                        icon={MORE_ICON}
+                        size={24}
+                        onPress={handleMenuPress}
+                      />
+                    </View>
+                    {songInfo.imageSrc && (
+                      <Image
+                        style={[
+                          styles.albumArt,
+                          {
+                            display: height < 600 ? 'none' : 'flex',
+                            width: albumArtWidth,
+                            height: albumArtWidth,
+                            maxWidth: height / 2,
+                            maxHeight: height / 2,
+                            transform: [
+                              { translateX: -albumArtWidth / 2 },
+                              { translateY: -albumArtWidth / 2 },
+                            ],
+                          },
+                        ]}
+                        source={{ uri: songInfo.imageSrc }}
+                      />
+                    )}
+                  </Animated.View>
+                  <View
+                    style={[
+                      styles.titleAndControlsContainer,
+                      height < 600 && styles.titleAndControlsContainerLandscape,
+                    ]}
+                  >
+                    <View style={styles.titleContainer}>
+                      <Text numberOfLines={1} style={styles.title}>
+                        {songInfo.title}
+                      </Text>
+                      <Text
+                        numberOfLines={1}
+                        variant='bodyLarge'
+                        style={styles.artist}
+                      >
+                        {songInfo.artist}
+                      </Text>
+                    </View>
+                    <PlayerSeekBar
+                      songInfo={songInfo}
+                      isPlaying={isPlayingOptimistic}
+                    />
+                    <PlayerControls
+                      isPlaying={isPlayingOptimistic}
+                      onPlayPause={handlePlayPause}
+                    />
+                    <PlayerExtraActions />
                   </View>
-                  <PlayerSeekBar
-                    songInfo={songInfo}
-                    isPlaying={isPlayingOptimistic}
-                  />
-                  <PlayerControls
-                    isPlaying={isPlayingOptimistic}
-                    onPlayPause={handlePlayPause}
-                  />
-                  <PlayerExtraActions />
-                </View>
-              </>
-            )}
-          </View>
-        </LinearGradient>
-      </BottomSheetView>
-    </BottomSheet>
+                </>
+              )}
+            </View>
+          </LinearGradient>
+        </BottomSheetView>
+      </BottomSheet>
+      <PlayerMenu
+        ref={playerMenuRef}
+        onSleepTimerMenuOpen={handleSleepTimerMenuOpen}
+        onPause={handlePause}
+      />
+      <SleepTimerMenu ref={sleepTimerMenuRef} />
+    </>
   );
 };
 
