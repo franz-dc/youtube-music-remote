@@ -1,9 +1,8 @@
 import { useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { Platform, ScrollView } from 'react-native';
+import { Platform } from 'react-native';
 import { List } from 'react-native-paper';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
   OptionDialog,
@@ -17,8 +16,6 @@ import { SettingsSchema } from '@/schemas';
 
 const Settings = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
-
-  const { bottom: bottomInset } = useSafeAreaInsets();
 
   const [settingKey, setSettingKey] = useState<keyof SettingsSchema | null>(
     null
@@ -56,72 +53,70 @@ const Settings = () => {
 
   return (
     <>
-      <ScrollView style={{ flex: 1 }}>
-        <List.Section>
-          <SettingsSubheader>{t('connection.title')}</SettingsSubheader>
-          <SettingsListItem
-            category='connection'
-            setting='ipAddress'
-            description={ipAddress || '-'}
-            type='text'
-            onPress={openTextDialog}
-          />
-          <SettingsListItem
-            category='connection'
-            setting='port'
-            type='text'
-            onPress={openTextDialog}
-          />
-        </List.Section>
-        <List.Section>
-          <SettingsSubheader>{t('appearance.title')}</SettingsSubheader>
-          <SettingsListItem
-            category='appearance'
-            setting='theme'
-            description={t(`appearance.themes.${theme}`)}
-            type='option'
-            onPress={openOptionDialog}
-          />
-          {Platform.OS === 'android' && (
-            <SettingsListItem
-              category='appearance'
-              setting='useMaterialYouColors'
-              type='switch'
-              description={t('appearance.useMaterialYouColorsDescription')}
-            />
-          )}
+      <List.Section>
+        <SettingsSubheader>{t('connection.title')}</SettingsSubheader>
+        <SettingsListItem
+          category='connection'
+          setting='ipAddress'
+          description={ipAddress || '-'}
+          type='text'
+          onPress={openTextDialog}
+        />
+        <SettingsListItem
+          category='connection'
+          setting='port'
+          type='text'
+          onPress={openTextDialog}
+        />
+      </List.Section>
+      <List.Section>
+        <SettingsSubheader>{t('appearance.title')}</SettingsSubheader>
+        <SettingsListItem
+          category='appearance'
+          setting='theme'
+          description={t(`appearance.themes.${theme}`)}
+          type='option'
+          onPress={openOptionDialog}
+        />
+        {Platform.OS === 'android' && (
           <SettingsListItem
             category='appearance'
-            setting='showAlbumArtColor'
+            setting='useMaterialYouColors'
             type='switch'
+            description={t('appearance.useMaterialYouColorsDescription')}
           />
-          <SettingsListItem
-            category='appearance'
-            setting='showLikeAndDislikeButtons'
-            type='switch'
-          />
-          <SettingsListItem
-            category='appearance'
-            setting='showVolumeControl'
-            type='switch'
-          />
-          <SettingsListItem
-            category='appearance'
-            setting='showFullScreenButton'
-            type='switch'
-          />
-        </List.Section>
-        <List.Section style={{ marginBottom: bottomInset }}>
-          <SettingsSubheader>{t('general.title')}</SettingsSubheader>
-          <SettingsListItem
-            category='general'
-            setting='language'
-            description={t(`general.languages.${language}`)}
-            type='option'
-            onPress={openOptionDialog}
-          />
-        </List.Section>
-      </ScrollView>
+        )}
+        <SettingsListItem
+          category='appearance'
+          setting='showAlbumArtColor'
+          type='switch'
+        />
+        <SettingsListItem
+          category='appearance'
+          setting='showLikeAndDislikeButtons'
+          type='switch'
+        />
+        <SettingsListItem
+          category='appearance'
+          setting='showVolumeControl'
+          type='switch'
+        />
+        <SettingsListItem
+          category='appearance'
+          setting='showFullScreenButton'
+          type='switch'
+        />
+      </List.Section>
+      <List.Section>
+        <SettingsSubheader>{t('general.title')}</SettingsSubheader>
+        <SettingsListItem
+          category='general'
+          setting='language'
+          description={t(`general.languages.${language}`)}
+          type='option'
+          onPress={openOptionDialog}
+        />
+      </List.Section>
       <TextDialog
         visible={!!textSetting && isTextDialogVisible}
         onDismiss={closeTextDialog}
