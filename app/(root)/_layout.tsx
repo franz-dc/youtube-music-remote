@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Slot, router } from 'expo-router';
+import { Href, Slot, router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -23,9 +23,9 @@ const Layout = () => {
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
 
-  const openSettings = () => {
+  const pushFromMenu = (path: Href<string>) => {
     closeMenu();
-    router.push('/settings');
+    router.push(path);
   };
 
   return (
@@ -41,7 +41,12 @@ const Layout = () => {
           <Menu.Item
             title={t('settings.title')}
             leadingIcon='cog'
-            onPress={openSettings}
+            onPress={() => pushFromMenu('/settings')}
+          />
+          <Menu.Item
+            title={t('about.title')}
+            leadingIcon='information-outline'
+            onPress={() => pushFromMenu('/about')}
           />
         </Menu>
       </Appbar.Header>

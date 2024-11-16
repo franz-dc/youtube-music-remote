@@ -85,5 +85,12 @@
       },
       "keepScreenOn": "Keep screen on"
     }
+  },
+  "about": {
+    "title": "About",
+    "checkForUpdates": "Check for updates",
+    "webVersion": "Web version",
+    "changelog": "Changelog",
+    "license": "License"
   }
 }
