@@ -10,8 +10,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const Settings = () => {
-  const { t } = useTranslation('translation', { keyPrefix: 'settings' });
+const Layout = () => {
+  const { t } = useTranslation('translation', { keyPrefix: 'about' });
 
   const { bottom: bottomInset } = useSafeAreaInsets();
 
@@ -30,5 +30,4 @@ const Settings = () => {
     </View>
   );
 };
-
-export default Settings;
+export default Layout;

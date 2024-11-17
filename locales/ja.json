@@ -85,5 +85,12 @@
       },
       "keepScreenOn": "画面をオンに保つ"
     }
+  },
+  "about": {
+    "title": "このアプリについて",
+    "checkForUpdates": "更新を確認",
+    "webVersion": "Webバージョン",
+    "changelog": "変更履歴",
+    "license": "ライセンス"
   }
 }
