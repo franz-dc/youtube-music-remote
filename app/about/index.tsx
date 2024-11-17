@@ -44,11 +44,11 @@ const About = () => {
           ? t('webVersion')
           : Application.nativeApplicationVersion}
       </Text>
-      <List.Item
+      {/* <List.Item
         title={t('checkForUpdates')}
         left={(props) => <List.Icon {...props} icon='update' />}
         style={styles.listItem}
-      />
+      /> */}
       <List.Item
         title='GitHub'
         left={(props) => <List.Icon {...props} icon='github' />}
