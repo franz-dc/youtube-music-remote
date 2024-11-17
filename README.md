@@ -6,7 +6,7 @@
 
 Control [YouTube Music](https://github.com/th-ch/youtube-music) from your phone, tablet, or another computer.
 
-<!-- The app can be downloaded [here](https://github.com/franz-dc/youtube-music-remote/releases/latest). -->
+Download the app [here](https://github.com/franz-dc/youtube-music-remote/releases/latest)!
 
 For the web version, see the [dedicated section](#web-version) below.
 
