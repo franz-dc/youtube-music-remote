@@ -20,9 +20,10 @@ For the web version, see the [dedicated section](#web-version) below.
 ## Getting Started
 
 1. Enable the API Server plugin in YouTube Music.
-2. Install YouTube Music Remote to your device or access the web version.
-3. Configure the connection settings.
-4. Enjoy controlling YouTube Music remotely!
+2. Set the authorization strategy to `No authorization`.
+3. Install YouTube Music Remote to your device or access the web version.
+4. Configure the connection settings.
+5. Enjoy controlling YouTube Music remotely!
 
 ## Web Version
 
