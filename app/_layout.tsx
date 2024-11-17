@@ -39,6 +39,9 @@ const StackWithConfig = () => {
   const [useMaterialYouColors] = useSettingAtom('useMaterialYouColors');
   const [keepScreenOn] = useSettingAtom('keepScreenOn');
 
+  const [isKeepScreenOnEnabledOnce, setIsKeepScreenOnEnabledOnce] =
+    useState(false);
+
   const { theme: systemDynamicTheme } = useMaterial3Theme();
 
   const themes = useMemo<
@@ -112,13 +115,15 @@ const StackWithConfig = () => {
     const keepScreenOnHandler = async () => {
       if (keepScreenOn) {
         await activateKeepAwakeAsync();
+        setIsKeepScreenOnEnabledOnce(true);
       } else {
+        if (!isKeepScreenOnEnabledOnce) return;
         deactivateKeepAwake();
       }
     };
 
     keepScreenOnHandler();
-  }, [keepScreenOn]);
+  }, [keepScreenOn, isKeepScreenOnEnabledOnce]);
 
   // update status bar style when theme changes
   useEffect(() => {
