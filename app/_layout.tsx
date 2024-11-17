@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import * as NavigationBar from 'expo-navigation-bar';
 import { SplashScreen, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -10,7 +11,6 @@ import { useTranslation } from 'react-i18next';
 import { Appearance, View } from 'react-native';
 import { MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
 import { ThemeProp } from 'react-native-paper/lib/typescript/types';
-
 import 'react-native-reanimated';
 import 'intl-pluralrules';
 import '@/i18n';
@@ -37,6 +37,7 @@ const StackWithConfig = () => {
   const [language] = useSettingAtom('language');
   const [theme] = useSettingAtom('theme');
   const [useMaterialYouColors] = useSettingAtom('useMaterialYouColors');
+  const [keepScreenOn] = useSettingAtom('keepScreenOn');
 
   const { theme: systemDynamicTheme } = useMaterial3Theme();
 
@@ -105,6 +106,19 @@ const StackWithConfig = () => {
     () => themes[theme as keyof typeof themes] || themes.system,
     [themes, theme]
   );
+
+  // enable/disable KeepAwake when keepScreenOn setting changes
+  useEffect(() => {
+    const keepScreenOnHandler = async () => {
+      if (keepScreenOn) {
+        await activateKeepAwakeAsync();
+      } else {
+        deactivateKeepAwake();
+      }
+    };
+
+    keepScreenOnHandler();
+  }, [keepScreenOn]);
 
   if (!isInitialized) return null;
 

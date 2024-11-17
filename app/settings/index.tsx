@@ -116,6 +116,11 @@ const Settings = () => {
           type='option'
           onPress={openOptionDialog}
         />
+        <SettingsListItem
+          category='general'
+          setting='keepScreenOn'
+          type='switch'
+        />
       </List.Section>
       <TextDialog
         visible={!!textSetting && isTextDialogVisible}
