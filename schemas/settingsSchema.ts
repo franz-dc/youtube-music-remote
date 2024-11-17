@@ -13,4 +13,5 @@ export type SettingsSchema = {
   showFullScreenButton: boolean;
   // general
   language: (typeof SETTINGS_OPTIONS.language)[number];
+  keepScreenOn: boolean;
 };

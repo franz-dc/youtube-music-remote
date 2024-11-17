@@ -41,6 +41,7 @@ export const DEFAULT_SETTINGS = {
   showFullScreenButton: true,
   // general
   language: 'system',
+  keepScreenOn: false,
 } as const satisfies SettingsSchema;
 
 export const TEXT_SETTINGS: Record<
