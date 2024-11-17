@@ -210,7 +210,6 @@ const Player = () => {
         animationConfigs={ANIMATION_CONFIGS}
         animatedIndex={animatedIndex}
         animatedPosition={animatedPosition}
-        handleIndicatorStyle={{ backgroundColor: theme.colors.onSurface }}
         handleComponent={null}
         snapPoints={snapPoints}
         enableOverDrag={false}
