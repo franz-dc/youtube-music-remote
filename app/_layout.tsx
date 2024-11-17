@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import * as NavigationBar from 'expo-navigation-bar';
 import { SplashScreen, Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
+import { setStatusBarStyle } from 'expo-status-bar';
 import { Provider as JotaiProvider } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { Appearance, View } from 'react-native';
@@ -38,6 +38,9 @@ const StackWithConfig = () => {
   const [theme] = useSettingAtom('theme');
   const [useMaterialYouColors] = useSettingAtom('useMaterialYouColors');
   const [keepScreenOn] = useSettingAtom('keepScreenOn');
+
+  const [isKeepScreenOnEnabledOnce, setIsKeepScreenOnEnabledOnce] =
+    useState(false);
 
   const { theme: systemDynamicTheme } = useMaterial3Theme();
 
@@ -112,19 +115,27 @@ const StackWithConfig = () => {
     const keepScreenOnHandler = async () => {
       if (keepScreenOn) {
         await activateKeepAwakeAsync();
+        setIsKeepScreenOnEnabledOnce(true);
       } else {
+        if (!isKeepScreenOnEnabledOnce) return;
         deactivateKeepAwake();
       }
     };
 
     keepScreenOnHandler();
-  }, [keepScreenOn]);
+  }, [keepScreenOn, isKeepScreenOnEnabledOnce]);
+
+  // update status bar style when theme changes
+  useEffect(() => {
+    setStatusBarStyle(
+      themes[theme as keyof typeof themes].dark ? 'light' : 'dark'
+    );
+  }, [theme, themes]);
 
   if (!isInitialized) return null;
 
   return (
     <PaperProvider theme={activeTheme}>
-      <StatusBar style={activeTheme ? 'light' : 'dark'} />
       <View
         style={{ flex: 1, backgroundColor: activeTheme.colors!.background }}
       >

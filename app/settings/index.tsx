@@ -90,6 +90,7 @@ const Settings = () => {
           category='appearance'
           setting='showAlbumArtColor'
           type='switch'
+          description={t('appearance.showAlbumArtColorDescription')}
         />
         <SettingsListItem
           category='appearance'

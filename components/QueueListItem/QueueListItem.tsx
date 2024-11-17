@@ -1,3 +1,4 @@
+import Color from 'color';
 import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, View } from 'react-native';
 import { Icon, Text, useTheme } from 'react-native-paper';
@@ -16,15 +17,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
   },
-  isPlayingListItemContainer: {
-    backgroundColor: '#ffffff0d',
-  },
   albumArtContainer: {
     position: 'relative',
     width: 48,
     height: 48,
     overflow: 'hidden',
-    backgroundColor: '#000000',
     borderRadius: 4,
   },
   albumArt: {
@@ -63,17 +60,33 @@ const QueueListItem = ({ song }: SongListItemProps) => {
   const artist = song.shortBylineText.runs[0].text ?? t('unknownChannel');
   const isPlaying = song.selected;
 
+  const activeBackgroundColor = Color(theme.colors.onSurface)
+    .fade(0.9)
+    .string();
+
   return (
     <View
       style={[
         styles.listItemContainer,
-        isPlaying && styles.isPlayingListItemContainer,
+        isPlaying && {
+          backgroundColor: activeBackgroundColor,
+        },
       ]}
     >
-      <View style={styles.albumArtContainer}>
+      <View
+        style={[
+          styles.albumArtContainer,
+          { backgroundColor: theme.dark ? '#000000' : '#ffffff' },
+        ]}
+      >
         <Image
           source={{ uri: smallestThumbnailUrl }}
-          style={[styles.albumArt, isPlaying && styles.albumArtPlaying]}
+          style={[
+            styles.albumArt,
+            isPlaying && {
+              opacity: theme.dark ? 0.15 : 0.25,
+            },
+          ]}
         />
         {isPlaying && (
           <>
