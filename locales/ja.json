@@ -71,6 +71,7 @@
       "useMaterialYouColors": "Material Youの色を使用",
       "useMaterialYouColorsDescription": "Android 12以降に適用されます",
       "showAlbumArtColor": "アルバムアートの色を表示",
+      "showAlbumArtColorDescription": "ダークとブラックのテーマにのみ適用されます",
       "showLikeAndDislikeButtons": "好きと嫌いのボタンを表示",
       "showVolumeControl": "音量コントロールを表示",
       "showFullScreenButton": "全画面ボタンを表示"

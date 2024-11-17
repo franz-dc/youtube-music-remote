@@ -71,6 +71,7 @@
       "useMaterialYouColors": "Use Material You colors",
       "useMaterialYouColorsDescription": "Applies to Android 12 and later",
       "showAlbumArtColor": "Show album art color",
+      "showAlbumArtColorDescription": "Applies to dark and black themes only",
       "showLikeAndDislikeButtons": "Show like and dislike buttons",
       "showVolumeControl": "Show volume control",
       "showFullScreenButton": "Show full screen button"
