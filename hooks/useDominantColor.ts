@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import Color from 'color';
 import { getColors } from 'react-native-image-colors';
 import { useTheme } from 'react-native-paper';
-
-import { isHexColorBright } from '@/utils';
 
 type UseDominantColorResult = {
   color: string;
@@ -37,7 +36,7 @@ export const useDominantColor = (imageUrl?: string | null) => {
           dominantColor
             ? {
                 color: dominantColor,
-                isBright: isHexColorBright(dominantColor),
+                isBright: Color(dominantColor).isLight(),
                 imageUrl,
               }
             : fallbackData
