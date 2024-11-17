@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { getColors } from 'react-native-image-colors';
 import { useTheme } from 'react-native-paper';
 
-import { DOMINANT_COLOR_FALLBACK } from '@/constants';
 import { isHexColorBright } from '@/utils';
 
 type UseDominantColorResult = {
@@ -17,11 +16,11 @@ export const useDominantColor = (imageUrl?: string | null) => {
 
   const fallbackData: UseDominantColorResult = useMemo(
     () => ({
-      color: DOMINANT_COLOR_FALLBACK[theme.dark ? 'dark' : 'light'],
+      color: theme.colors.surface,
       isBright: false,
       imageUrl: '',
     }),
-    [theme.dark]
+    [theme.colors.surface]
   );
 
   const [data, setData] = useState<UseDominantColorResult>(fallbackData);

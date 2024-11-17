@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, View } from 'react-native';
 import { IconButton, Text, useTheme } from 'react-native-paper';
 
+import { useSettingAtom } from '@/configs';
 import { MINI_PLAYER_ALBUM_ART_WIDTH } from '@/constants';
 import { useClientElapsedSeconds } from '@/hooks';
 import { SongInfoSchema } from '@/schemas';
@@ -65,6 +66,8 @@ const MiniPlayer = ({ songInfo, isPlaying, onPlayPause }: MiniPlayerProps) => {
 
   const theme = useTheme();
 
+  const [showAlbumArtColor] = useSettingAtom('showAlbumArtColor');
+
   const { elapsedSeconds } = useClientElapsedSeconds({
     songInfo,
     isPlaying,
@@ -73,7 +76,14 @@ const MiniPlayer = ({ songInfo, isPlaying, onPlayPause }: MiniPlayerProps) => {
   // FIXME: Buttons are still pressable when the player is maximized
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        (!showAlbumArtColor || !theme.dark) && {
+          backgroundColor: theme.colors.elevation.level4,
+        },
+      ]}
+    >
       <View style={styles.progressBar}>
         <View
           style={[

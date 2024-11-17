@@ -20,7 +20,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSettingAtom } from '@/configs';
 import {
   ANIMATION_CONFIGS,
-  DOMINANT_COLOR_FALLBACK,
   MINI_PLAYER_ALBUM_ART_WIDTH,
   MINI_PLAYER_HEIGHT,
   MORE_ICON,
@@ -112,8 +111,6 @@ const styles = StyleSheet.create({
 
 const Player = () => {
   const theme = useTheme();
-  const backgroundColor =
-    DOMINANT_COLOR_FALLBACK[theme.dark ? 'dark' : 'light'];
 
   const { top: topInset, bottom: bottomInset } = useSafeAreaInsets();
 
@@ -152,10 +149,10 @@ const Player = () => {
     useDominantColor(songInfo?.imageSrc);
   const dominantColorGradientStart = dominantColor
     ? `${dominantColor}${isDominantColorBright ? '50' : 'ff'}`
-    : backgroundColor;
+    : theme.colors.surface;
   const dominantColorGradientEnd = dominantColor
     ? `${dominantColor}${isDominantColorBright ? '18' : '40'}`
-    : backgroundColor;
+    : theme.colors.surface;
 
   // bottom sheet modal - player
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -222,13 +219,19 @@ const Player = () => {
         <BottomSheetView style={styles.bottomSheetView}>
           <LinearGradient
             colors={
-              showAlbumArtColor
+              showAlbumArtColor && theme.dark
                 ? [dominantColorGradientStart, dominantColorGradientEnd]
-                : [backgroundColor, backgroundColor]
+                : ['transparent', 'transparent']
             }
             style={[
               styles.linearGradient,
-              { backgroundColor, paddingBottom: bottomInset },
+              {
+                backgroundColor:
+                  showAlbumArtColor && theme.dark
+                    ? '#000000'
+                    : theme.colors.surface,
+                paddingBottom: bottomInset,
+              },
             ]}
           >
             <View style={[styles.container, { paddingTop: topInset }]}>
