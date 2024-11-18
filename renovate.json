@@ -1,12 +1,12 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ],
-  "assignees": [
-    "franz-dc"
-  ],
-  "labels": [
-    "dependencies"
+  "extends": ["config:recommended"],
+  "assignees": ["franz-dc"],
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "matchPackageNames": "^expo",
+      "enabled": false
+    }
   ]
 }
