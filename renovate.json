@@ -9,5 +9,5 @@
       "enabled": false
     }
   ],
-  "ignoreDeps": ["react-native"]
+  "ignoreDeps": ["expo", "react-native"]
 }
