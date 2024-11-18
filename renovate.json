@@ -7,6 +7,10 @@
     {
       "matchPackageNames": "^expo",
       "enabled": false
+    },
+    {
+      "matchPackageNames": "^react-native$",
+      "enabled": false
     }
   ]
 }
