@@ -5,12 +5,9 @@
   "labels": ["dependencies"],
   "packageRules": [
     {
-      "matchPackageNames": "^expo",
-      "enabled": false
-    },
-    {
-      "matchPackageNames": "^react-native$",
+      "matchPackageNames": ["^expo"],
       "enabled": false
     }
-  ]
+  ],
+  "ignoreDeps": ["react-native"]
 }
