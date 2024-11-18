@@ -353,10 +353,7 @@ const Player = () => {
                         {songInfo.artist}
                       </Text>
                     </View>
-                    <PlayerSeekBar
-                      songInfo={songInfo}
-                      isPlaying={isPlayingOptimistic}
-                    />
+                    <PlayerSeekBar songInfo={songInfo} />
                     <PlayerControls
                       isPlaying={isPlayingOptimistic}
                       onPlayPause={handlePlayPause}

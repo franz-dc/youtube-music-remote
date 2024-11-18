@@ -4,7 +4,6 @@ import { IconButton, Text, useTheme } from 'react-native-paper';
 
 import { useSettingAtom } from '@/configs';
 import { MINI_PLAYER_ALBUM_ART_WIDTH } from '@/constants';
-import { useClientElapsedSeconds } from '@/hooks';
 import { SongInfoSchema } from '@/schemas';
 import { playNextTrack, playPreviousTrack } from '@/services';
 
@@ -68,11 +67,6 @@ const MiniPlayer = ({ songInfo, isPlaying, onPlayPause }: MiniPlayerProps) => {
 
   const [showAlbumArtColor] = useSettingAtom('showAlbumArtColor');
 
-  const { elapsedSeconds } = useClientElapsedSeconds({
-    songInfo,
-    isPlaying,
-  });
-
   // FIXME: Buttons are still pressable when the player is maximized
 
   return (
@@ -90,7 +84,7 @@ const MiniPlayer = ({ songInfo, isPlaying, onPlayPause }: MiniPlayerProps) => {
             styles.progressBarMinimumTrack,
             {
               backgroundColor: theme.colors.onSurface,
-              width: `${(elapsedSeconds / songInfo.songDuration || 0) * 100}%`,
+              width: `${(songInfo.elapsedSeconds / songInfo.songDuration || 0) * 100}%`,
             },
           ]}
         />
