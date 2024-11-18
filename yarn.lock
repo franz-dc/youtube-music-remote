@@ -13761,9 +13761,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yt-music-remote-control@workspace:.":
+"youtube-music-remote@workspace:.":
   version: 0.0.0-use.local
-  resolution: "yt-music-remote-control@workspace:."
+  resolution: "youtube-music-remote@workspace:."
   dependencies:
     "@babel/core": "npm:^7.20.0"
     "@expo/vector-icons": "npm:^14.0.2"
