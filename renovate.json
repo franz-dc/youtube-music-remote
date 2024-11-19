@@ -13,6 +13,10 @@
       "allowedVersions": "^8.57.0"
     },
     {
+      "matchPackageNames": ["react-native-mmkv"],
+      "allowedVersions": "^2.12.2"
+    },
+    {
       "matchPackageNames": ["@expo/metro-runtime"],
       "allowedVersions": "~3.2.3",
       "groupName": "expo-51-0-39"
