@@ -1,26 +1,27 @@
-import RNLanguageDetector from '@os-team/i18next-react-native-language-detector';
+import { getLocales } from 'expo-localization';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import { Platform } from 'react-native';
 
 import { LANGUAGES } from './constants';
 import { en, ja } from './locales';
 
-if (Platform.OS !== 'web') {
-  i18n.use(RNLanguageDetector);
-}
-
-i18n.use(initReactI18next).init({
-  fallbackLng: 'en',
-  supportedLngs: LANGUAGES,
-  resources: {
-    en: {
-      translation: en,
+i18n
+  .use({
+    type: 'languageDetector',
+    detect: () => getLocales()[0].languageCode?.split('_')[0],
+  })
+  .use(initReactI18next)
+  .init({
+    fallbackLng: 'en',
+    supportedLngs: LANGUAGES,
+    resources: {
+      en: {
+        translation: en,
+      },
+      ja: {
+        translation: ja,
+      },
     },
-    ja: {
-      translation: ja,
-    },
-  },
-});
+  });
 
 export default i18n;

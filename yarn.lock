@@ -2274,16 +2274,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@os-team/i18next-react-native-language-detector@npm:^1.0.34":
-  version: 1.0.34
-  resolution: "@os-team/i18next-react-native-language-detector@npm:1.0.34"
-  peerDependencies:
-    i18next: "*"
-    react-native: "*"
-  checksum: 10c0/76d044e0b406368cc8d3ac80b0ee94a925b9319629009c1802ec1bed8fdf9cdbbd70360f0c6c9778fe4faf41ff53f4f498242f956c4a21b851f4f11536eab94f
-  languageName: node
-  linkType: hard
-
 "@pchmn/expo-material3-theme@npm:^1.3.2":
   version: 1.3.2
   resolution: "@pchmn/expo-material3-theme@npm:1.3.2"
@@ -6136,6 +6126,17 @@ __metadata:
     expo-constants: "npm:~16.0.0"
     invariant: "npm:^2.2.4"
   checksum: 10c0/a6550cacc3117dde92fe9758c3b97089dae8ce2d90a2d6dd4441571991c4c7e139beb9d5648f04eef2fccc52f00f1631f36717bcd070c62413c013a30ae7aa97
+  languageName: node
+  linkType: hard
+
+"expo-localization@npm:~15.0.3":
+  version: 15.0.3
+  resolution: "expo-localization@npm:15.0.3"
+  dependencies:
+    rtl-detect: "npm:^1.0.2"
+  peerDependencies:
+    expo: "*"
+  checksum: 10c0/caa6f68a0f22a067b6940d7f7e64a68eb5f17a767d172aa5793bff24baa2d804b4f827027ea071d1e23f4d8b41f693cfb2790db095f95dadc1d41a3b07072398
   languageName: node
   linkType: hard
 
@@ -11438,6 +11439,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"rtl-detect@npm:^1.0.2":
+  version: 1.1.2
+  resolution: "rtl-detect@npm:1.1.2"
+  checksum: 10c0/1b92888aafca1593314f837e83fdf02eb208faae3e713ab87c176804728efd3b1980d53b64f65f1fa593348087e852c5cd729b7b9372950f6e9b7be489afc0ca
+  languageName: node
+  linkType: hard
+
 "run-parallel@npm:^1.1.9":
   version: 1.2.0
   resolution: "run-parallel@npm:1.2.0"
@@ -13696,7 +13704,6 @@ __metadata:
     "@babel/core": "npm:^7.20.0"
     "@expo/vector-icons": "npm:^14.0.2"
     "@gorhom/bottom-sheet": "npm:^5"
-    "@os-team/i18next-react-native-language-detector": "npm:^1.0.34"
     "@pchmn/expo-material3-theme": "npm:^1.3.2"
     "@react-native-community/slider": "npm:^4.5.5"
     "@react-navigation/native": "npm:^6.0.2"
@@ -13723,6 +13730,7 @@ __metadata:
     expo-keep-awake: "npm:~13.0.2"
     expo-linear-gradient: "npm:~13.0.2"
     expo-linking: "npm:~6.3.1"
+    expo-localization: "npm:~15.0.3"
     expo-navigation-bar: "npm:~3.0.7"
     expo-router: "npm:~3.5.23"
     expo-splash-screen: "npm:~0.27.5"
