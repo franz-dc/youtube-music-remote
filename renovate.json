@@ -13,6 +13,10 @@
       "allowedVersions": "^8.57.0"
     },
     {
+      "matchPackageNames": ["@react-navigation/native"],
+      "allowedVersions": "^6.0.2"
+    },
+    {
       "matchPackageNames": ["react-native-mmkv"],
       "allowedVersions": "^2.12.2"
     },
