@@ -3,6 +3,7 @@
   "extends": ["config:recommended"],
   "assignees": ["franz-dc"],
   "labels": ["dependencies"],
+  "rangeStrategy": "bump",
   "packageRules": [
     {
       "matchPackageNames": ["^expo"],
