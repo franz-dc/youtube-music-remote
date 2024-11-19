@@ -9,7 +9,7 @@
       "allowedVersions": "^51.0.0"
     },
     {
-      "matchPackageNames": ["^eslint$"],
+      "matchPackageNames": ["eslint"],
       "allowedVersions": "^8.57.0"
     },
     {
