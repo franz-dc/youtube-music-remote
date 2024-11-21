@@ -144,7 +144,6 @@ const Player = () => {
     await pause();
   };
 
-  // TODO: Use right gradient colors for light theme
   const { color: dominantColor, isBright: isDominantColorBright } =
     useDominantColor(songInfo?.imageSrc);
   const dominantColorGradientStart = dominantColor
