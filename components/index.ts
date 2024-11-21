@@ -23,3 +23,5 @@ export { default as Slider } from './Slider';
 
 export { default as QueueListItem } from './QueueListItem';
 export * from './QueueListItem';
+
+export { default as UpdateChecker } from './UpdateChecker';
