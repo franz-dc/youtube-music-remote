@@ -10,10 +10,10 @@ import {
   setNotificationHandler,
 } from 'expo-notifications';
 import { SplashScreen, Stack } from 'expo-router';
-import { setStatusBarStyle } from 'expo-status-bar';
+import { setStatusBarHidden, setStatusBarStyle } from 'expo-status-bar';
 import { Provider as JotaiProvider } from 'jotai';
 import { useTranslation } from 'react-i18next';
-import { Appearance, Platform, View } from 'react-native';
+import { Appearance, Platform, View, useWindowDimensions } from 'react-native';
 import { MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
 import { ThemeProp } from 'react-native-paper/lib/typescript/types';
 import 'react-native-reanimated';
@@ -57,6 +57,9 @@ const StackWithConfig = () => {
 
   const [isKeepScreenOnEnabledOnce, setIsKeepScreenOnEnabledOnce] =
     useState(false);
+
+  const { width, height } = useWindowDimensions();
+  const isPortrait = height > width;
 
   const { theme: systemDynamicTheme } = useMaterial3Theme();
 
@@ -165,6 +168,12 @@ const StackWithConfig = () => {
 
     setIsFreshInstall(false);
   }, [isFreshInstall, setIsFreshInstall, isInitialized]);
+
+  // hide bars on landscape mode
+  useEffect(() => {
+    setStatusBarHidden(!isPortrait);
+    NavigationBar.setVisibilityAsync(isPortrait ? 'visible' : 'hidden');
+  }, [isPortrait]);
 
   if (!isInitialized) return null;
 
