@@ -150,7 +150,7 @@ const StackWithConfig = () => {
     );
   }, [theme, themes]);
 
-  useStartupUpdateChecker();
+  useStartupUpdateChecker(isInitialized);
 
   // clear download cache on fresh installs
   useEffect(() => {

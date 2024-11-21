@@ -14,7 +14,7 @@ import { APP_FILE_EXTENSION } from '@/constants';
 
 import { useGetLatestRelease } from './useGetLatestRelease';
 
-export const useStartupUpdateChecker = () => {
+export const useStartupUpdateChecker = (isInitialized: boolean) => {
   const { t } = useTranslation('translation', { keyPrefix: 'about' });
 
   const [checkForUpdatesOnAppStart] = useSettingAtom(
@@ -26,7 +26,8 @@ export const useStartupUpdateChecker = () => {
   // Get the latest release from the GitHub API.
   // If there is an error, nothing will happen.
   const { data: latestRelease } = useGetLatestRelease({
-    enabled: checkForUpdatesOnAppStart,
+    enabled:
+      Platform.OS !== 'web' && checkForUpdatesOnAppStart && isInitialized,
   });
 
   // get latest version number without the 'v' prefix
