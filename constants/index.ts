@@ -112,3 +112,7 @@ export const ANIMATION_CONFIGS = {
   duration: 350,
   easing: Easing.out(Easing.exp),
 };
+export const APP_FILE_EXTENSION = Platform.select({
+  ios: 'ipa',
+  android: 'apk',
+});

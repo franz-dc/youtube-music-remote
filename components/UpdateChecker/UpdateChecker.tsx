@@ -10,12 +10,8 @@ import { Platform, StyleSheet } from 'react-native';
 import { List } from 'react-native-paper';
 import { gt } from 'semver';
 
+import { APP_FILE_EXTENSION } from '@/constants';
 import { useGetLatestRelease } from '@/hooks';
-
-const FILE_EXTENSION = Platform.select({
-  ios: 'ipa',
-  android: 'apk',
-});
 
 const styles = StyleSheet.create({
   listItem: {
@@ -52,8 +48,10 @@ const UpdateChecker = () => {
 
   // get latest version number without the 'v' prefix
   const latestVersion = latestRelease?.tag_name.slice(1);
-  const asset = FILE_EXTENSION
-    ? latestRelease?.assets.find((asset) => asset.name.endsWith(FILE_EXTENSION))
+  const asset = APP_FILE_EXTENSION
+    ? latestRelease?.assets.find((asset) =>
+        asset.name.endsWith(APP_FILE_EXTENSION!)
+      )
     : null;
   const hasUpdate =
     Platform.OS !== 'web' && currentVersion && latestVersion && asset
