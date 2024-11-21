@@ -110,7 +110,9 @@ const StackWithConfig = () => {
       setIsInitialized(true);
       await SplashScreen.hideAsync();
 
-      requestPermissionsAsync();
+      if (Platform.OS !== 'web') {
+        requestPermissionsAsync();
+      }
     };
 
     initConfig();
