@@ -10,6 +10,7 @@ import { Platform, StyleSheet } from 'react-native';
 import { List } from 'react-native-paper';
 import { gt } from 'semver';
 
+import { useSettingAtom } from '@/configs';
 import { APP_FILE_EXTENSION } from '@/constants';
 import { useGetLatestRelease } from '@/hooks';
 
@@ -19,24 +20,23 @@ const styles = StyleSheet.create({
   },
 });
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
-});
-
 const UpdateChecker = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'about' });
+
+  useEffect(() => {
+    Notifications.clearLastNotificationResponseAsync();
+  }, []);
 
   const params = useLocalSearchParams<{
     startUpdate: string;
   }>();
 
+  const [, setIsFreshInstall] = useSettingAtom('isFreshInstall');
+
   const [isDownloading, setIsDownloading] = useState(false);
   const [isDownloadError, setIsDownloadError] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [contentUri, setContentUri] = useState<string | null>(null);
 
   const {
     data: latestRelease,
@@ -62,6 +62,7 @@ const UpdateChecker = () => {
     if (isLoading || isRefetching) return 'checkingForUpdates';
     if (isError || isDownloadError) return 'errorCheckingForUpdates';
     if (isDownloading) return 'downloadingUpdate';
+    if (contentUri) return 'tapToInstall';
     if (hasUpdate) return 'updateAvailableLong';
     return 'upToDate';
   };
@@ -75,7 +76,7 @@ const UpdateChecker = () => {
 
       const downloadResumable = FileSystem.createDownloadResumable(
         asset!.browser_download_url,
-        FileSystem.cacheDirectory + asset!.name,
+        FileSystem.cacheDirectory + `update.${APP_FILE_EXTENSION}`,
         {},
         (downloadProgress) => {
           const progress =
@@ -94,16 +95,27 @@ const UpdateChecker = () => {
       const contentUri = await FileSystem.getContentUriAsync(
         downloadResult.uri
       );
+
+      setContentUri(contentUri);
+
+      // Set `isFreshInstall` to true so the download cache can be cleared on
+      // next app start.
+      // - If the user cancels the installation, the cache will be cleared the
+      // next time the app starts regardless.
+      // - This has a side effect of catching corrupted downloads or failed
+      // installations.
+      setIsFreshInstall(true);
+
       await startActivityAsync('android.intent.action.VIEW', {
         data: contentUri,
         flags: 1,
       });
-    } catch (error) {
+    } catch {
       setIsDownloadError(true);
     } finally {
       setIsDownloading(false);
     }
-  }, [asset]);
+  }, [asset, setIsFreshInstall]);
 
   // start download if the user pressed the notification to update
   useEffect(() => {
@@ -119,6 +131,14 @@ const UpdateChecker = () => {
 
   const handlePress = async () => {
     if (isLoading || isRefetching || isDownloading) return;
+
+    if (contentUri) {
+      await startActivityAsync('android.intent.action.VIEW', {
+        data: contentUri,
+        flags: 1,
+      });
+      return;
+    }
 
     if (hasUpdate) {
       await downloadUpdate();
