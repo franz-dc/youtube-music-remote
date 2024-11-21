@@ -96,6 +96,7 @@
     "updateAvailable": "An update is available",
     "updateAvailableDescription": "Tap to download and install",
     "updateAvailableLong": "Update available. Tap to download and install.",
+    "tapToInstall": "Tap to install",
     "downloadingUpdate": "Downloading update ({{progress}}%)...",
     "errorCheckingForUpdates": "Error checking for updates. Tap to retry.",
     "webVersion": "Web version",
