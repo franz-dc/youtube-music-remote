@@ -42,6 +42,7 @@ export const DEFAULT_SETTINGS = {
   // general
   language: 'system',
   keepScreenOn: false,
+  checkForUpdatesOnAppStart: true,
 } as const satisfies SettingsSchema;
 
 export const TEXT_SETTINGS: Record<
