@@ -25,3 +25,6 @@ export { default as QueueListItem } from './QueueListItem';
 export * from './QueueListItem';
 
 export { default as UpdateChecker } from './UpdateChecker';
+
+export { default as UpdateRedirect } from './UpdateRedirect';
+export * from './UpdateRedirect';
