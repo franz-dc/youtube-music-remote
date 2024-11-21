@@ -2,25 +2,40 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import * as FileSystem from 'expo-file-system';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import * as NavigationBar from 'expo-navigation-bar';
+import {
+  requestPermissionsAsync,
+  setNotificationHandler,
+} from 'expo-notifications';
 import { SplashScreen, Stack } from 'expo-router';
 import { setStatusBarStyle } from 'expo-status-bar';
 import { Provider as JotaiProvider } from 'jotai';
 import { useTranslation } from 'react-i18next';
-import { Appearance, View } from 'react-native';
+import { Appearance, Platform, View } from 'react-native';
 import { MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
 import { ThemeProp } from 'react-native-paper/lib/typescript/types';
 import 'react-native-reanimated';
 import 'intl-pluralrules';
 import '@/i18n';
 
+import { UpdateRedirect } from '@/components';
 import { store, useSettingAtom } from '@/configs';
-import { SETTINGS_OPTIONS } from '@/constants';
+import { APP_FILE_EXTENSION, SETTINGS_OPTIONS } from '@/constants';
+import { useStartupUpdateChecker } from '@/hooks';
 
 const systemColorScheme = Appearance.getColorScheme() || 'dark';
 
 SplashScreen.preventAutoHideAsync();
+
+setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
 
 const queryClient = new QueryClient();
 
@@ -38,6 +53,7 @@ const StackWithConfig = () => {
   const [theme] = useSettingAtom('theme');
   const [useMaterialYouColors] = useSettingAtom('useMaterialYouColors');
   const [keepScreenOn] = useSettingAtom('keepScreenOn');
+  const [isFreshInstall, setIsFreshInstall] = useSettingAtom('isFreshInstall');
 
   const [isKeepScreenOnEnabledOnce, setIsKeepScreenOnEnabledOnce] =
     useState(false);
@@ -81,7 +97,7 @@ const StackWithConfig = () => {
 
   // initialize app with user settings
   useEffect(() => {
-    SplashScreen.preventAutoHideAsync();
+    if (isInitialized) return;
 
     const initConfig = async () => {
       i18n.changeLanguage(
@@ -93,10 +109,12 @@ const StackWithConfig = () => {
 
       setIsInitialized(true);
       await SplashScreen.hideAsync();
+
+      requestPermissionsAsync();
     };
 
     initConfig();
-  }, [i18n, language, systemLanguage]);
+  }, [isInitialized, i18n, language, systemLanguage, setIsFreshInstall]);
 
   // update i18n language when language setting changes
   useEffect(() => {
@@ -132,10 +150,27 @@ const StackWithConfig = () => {
     );
   }, [theme, themes]);
 
+  useStartupUpdateChecker(isInitialized);
+
+  // clear download cache on fresh installs
+  useEffect(() => {
+    if (!isFreshInstall || Platform.OS === 'web' || isInitialized) return;
+
+    FileSystem.deleteAsync(
+      FileSystem.cacheDirectory + `update.${APP_FILE_EXTENSION}`,
+      { idempotent: true }
+    );
+
+    setIsFreshInstall(false);
+  }, [isFreshInstall, setIsFreshInstall, isInitialized]);
+
   if (!isInitialized) return null;
 
   return (
     <PaperProvider theme={activeTheme}>
+      {Platform.OS !== 'web' && (
+        <UpdateRedirect isInitialized={isInitialized} />
+      )}
       <View
         style={{ flex: 1, backgroundColor: activeTheme.colors!.background }}
       >

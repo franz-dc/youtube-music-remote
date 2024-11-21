@@ -36,6 +36,10 @@
           "backgroundColor": "#1a1b21"
         }
       },
+      "permissions": [
+        "REQUEST_INSTALL_PACKAGES",
+        "android.permission.POST_NOTIFICATIONS"
+      ],
       "package": "com.franzdc.youtubemusicremote"
     },
     "web": {
@@ -59,7 +63,14 @@
           }
         }
       ],
-      "expo-localization"
+      "expo-localization",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/logo.png",
+          "color": "#ffffff"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
