@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 import { nativeApplicationVersion as currentVersion } from 'expo-application';
 import {
-  clearLastNotificationResponseAsync,
   getLastNotificationResponseAsync,
   scheduleNotificationAsync,
 } from 'expo-notifications';
@@ -11,13 +10,9 @@ import { Platform } from 'react-native';
 import { gt } from 'semver';
 
 import { useSettingAtom } from '@/configs';
+import { APP_FILE_EXTENSION } from '@/constants';
 
 import { useGetLatestRelease } from './useGetLatestRelease';
-
-const FILE_EXTENSION = Platform.select({
-  ios: 'ipa',
-  android: 'apk',
-});
 
 export const useStartupUpdateChecker = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'about' });
@@ -38,9 +33,9 @@ export const useStartupUpdateChecker = () => {
   const latestVersion = latestRelease?.tag_name.slice(1);
 
   const asset =
-    FILE_EXTENSION && latestRelease
+    APP_FILE_EXTENSION && latestRelease
       ? latestRelease.assets.find((asset) =>
-          asset.name.endsWith(FILE_EXTENSION)
+          asset.name.endsWith(APP_FILE_EXTENSION!)
         )
       : null;
 
@@ -72,7 +67,6 @@ export const useStartupUpdateChecker = () => {
         trigger: null,
         identifier: 'updateAvailable',
       });
-      clearLastNotificationResponseAsync();
       setIsNotificationSent(true);
     };
 
