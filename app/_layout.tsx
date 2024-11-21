@@ -4,11 +4,15 @@ import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import * as NavigationBar from 'expo-navigation-bar';
-import { SplashScreen, Stack } from 'expo-router';
+import {
+  getLastNotificationResponseAsync,
+  requestPermissionsAsync,
+} from 'expo-notifications';
+import { SplashScreen, Stack, router, usePathname } from 'expo-router';
 import { setStatusBarStyle } from 'expo-status-bar';
 import { Provider as JotaiProvider } from 'jotai';
 import { useTranslation } from 'react-i18next';
-import { Appearance, View } from 'react-native';
+import { Appearance, Platform, View } from 'react-native';
 import { MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
 import { ThemeProp } from 'react-native-paper/lib/typescript/types';
 import 'react-native-reanimated';
@@ -17,6 +21,7 @@ import '@/i18n';
 
 import { store, useSettingAtom } from '@/configs';
 import { SETTINGS_OPTIONS } from '@/constants';
+import { useStartupUpdateChecker } from '@/hooks';
 
 const systemColorScheme = Appearance.getColorScheme() || 'dark';
 
@@ -93,6 +98,7 @@ const StackWithConfig = () => {
 
       setIsInitialized(true);
       await SplashScreen.hideAsync();
+      requestPermissionsAsync();
     };
 
     initConfig();
@@ -131,6 +137,32 @@ const StackWithConfig = () => {
       themes[theme as keyof typeof themes].dark ? 'light' : 'dark'
     );
   }, [theme, themes]);
+
+  // check if download update notification is pressed
+  const pathName = usePathname();
+  useEffect(() => {
+    if (!isInitialized || pathName === '/about' || Platform.OS === 'web') {
+      return;
+    }
+
+    const handleUpdateOnNotificationPress = async () => {
+      const lastNotificationResponse = await getLastNotificationResponseAsync();
+
+      if (
+        lastNotificationResponse?.notification?.request.identifier ===
+        'updateAvailable'
+      ) {
+        router.push({
+          pathname: '/about',
+          params: { startUpdate: '1' },
+        });
+      }
+    };
+
+    handleUpdateOnNotificationPress();
+  }, [isInitialized, pathName]);
+
+  useStartupUpdateChecker();
 
   if (!isInitialized) return null;
 
