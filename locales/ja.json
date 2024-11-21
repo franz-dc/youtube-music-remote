@@ -84,12 +84,21 @@
         "en": "英語",
         "ja": "日本語"
       },
-      "keepScreenOn": "画面をオンに保つ"
+      "keepScreenOn": "画面をオンに保つ",
+      "checkForUpdatesOnAppStart": "アプリ起動時に更新を確認"
     }
   },
   "about": {
     "title": "このアプリについて",
     "checkForUpdates": "更新を確認",
+    "checkingForUpdates": "更新を確認中...",
+    "upToDate": "最新の状態です",
+    "updateAvailable": "更新が利用可能です",
+    "updateAvailableDescription": "タップしてダウンロードしてインストール",
+    "updateAvailableLong": "更新が利用可能です。タップしてダウンロードしてインストールしてください。",
+    "tapToInstall": "タップしてインストール",
+    "downloadingUpdate": "更新をダウンロード中 ({{progress}}%)...",
+    "errorCheckingForUpdates": "更新の確認中にエラーが発生しました。タップして再試行してください。",
     "webVersion": "Webバージョン",
     "changelog": "変更履歴",
     "license": "ライセンス"
