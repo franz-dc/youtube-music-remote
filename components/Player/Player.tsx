@@ -39,8 +39,9 @@ import PlayerExtraActions from './PlayerExtraActions';
 import PlayerMenu, { PlayerMenuMethods } from './PlayerMenu';
 import PlayerSeekBar from './PlayerSeekBar';
 import SleepTimerMenu, { SleepTimerMenuMethods } from './SleepTimerMenu';
+import SongDetails from './SongDetails';
 
-const PLAYER_HORIZONTAL_PADDING = 24;
+const PLAYER_PADDING = 24;
 const MINI_PLAYER_VISIBILITY_THRESHOLD = 0.8;
 const PLAYER_VISIBILITY_THRESHOLD = 0.2;
 const styles = StyleSheet.create({
@@ -51,37 +52,33 @@ const styles = StyleSheet.create({
     flex: 1,
     // gap: 8,
     justifyContent: 'flex-end',
-    paddingHorizontal: PLAYER_HORIZONTAL_PADDING,
-    paddingBottom: 24,
+    paddingHorizontal: PLAYER_PADDING,
+    paddingBottom: PLAYER_PADDING,
     zIndex: 0,
   },
   albumArtContainer: {
-    position: 'relative',
     // with app bar controls
+    position: 'relative',
     flex: 1,
-    height: '100%',
+    flexDirection: 'row',
+    gap: PLAYER_PADDING,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  albumArtWrapper: {
+    flex: 1,
   },
   albumArt: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
+    // Consider app bar height as inset as it visually looks like blank space.
+    // Remove it if something will be placed in the middle of the player top
+    // bar in the future.
+    marginTop: -52,
     borderRadius: 16,
   },
-  titleAndControlsContainer: {
-    justifyContent: 'flex-end',
-  },
-  titleAndControlsContainerLandscape: {
+  mainPlayerContainer: {
     flex: 1,
-  },
-  titleContainer: {
-    marginBottom: 24,
-  },
-  title: {
-    fontSize: 16 * 1.25,
-    fontWeight: 'bold',
-  },
-  artist: {
-    opacity: 0.5,
+    gap: 16,
+    justifyContent: 'flex-end',
   },
   bottomSheetView: {
     position: 'relative',
@@ -92,10 +89,9 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: MINI_PLAYER_HEIGHT,
     flex: 1,
-    // padding: 16,
     alignItems: 'center',
+    height: MINI_PLAYER_HEIGHT,
   },
   miniPlayerPressable: {
     width: '100%',
@@ -116,19 +112,45 @@ const Player = () => {
 
   const { t } = useTranslation('translation', { keyPrefix: 'player' });
 
-  const { width, height } = useWindowDimensions();
-  const isPortrait = height > width;
-  const albumArtWidth = Math.min(
-    width - PLAYER_HORIZONTAL_PADDING * 2,
-    height - 450,
-    height / 2
-  );
-
-  const [showAlbumArtColor] = useSettingAtom('showAlbumArtColor');
-
   const { data: songInfo, isLoading, isError } = useNowPlaying();
 
+  const [showAlbumArtColor] = useSettingAtom('showAlbumArtColor');
+  const [showLikeAndDislikeButtons] = useSettingAtom(
+    'showLikeAndDislikeButtons'
+  );
+  const [showVolumeControl] = useSettingAtom('showVolumeControl');
+  const [showFullScreenButton] = useSettingAtom('showFullScreenButton');
+
+  const isExtraActionsVisible =
+    showLikeAndDislikeButtons || showVolumeControl || showFullScreenButton;
+
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
+  const isAlbumArtAndDetailsSideBySide = isLandscape && height < 600;
+
   const [isPlayingOptimistic, setIsPlayingOptimistic] = useState(false);
+
+  // Arbitrarily calculate image width due to image requiring dimensions.
+  // Not that elegant but it works. Refactor if necessary.
+  const maxAlbumArtWidthLandscape = (width - 48) * 0.4;
+  const albumArtWidthLandscapeRaw =
+    height +
+    topInset +
+    bottomInset -
+    60 - // app bar
+    46 - // seek bar
+    88 - // controls
+    (isExtraActionsVisible ? 48 + 8 : 0) - // extra actions
+    PLAYER_PADDING;
+  const albumArtWidthLandscape = Math.min(
+    albumArtWidthLandscapeRaw,
+    maxAlbumArtWidthLandscape
+  );
+  const albumArtWidth = Math.min(
+    width - PLAYER_PADDING * 2,
+    albumArtWidthLandscapeRaw - 52 - PLAYER_PADDING,
+    height / 2
+  );
 
   useEffect(() => {
     setIsPlayingOptimistic(songInfo ? !songInfo.isPaused : false);
@@ -136,7 +158,11 @@ const Player = () => {
 
   const handlePlayPause = async () => {
     setIsPlayingOptimistic((prev) => !prev);
-    await togglePlayPause();
+    try {
+      await togglePlayPause();
+    } catch {
+      setIsPlayingOptimistic((prev) => !prev);
+    }
   };
 
   const handlePause = async () => {
@@ -162,7 +188,7 @@ const Player = () => {
   const animatedPosition = useSharedValue(0);
   const animatedIndex = useSharedValue(0);
   const heightForPosition =
-    height + (isPortrait ? topInset : 0) - MINI_PLAYER_HEIGHT;
+    height + (isLandscape ? 0 : topInset) - MINI_PLAYER_HEIGHT;
 
   // Linear scale opacity relative to PLAYER_VISIBILITY_THRESHOLD and 1.
   // Overshoots in opacity are ignored as it won't error out.
@@ -296,7 +322,7 @@ const Player = () => {
                 <>
                   <Animated.View
                     style={[
-                      styles.albumArtContainer,
+                      styles.mainPlayerContainer,
                       playerOpacityStyle,
                       playerZIndexStyle,
                     ]}
@@ -312,46 +338,44 @@ const Player = () => {
                         icon={MORE_ICON}
                         size={24}
                         onPress={handleMenuPress}
+                        accessibilityLabel={t('player.moreActions')}
                       />
                     </View>
-                    {songInfo.imageSrc && (
-                      <Image
-                        style={[
-                          styles.albumArt,
-                          {
-                            display: height < 600 ? 'none' : 'flex',
-                            width: albumArtWidth,
-                            height: albumArtWidth,
-                            maxWidth: height / 2,
-                            maxHeight: height / 2,
-                            transform: [
-                              { translateX: -albumArtWidth / 2 },
-                              { translateY: -albumArtWidth / 2 },
-                            ],
-                          },
-                        ]}
-                        source={{ uri: songInfo.imageSrc }}
-                      />
+                    <View
+                      style={[
+                        styles.albumArtContainer,
+                        isAlbumArtAndDetailsSideBySide && {
+                          alignItems: 'flex-end',
+                          justifyContent: 'flex-start',
+                        },
+                      ]}
+                    >
+                      {songInfo.imageSrc && (
+                        <Image
+                          source={{ uri: songInfo.imageSrc }}
+                          style={[
+                            styles.albumArt,
+                            {
+                              display: height < 450 ? 'none' : 'flex',
+                              width: albumArtWidth,
+                              height: albumArtWidth,
+                            },
+                            isAlbumArtAndDetailsSideBySide && {
+                              display: height < 300 ? 'none' : 'flex',
+                              width: albumArtWidthLandscape,
+                              height: albumArtWidthLandscape,
+                              marginTop: 0,
+                            },
+                          ]}
+                        />
+                      )}
+                      {isAlbumArtAndDetailsSideBySide && (
+                        <SongDetails {...songInfo} sideBySide />
+                      )}
+                    </View>
+                    {!isAlbumArtAndDetailsSideBySide && (
+                      <SongDetails {...songInfo} />
                     )}
-                  </Animated.View>
-                  <View
-                    style={[
-                      styles.titleAndControlsContainer,
-                      height < 600 && styles.titleAndControlsContainerLandscape,
-                    ]}
-                  >
-                    <View style={styles.titleContainer}>
-                      <Text numberOfLines={1} style={styles.title}>
-                        {songInfo.title}
-                      </Text>
-                      <Text
-                        numberOfLines={1}
-                        variant='bodyLarge'
-                        style={styles.artist}
-                      >
-                        {songInfo.artist}
-                      </Text>
-                    </View>
                     <PlayerSeekBar
                       songInfo={songInfo}
                       isPlaying={isPlayingOptimistic}
@@ -361,7 +385,7 @@ const Player = () => {
                       onPlayPause={handlePlayPause}
                     />
                     <PlayerExtraActions />
-                  </View>
+                  </Animated.View>
                 </>
               )}
             </View>
