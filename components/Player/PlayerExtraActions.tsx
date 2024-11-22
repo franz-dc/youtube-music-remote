@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { IconButton } from 'react-native-paper';
 
 import { useSettingAtom } from '@/configs';
@@ -28,16 +28,25 @@ const styles = StyleSheet.create({
   volumeSlider: {
     width: 100,
   },
+  volumeSliderLandscape: {
+    width: 150,
+  },
 });
 
 const PlayerExtraActions = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'player' });
+
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
 
   const [showLikeAndDislikeButtons] = useSettingAtom(
     'showLikeAndDislikeButtons'
   );
   const [showVolumeControl] = useSettingAtom('showVolumeControl');
   const [showFullScreenButton] = useSettingAtom('showFullScreenButton');
+
+  const showPlayerActions =
+    showLikeAndDislikeButtons || showVolumeControl || showFullScreenButton;
 
   // Fullscreen state (optimistic)
   const [isFullScreen, setIsFullscreen] = useState(false);
@@ -100,6 +109,8 @@ const PlayerExtraActions = () => {
     }
   };
 
+  if (!showPlayerActions) return null;
+
   return (
     <View style={styles.actionsContainer}>
       <View style={styles.stack}>
@@ -132,6 +143,7 @@ const PlayerExtraActions = () => {
             <Slider
               style={[
                 styles.volumeSlider,
+                isLandscape && styles.volumeSliderLandscape,
                 !showFullScreenButton && {
                   marginRight: Platform.OS === 'web' ? 16 : 0,
                 },
