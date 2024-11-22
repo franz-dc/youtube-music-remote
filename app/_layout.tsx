@@ -59,7 +59,7 @@ const StackWithConfig = () => {
     useState(false);
 
   const { width, height } = useWindowDimensions();
-  const isPortrait = height > width;
+  const isLandscape = width > height;
 
   const { theme: systemDynamicTheme } = useMaterial3Theme();
 
@@ -171,9 +171,9 @@ const StackWithConfig = () => {
 
   // hide bars on landscape mode
   useEffect(() => {
-    setStatusBarHidden(!isPortrait);
-    NavigationBar.setVisibilityAsync(isPortrait ? 'visible' : 'hidden');
-  }, [isPortrait]);
+    setStatusBarHidden(isLandscape);
+    NavigationBar.setVisibilityAsync(isLandscape ? 'hidden' : 'visible');
+  }, [isLandscape]);
 
   if (!isInitialized) return null;
 
