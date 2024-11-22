@@ -7251,12 +7251,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^23.16.4":
-  version: 23.16.8
-  resolution: "i18next@npm:23.16.8"
+"i18next@npm:^24.0.0":
+  version: 24.0.0
+  resolution: "i18next@npm:24.0.0"
   dependencies:
     "@babel/runtime": "npm:^7.23.2"
-  checksum: 10c0/57d249191e8a39bbbbe190cfa2e2bb651d0198e14444fe80453d3df8d02927de3c147c77724e9ae6c72fa241898cd761e3fdcd55d053db373471f1ac084bf345
+  peerDependencies:
+    typescript: ^5
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10c0/675e87241883dffb18f7bea6d996475777f14406e55c2915ecafb6e4ec28c3e921b675f194e99c3de0f9f234a4a2e204f8c53cfc4fd34a1db89f98c191713034
   languageName: node
   linkType: hard
 
@@ -12893,7 +12898,7 @@ __metadata:
 
 "typescript@patch:typescript@npm%3A~5.7.0#optional!builtin<compat/typescript>":
   version: 5.7.2
-  resolution: "typescript@patch:typescript@npm%3A5.7.2#optional!builtin<compat/typescript>::version=5.7.2&hash=cef18b"
+  resolution: "typescript@patch:typescript@npm%3A5.7.2#optional!builtin<compat/typescript>::version=5.7.2&hash=379a07"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
@@ -13822,7 +13827,7 @@ __metadata:
     expo-status-bar: "npm:~1.12.1"
     expo-system-ui: "npm:~3.0.7"
     expo-web-browser: "npm:~13.0.3"
-    i18next: "npm:^23.16.4"
+    i18next: "npm:^24.0.0"
     intl-pluralrules: "npm:^2.0.1"
     jest: "npm:^29.2.1"
     jest-expo: "npm:~51.0.3"
