@@ -76,7 +76,7 @@ const Queue = () => {
     <>
       <View style={{ flex: 1, paddingBottom }}>
         <FlashList
-          data={queue.items}
+          data={queue.items.filter((it) => item.playlistPanelVideoRenderer.videoId)}
           renderItem={({ item }) => (
             <QueueListItem song={item.playlistPanelVideoRenderer} />
           )}
