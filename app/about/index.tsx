@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Image, Linking, Platform, StyleSheet } from 'react-native';
 import { List, Text } from 'react-native-paper';
 
+import { UpdateChecker } from '@/components';
+
 const styles = StyleSheet.create({
   image: {
     width: 120,
@@ -25,8 +27,6 @@ const styles = StyleSheet.create({
   },
 });
 
-// TODO: Check for updates API
-
 const About = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'about' });
 
@@ -44,11 +44,7 @@ const About = () => {
           ? t('webVersion')
           : Application.nativeApplicationVersion}
       </Text>
-      {/* <List.Item
-        title={t('checkForUpdates')}
-        left={(props) => <List.Icon {...props} icon='update' />}
-        style={styles.listItem}
-      /> */}
+      {Platform.OS !== 'web' && <UpdateChecker />}
       <List.Item
         title='GitHub'
         left={(props) => <List.Icon {...props} icon='github' />}

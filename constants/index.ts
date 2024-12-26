@@ -42,6 +42,9 @@ export const DEFAULT_SETTINGS = {
   // general
   language: 'system',
   keepScreenOn: false,
+  checkForUpdatesOnAppStart: true,
+  // extras
+  isFreshInstall: false,
 } as const satisfies SettingsSchema;
 
 export const TEXT_SETTINGS: Record<
@@ -111,3 +114,7 @@ export const ANIMATION_CONFIGS = {
   duration: 350,
   easing: Easing.out(Easing.exp),
 };
+export const APP_FILE_EXTENSION = Platform.select({
+  ios: 'ipa',
+  android: 'apk',
+});

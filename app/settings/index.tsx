@@ -117,11 +117,20 @@ const Settings = () => {
           type='option'
           onPress={openOptionDialog}
         />
-        <SettingsListItem
-          category='general'
-          setting='keepScreenOn'
-          type='switch'
-        />
+        {Platform.OS !== 'web' && (
+          <SettingsListItem
+            category='general'
+            setting='keepScreenOn'
+            type='switch'
+          />
+        )}
+        {Platform.OS !== 'web' && (
+          <SettingsListItem
+            category='general'
+            setting='checkForUpdatesOnAppStart'
+            type='switch'
+          />
+        )}
       </List.Section>
       <TextDialog
         visible={!!textSetting && isTextDialogVisible}

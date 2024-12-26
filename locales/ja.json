@@ -30,13 +30,14 @@
     "nothingIsPlayingMessage": "ここからコントロールするには、YouTube Musicで何かを再生してください。",
     "minimizePlayer": "プレーヤーを最小化",
     "maximizePlayer": "プレーヤーを最大化",
+    "moreActions": "その他のアクション",
     "sleepTimer": "スリープタイマー",
     "addFiveMinutes": "5分追加",
     "cancelTimer": "タイマーをキャンセル",
-    "minutes_one": "{{value}}分",
-    "minutes_other": "{{value}}分",
-    "hours_one": "{{value}}時間",
-    "hours_other": "{{value}}時間",
+    "minutes_one": "{{count}}分",
+    "minutes_other": "{{count}}分",
+    "hours_one": "{{count}}時間",
+    "hours_other": "{{count}}時間",
     "share": "共有",
     "like": "好き",
     "dislike": "嫌い"
@@ -84,12 +85,21 @@
         "en": "英語",
         "ja": "日本語"
       },
-      "keepScreenOn": "画面をオンに保つ"
+      "keepScreenOn": "画面をオンに保つ",
+      "checkForUpdatesOnAppStart": "アプリ起動時に更新を確認"
     }
   },
   "about": {
     "title": "このアプリについて",
     "checkForUpdates": "更新を確認",
+    "checkingForUpdates": "更新を確認中...",
+    "upToDate": "最新の状態です",
+    "updateAvailable": "更新が利用可能です",
+    "updateAvailableDescription": "タップしてダウンロードしてインストール",
+    "updateAvailableLong": "更新が利用可能です。タップしてダウンロードしてインストールしてください。",
+    "tapToInstall": "タップしてインストール",
+    "downloadingUpdate": "更新をダウンロード中 ({{progress}}%)...",
+    "errorCheckingForUpdates": "更新の確認中にエラーが発生しました。タップして再試行してください。",
     "webVersion": "Webバージョン",
     "changelog": "変更履歴",
     "license": "ライセンス"

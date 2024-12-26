@@ -30,6 +30,7 @@
     "nothingIsPlayingMessage": "Play something on YouTube Music to control it from here.",
     "minimizePlayer": "Minimize player",
     "maximizePlayer": "Maximize player",
+    "moreActions": "More actions",
     "sleepTimer": "Sleep timer",
     "addFiveMinutes": "Add 5 minutes",
     "cancelTimer": "Cancel timer",
@@ -84,12 +85,21 @@
         "en": "English",
         "ja": "Japanese"
       },
-      "keepScreenOn": "Keep screen on"
+      "keepScreenOn": "Keep screen on",
+      "checkForUpdatesOnAppStart": "Check for updates on app start"
     }
   },
   "about": {
     "title": "About",
     "checkForUpdates": "Check for updates",
+    "checkingForUpdates": "Checking for updates...",
+    "upToDate": "Up to date",
+    "updateAvailable": "An update is available",
+    "updateAvailableDescription": "Tap to download and install",
+    "updateAvailableLong": "Update available. Tap to download and install.",
+    "tapToInstall": "Tap to install",
+    "downloadingUpdate": "Downloading update ({{progress}}%)...",
+    "errorCheckingForUpdates": "Error checking for updates. Tap to retry.",
     "webVersion": "Web version",
     "changelog": "Changelog",
     "license": "License"

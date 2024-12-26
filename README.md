@@ -33,7 +33,7 @@ You need to disable a security feature for the site first. YouTube Music's API S
 
 ### Chrome (and other Chromium-based browsers)
 
-1. Open the website.
+1. Go to the web app.
 2. Click the lock or settings icon on the left side of the address bar.
 3. Click `Site settings`.
 4. Scroll down to `Insecure content` and select `Allow`.
@@ -41,7 +41,7 @@ You need to disable a security feature for the site first. YouTube Music's API S
 
 ### Firefox
 
-1. Open the website and go to the [settings page](https://youtube-music-remote.vercel.app/settings).
+1. Go to the web app and go to the [settings page](https://youtube-music-remote.vercel.app/settings).
 2. Configure your connection settings.
 3. Click the lock icon on the left side of the address bar.
 4. Click `Connection secure`.

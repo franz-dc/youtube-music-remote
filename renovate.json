@@ -1,0 +1,548 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "assignees": ["franz-dc"],
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "matchPackageNames": ["eslint"],
+      "allowedVersions": "^8.57.0"
+    },
+    {
+      "matchPackageNames": ["@react-navigation/native"],
+      "allowedVersions": "^6.0.2"
+    },
+    {
+      "matchPackageNames": ["react-native-mmkv"],
+      "allowedVersions": "^2.12.2"
+    },
+    {
+      "matchPackageNames": ["@expo/metro-runtime"],
+      "allowedVersions": "~3.2.3",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["@expo/vector-icons"],
+      "allowedVersions": "^14.0.3",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["@react-native-async-storage/async-storage"],
+      "allowedVersions": "1.23.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["@react-native-community/datetimepicker"],
+      "allowedVersions": "8.0.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["@react-native-masked-view/masked-view"],
+      "allowedVersions": "0.3.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["@react-native-community/netinfo"],
+      "allowedVersions": "11.3.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["@react-native-community/slider"],
+      "allowedVersions": "4.5.2",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["@react-native-community/viewpager"],
+      "allowedVersions": "5.0.11",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["@react-native-picker/picker"],
+      "allowedVersions": "2.7.5",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": [
+        "@react-native-segmented-control/segmented-control"
+      ],
+      "allowedVersions": "2.5.2",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["@stripe/stripe-react-native"],
+      "allowedVersions": "0.37.2",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["eslint-config-expo"],
+      "allowedVersions": "~7.1.2",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-analytics-amplitude"],
+      "allowedVersions": "~11.3.0",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-app-auth"],
+      "allowedVersions": "~11.1.0",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-app-loader-provider"],
+      "allowedVersions": "~8.0.0",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-apple-authentication"],
+      "allowedVersions": "~6.4.2",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-application"],
+      "allowedVersions": "~5.9.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-asset"],
+      "allowedVersions": "~10.0.10",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-auth-session"],
+      "allowedVersions": "~5.5.2",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-av"],
+      "allowedVersions": "~14.0.7",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-background-fetch"],
+      "allowedVersions": "~12.0.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-barcode-scanner"],
+      "allowedVersions": "~13.0.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-battery"],
+      "allowedVersions": "~8.0.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-blur"],
+      "allowedVersions": "~13.0.2",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-brightness"],
+      "allowedVersions": "~12.0.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-build-properties"],
+      "allowedVersions": "~0.12.5",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-calendar"],
+      "allowedVersions": "~13.0.5",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-camera"],
+      "allowedVersions": "~15.0.16",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-cellular"],
+      "allowedVersions": "~6.0.3",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-checkbox"],
+      "allowedVersions": "~3.0.0",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-clipboard"],
+      "allowedVersions": "~6.0.3",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-constants"],
+      "allowedVersions": "~16.0.2",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-contacts"],
+      "allowedVersions": "~13.0.5",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-crypto"],
+      "allowedVersions": "~13.0.2",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-dev-client"],
+      "allowedVersions": "~4.0.29",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-device"],
+      "allowedVersions": "~6.0.2",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-document-picker"],
+      "allowedVersions": "~12.0.2",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-face-detector"],
+      "allowedVersions": "~12.7.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-file-system"],
+      "allowedVersions": "~17.0.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-font"],
+      "allowedVersions": "~12.0.10",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-gl"],
+      "allowedVersions": "~14.0.2",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-google-app-auth"],
+      "allowedVersions": "~8.3.0",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-haptics"],
+      "allowedVersions": "~13.0.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-image"],
+      "allowedVersions": "~1.13.0",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-image-loader"],
+      "allowedVersions": "~4.7.0",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-image-manipulator"],
+      "allowedVersions": "~12.0.5",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-image-picker"],
+      "allowedVersions": "~15.0.7",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-intent-launcher"],
+      "allowedVersions": "~11.0.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-insights"],
+      "allowedVersions": "~0.7.0",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-keep-awake"],
+      "allowedVersions": "~13.0.2",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-linear-gradient"],
+      "allowedVersions": "~13.0.2",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-linking"],
+      "allowedVersions": "~6.3.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-local-authentication"],
+      "allowedVersions": "~14.0.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-localization"],
+      "allowedVersions": "~15.0.3",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-location"],
+      "allowedVersions": "~17.0.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-mail-composer"],
+      "allowedVersions": "~13.0.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-media-library"],
+      "allowedVersions": "~16.0.5",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-module-template"],
+      "allowedVersions": "~10.14.13",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-modules-core"],
+      "allowedVersions": "~1.12.26",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-navigation-bar"],
+      "allowedVersions": "~3.0.7",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-network"],
+      "allowedVersions": "~6.0.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-notifications"],
+      "allowedVersions": "~0.28.19",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-print"],
+      "allowedVersions": "~13.0.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-random"],
+      "allowedVersions": "~14.0.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-router"],
+      "allowedVersions": "~3.5.24",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-screen-capture"],
+      "allowedVersions": "~6.0.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-screen-orientation"],
+      "allowedVersions": "~7.0.5",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-secure-store"],
+      "allowedVersions": "~13.0.2",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-sensors"],
+      "allowedVersions": "~13.0.9",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-sharing"],
+      "allowedVersions": "~12.0.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-sms"],
+      "allowedVersions": "~12.0.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-speech"],
+      "allowedVersions": "~12.0.2",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-splash-screen"],
+      "allowedVersions": "~0.27.7",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-sqlite"],
+      "allowedVersions": "~14.0.6",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-status-bar"],
+      "allowedVersions": "~1.12.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-store-review"],
+      "allowedVersions": "~7.0.2",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-symbols"],
+      "allowedVersions": "~0.1.5",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-system-ui"],
+      "allowedVersions": "~3.0.7",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-task-manager"],
+      "allowedVersions": "~11.8.2",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-tracking-transparency"],
+      "allowedVersions": "~4.0.2",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-updates"],
+      "allowedVersions": "~0.25.27",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-video-thumbnails"],
+      "allowedVersions": "~8.0.0",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["expo-web-browser"],
+      "allowedVersions": "~13.0.3",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["jest-expo"],
+      "allowedVersions": "~51.0.4",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["lottie-react-native"],
+      "allowedVersions": "6.7.0",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["react"],
+      "allowedVersions": "18.2.0",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["react-dom"],
+      "allowedVersions": "18.2.0",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["react-native"],
+      "allowedVersions": "0.74.5",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["react-native-web"],
+      "allowedVersions": "~0.19.10",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["react-native-gesture-handler"],
+      "allowedVersions": "~2.16.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["react-native-get-random-values"],
+      "allowedVersions": "~1.11.0",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["react-native-maps"],
+      "allowedVersions": "1.14.0",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["react-native-pager-view"],
+      "allowedVersions": "6.3.0",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["react-native-reanimated"],
+      "allowedVersions": "~3.10.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["react-native-screens"],
+      "allowedVersions": "3.31.1",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["react-native-safe-area-context"],
+      "allowedVersions": "4.10.5",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["react-native-svg"],
+      "allowedVersions": "15.2.0",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["react-native-view-shot"],
+      "allowedVersions": "3.8.0",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["react-native-webview"],
+      "allowedVersions": "13.8.6",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["sentry-expo"],
+      "allowedVersions": "~7.0.0",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["unimodules-app-loader"],
+      "allowedVersions": "~4.6.0",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["unimodules-image-loader-interface"],
+      "allowedVersions": "~6.1.0",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["@shopify/react-native-skia"],
+      "allowedVersions": "1.2.3",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["@shopify/flash-list"],
+      "allowedVersions": "1.6.4",
+      "groupName": "expo-51-0-39"
+    },
+    {
+      "matchPackageNames": ["@sentry/react-native"],
+      "allowedVersions": "~5.24.3",
+      "groupName": "expo-51-0-39"
+    }
+  ],
+  "ignoreDeps": ["expo", "react-native"]
+}

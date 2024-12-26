@@ -14,4 +14,7 @@ export type SettingsSchema = {
   // general
   language: (typeof SETTINGS_OPTIONS.language)[number];
   keepScreenOn: boolean;
+  checkForUpdatesOnAppStart: boolean;
+  // extras
+  isFreshInstall: boolean;
 };

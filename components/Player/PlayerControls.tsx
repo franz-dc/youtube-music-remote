@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginHorizontal: -16,
-    marginVertical: -8,
+    marginVertical: -20,
   },
   innerIcon: {
     marginHorizontal: -8,
