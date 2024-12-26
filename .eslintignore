@@ -1,3 +1,13 @@
-/.expo
-node_modules
-scripts/*
+node_modules/**
+package.json
+yarn.lock
+ios/**
+android/**
+assets/**
+dist/**
+scripts/**
+.vscode
+.expo-shared
+.prettierrc.json
+.eslintrc.js
+.expo
