@@ -11,3 +11,4 @@ scripts/**
 .prettierrc.json
 .eslintrc.js
 .expo
+expo-env.d.ts
