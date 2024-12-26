@@ -14,11 +14,8 @@ export const playPreviousTrack = async () => await api.post('/previous');
 
 export const playNextTrack = async () => await api.post('/next');
 
-// export const seekBackward = async (seconds: number) =>
-//   await api.post('/go-back', { seconds });
-
-export const seekSeconds = async (seconds: number) =>
-  await api.post('/go-forward', { seconds });
+export const seek = async (seconds: number) =>
+  await api.post('/seek-to', { seconds });
 
 export const toggleShuffle = async () => await api.post('/shuffle');
 

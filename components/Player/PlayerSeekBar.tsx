@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 
 import { SongInfoSchema } from '@/schemas';
+import { seek } from '@/services';
 import { formatSecondsToDuration } from '@/utils';
 
 import Slider from '../Slider';
@@ -22,11 +23,12 @@ const styles = StyleSheet.create({
   },
 });
 
-// TODO: Use this once https://github.com/th-ch/youtube-music/pull/2577 is released
-// const ELAPSED_SECONDS_INACCURACY_THRESHOLD = 3;
-
 const PlayerSeekBar = ({ songInfo }: PlayerSeekBarProps) => {
   const { t } = useTranslation('translation', { keyPrefix: 'player' });
+
+  const seekSeconds = async (value: number) => {
+    await seek(value * songInfo.songDuration);
+  };
 
   return (
     <View>
@@ -34,7 +36,7 @@ const PlayerSeekBar = ({ songInfo }: PlayerSeekBarProps) => {
         style={styles.seekBar}
         value={songInfo.elapsedSeconds / songInfo.songDuration || 0}
         step={0.001}
-        // onValueChange={seek}
+        onValueChange={seekSeconds}
         accessibilityLabel={t('seek')}
       />
       <View style={styles.seekBarTime}>
