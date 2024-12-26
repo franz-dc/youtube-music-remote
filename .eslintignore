@@ -8,7 +8,5 @@ dist/**
 scripts/**
 .vscode
 .expo-shared
-.prettierrc.json
-.eslintrc.js
 .expo
 expo-env.d.ts

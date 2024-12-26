@@ -3,9 +3,9 @@ module.exports = {
   extends: [
     'expo',
     'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
-    'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
     'plugin:import/recommended',
   ],
@@ -84,6 +84,7 @@ module.exports = {
     // react-hooks
     'react-hooks/exhaustive-deps': 'error',
     // typescript-eslint
+    '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     // ! temporarily turned off for now
