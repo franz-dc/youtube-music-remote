@@ -17,7 +17,7 @@ import { ANIMATION_CONFIGS } from '@/constants';
 import { useBottomSheetModalBackHandler } from '@/hooks';
 import { formatSecondsToDuration } from '@/utils';
 
-export type SleepTimerMenuProps = {};
+export type SleepTimerMenuProps = unknown;
 
 export type SleepTimerMenuMethods = {
   show: () => void;

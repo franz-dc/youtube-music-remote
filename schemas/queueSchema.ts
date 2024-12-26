@@ -190,6 +190,7 @@ export type QueueSchema = {
                   playlistId: string;
                   command: {
                     clickTrackingParams: string;
+                    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
                     dismissQueueCommand: {};
                   };
                 };

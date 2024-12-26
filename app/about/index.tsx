@@ -33,6 +33,7 @@ const About = () => {
   return (
     <>
       <Image
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         source={require('@/assets/images/logo.png')}
         style={styles.image}
       />

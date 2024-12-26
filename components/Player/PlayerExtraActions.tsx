@@ -61,7 +61,7 @@ const PlayerExtraActions = () => {
     try {
       setIsFullscreen((prev) => !prev);
       await setFullscreen(!isFullScreen);
-    } catch (error) {
+    } catch {
       setIsFullscreen((prev) => !prev);
     }
   };
@@ -169,4 +169,5 @@ const PlayerExtraActions = () => {
     </View>
   );
 };
+
 export default PlayerExtraActions;
