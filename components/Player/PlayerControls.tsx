@@ -2,12 +2,8 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { IconButton } from 'react-native-paper';
 
-import {
-  playNextTrack,
-  playPreviousTrack,
-  switchRepeat,
-  toggleShuffle,
-} from '@/services';
+import { useRepeat } from '@/hooks';
+import { playNextTrack, playPreviousTrack, toggleShuffle } from '@/services';
 
 export type PlayerControlsProps = {
   isPlaying: boolean;
@@ -27,8 +23,22 @@ const styles = StyleSheet.create({
   },
 });
 
+const repeatIconMap = {
+  NONE: 'repeat',
+  ALL: 'repeat',
+  ONE: 'repeat-once',
+};
+
+const repeatLabelMap = {
+  NONE: 'repeatOff',
+  ALL: 'repeatAll',
+  ONE: 'repeatOne',
+};
+
 const PlayerControls = ({ isPlaying, onPlayPause }: PlayerControlsProps) => {
   const { t } = useTranslation('translation', { keyPrefix: 'player' });
+
+  const { repeatMode, switchRepeat } = useRepeat();
 
   return (
     <View style={styles.playerControlsContainer}>
@@ -61,10 +71,11 @@ const PlayerControls = ({ isPlaying, onPlayPause }: PlayerControlsProps) => {
         style={styles.innerIcon}
       />
       <IconButton
-        icon='repeat'
+        icon={repeatIconMap[repeatMode || 'NONE']}
         size={28}
-        onPress={switchRepeat}
-        accessibilityLabel={t('switchRepeat')}
+        onPress={() => switchRepeat()}
+        accessibilityLabel={t(repeatLabelMap[repeatMode || 'NONE'])}
+        style={{ opacity: repeatMode === 'NONE' ? 0.5 : 1 }}
       />
     </View>
   );

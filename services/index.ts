@@ -1,7 +1,12 @@
 import axios from 'axios';
 
 import { api } from '@/configs';
-import { QueueSchema, ReleaseSchema, SongInfoSchema } from '@/schemas';
+import {
+  QueueSchema,
+  ReleaseSchema,
+  RepeatModeStateSchema,
+  SongInfoSchema,
+} from '@/schemas';
 
 // Player
 // export const play = async () => await api.post('/play');
@@ -18,6 +23,11 @@ export const seek = async (seconds: number) =>
   await api.post('/seek-to', { seconds });
 
 export const toggleShuffle = async () => await api.post('/shuffle');
+
+export const getRepeatMode = async () => {
+  const { data } = await api.get<RepeatModeStateSchema>('/repeat-mode');
+  return data;
+};
 
 export const switchRepeat = async () =>
   await api.post('/switch-repeat', { iteration: 1 });
