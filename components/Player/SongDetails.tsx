@@ -11,13 +11,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export type TitleAndArtistProps = {
+export type SongDetailsProps = {
   title: string;
   artist: string;
   sideBySide?: boolean;
 };
 
-const SongDetails = ({ title, artist, sideBySide }: TitleAndArtistProps) => {
+const SongDetails = ({ title, artist, sideBySide }: SongDetailsProps) => {
   return (
     <View style={[sideBySide && { flex: 1 }]}>
       <Text numberOfLines={sideBySide ? 2 : 1} style={styles.title}>

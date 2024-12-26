@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["mmkv", "pressable", "unmute"]
+  "cSpell.words": ["mmkv", "pressable", "unmute"],
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }
