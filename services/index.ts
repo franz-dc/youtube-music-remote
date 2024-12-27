@@ -51,14 +51,14 @@ export const toggleLikeSong = async () => await api.post('/like');
 export const toggleDislikeSong = async () => await api.post('/dislike');
 
 export const getSongInfo = async () => {
-  const { status, data } = await api.get<SongInfoSchema>('/song-info');
+  const { status, data } = await api.get<SongInfoSchema>('/song');
   if (status === 204) return null;
   return data;
 };
 
 // Queue Info
 export const getQueue = async () => {
-  const { status, data } = await api.get<QueueSchema>('/queue-info');
+  const { status, data } = await api.get<QueueSchema>('/queue');
   if (status === 204) return null;
   return data;
 };
