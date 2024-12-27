@@ -26,7 +26,7 @@ export const toggleShuffle = async () => await api.post('/shuffle');
 
 export const getRepeatMode = async () => {
   const { data } = await api.get<RepeatModeStateSchema>('/repeat-mode');
-  return data;
+  return data.mode;
 };
 
 export const switchRepeat = async () =>

@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { RepeatModeStateSchema } from '@/schemas';
 import { getRepeatMode, switchRepeat } from '@/services';
 
 const QUERY_KEY = ['repeatMode'];
@@ -18,7 +19,7 @@ export const useRepeat = () => {
   const { data } = useQuery({
     queryKey: QUERY_KEY,
     queryFn: getRepeatMode,
-    initialData: { mode: 'NONE' },
+    initialData: 'NONE' as RepeatModeStateSchema['mode'],
   });
 
   const { mutateAsync } = useMutation({
@@ -33,7 +34,7 @@ export const useRepeat = () => {
   });
 
   return {
-    repeatMode: data.mode,
+    repeatMode: data,
     switchRepeat: async () => {
       await mutateAsync();
     },
