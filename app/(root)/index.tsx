@@ -77,12 +77,19 @@ const Queue = () => {
       <View style={{ flex: 1, paddingBottom }}>
         <FlashList
           data={queue.items.filter(
-            (item) => item?.playlistPanelVideoRenderer?.videoId
+            (item) =>
+              item?.playlistPanelVideoRenderer?.videoId ||
+              item.playlistPanelVideoWrapperRenderer?.primaryRenderer
+                .playlistPanelVideoRenderer.videoId
           )}
           renderItem={({ item }) => (
             <QueueListItem song={item.playlistPanelVideoRenderer} />
           )}
-          keyExtractor={(item) => item.playlistPanelVideoRenderer.videoId}
+          keyExtractor={(item) =>
+            (item.playlistPanelVideoRenderer?.videoId ||
+              item.playlistPanelVideoWrapperRenderer?.primaryRenderer
+                .playlistPanelVideoRenderer.videoId) as string
+          }
           estimatedItemSize={64}
           contentContainerStyle={{ paddingBottom: 8 }}
         />
