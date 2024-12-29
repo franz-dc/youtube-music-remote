@@ -1,0 +1,31 @@
+name: Feature request
+description: Suggest a new feature or enhancement for YouTube Music Remote.
+title: '[Feature Request]: '
+labels: enhancement
+body:
+  - type: checkboxes
+    attributes:
+      label: Feature request checklist
+      description: Please check the following before submitting a feature request.
+      options:
+        - label: I am running the latest version of YouTube Music Remote.
+          required: true
+        - label: I have searched the [issues](https://github.com/franz-dc/youtube-music-remote/issues) of this repository and believe that this is not a duplicate.
+          required: true
+  - type: textarea
+    attributes:
+      label: Summary
+      description: |
+        A clear and concise description of the feature you are requesting.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Alternatives considered
+      description: A clear and concise description of any alternative solutions or features you've considered.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: Add further information that may be relevant to your request.

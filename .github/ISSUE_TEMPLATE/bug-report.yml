@@ -1,0 +1,66 @@
+name: Bug report
+description: Report unintended behavior in YouTube Music Remote.
+title: '[Bug]: '
+labels: bug
+body:
+  - type: checkboxes
+    attributes:
+      label: Bug report checklist
+      description: Please check the following before submitting a bug report.
+      options:
+        - label: I am running the latest version of YouTube Music Remote.
+          required: true
+        - label: I am running the latest version of YouTube Music.
+          required: true
+        - label: I have searched the [issues](https://github.com/franz-dc/youtube-music-remote/issues) of this repository and believe that this is not a duplicate.
+          required: true
+  - type: dropdown
+    attributes:
+      label: Platform
+      description: The device you are using YouTube Music Remote on.
+      options:
+        - Android
+        - iOS
+        - Web
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: App version
+      description: |
+        The version of the application you are using.
+        If you are using the web version, just put 'Web'.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Description
+      description: Briefly describe the issue.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps to reproduce
+      description: Describe the steps to reproduce the issue.
+      placeholder: |
+        1. Go to '...'
+        2. Press '...'
+        3. See error
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected behavior
+      description: Describe what you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Actual behavior
+      description: Describe what actually happened.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: Add further information that may be relevant to the issue.
