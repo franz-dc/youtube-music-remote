@@ -63,6 +63,18 @@ export const getQueue = async () => {
   return data;
 };
 
+export const addSongToQueue = async (videoId: string) =>
+  await api.post('/queue', { videoId });
+
+export const changeActiveSongInQueue = async (index: number) =>
+  await api.patch('/queue', { index });
+
+export const moveSongInQueue = async (fromIndex: number, toIndex: number) =>
+  await api.patch(`/queue/${fromIndex}`, { toIndex });
+
+export const removeSongFromQueue = async (index: number) =>
+  await api.delete(`/queue/${index}`);
+
 // GitHub
 export const getLatestRelease = async () => {
   const { data } = await axios.get<ReleaseSchema>(
