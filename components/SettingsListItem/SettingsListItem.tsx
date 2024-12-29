@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import { List, ListItemProps, Switch } from 'react-native-paper';
 
 import { useSettingAtom } from '@/configs';
+import { LIST_ITEM_PRESS_DELAY_MS } from '@/constants';
 import { SettingsSchema } from '@/schemas';
 
 const styles = StyleSheet.create({
@@ -58,6 +59,7 @@ const SettingsListItem = ({
       }
       style={styles.listItem}
       descriptionStyle={styles.description}
+      unstable_pressDelay={LIST_ITEM_PRESS_DELAY_MS}
     />
   );
 };
