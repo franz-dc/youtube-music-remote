@@ -33,7 +33,7 @@ enum Status {
   Like = 'LIKE',
 }
 
-type PlaylistPanelVideoRenderer = {
+export type PlaylistPanelVideoRenderer = {
   title: { runs: { text: string }[] };
   longBylineText: {
     runs: {
@@ -260,26 +260,28 @@ type PlaylistPanelVideoRenderer = {
   };
 };
 
+export type PlaylistPanelVideoWrapperRenderer = {
+  primaryRenderer: {
+    playlistPanelVideoRenderer: PlaylistPanelVideoRenderer;
+  };
+  counterpart: {
+    counterpartRenderer: {
+      playlistPanelVideoRenderer: PlaylistPanelVideoRenderer;
+    };
+    segmentMap: {
+      segment: {
+        primaryVideoStartTimeMilliseconds: string;
+        counterpartVideoStartTimeMilliseconds: string;
+        durationMilliseconds: string;
+      }[];
+    };
+  }[];
+};
+
 export type QueueSchema = {
   items: {
     playlistPanelVideoRenderer?: PlaylistPanelVideoRenderer;
-    playlistPanelVideoWrapperRenderer?: {
-      primaryRenderer: {
-        playlistPanelVideoRenderer: PlaylistPanelVideoRenderer;
-      };
-      counterpart: {
-        counterpartRenderer: {
-          playlistPanelVideoRenderer: PlaylistPanelVideoRenderer;
-        };
-        segmentMap: {
-          segment: {
-            primaryVideoStartTimeMilliseconds: string;
-            counterpartVideoStartTimeMilliseconds: string;
-            durationMilliseconds: string;
-          }[];
-        };
-      }[];
-    };
+    playlistPanelVideoWrapperRenderer?: PlaylistPanelVideoWrapperRenderer;
   }[];
   autoPlaying: boolean;
   continuation: string;

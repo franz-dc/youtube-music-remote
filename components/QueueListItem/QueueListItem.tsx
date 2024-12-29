@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, View } from 'react-native';
 import { Icon, Text, useTheme } from 'react-native-paper';
 
-import { QueueSchema } from '@/schemas';
+import { PlaylistPanelVideoRenderer } from '@/schemas';
 
 export type SongListItemProps = {
-  song: QueueSchema['items'][0]['playlistPanelVideoRenderer'];
+  song: PlaylistPanelVideoRenderer;
 };
 
 const styles = StyleSheet.create({
