@@ -1,12 +1,16 @@
+import { useQueryClient } from '@tanstack/react-query';
 import Color from 'color';
 import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, View } from 'react-native';
-import { Icon, Text, useTheme } from 'react-native-paper';
+import { Icon, Text, TouchableRipple, useTheme } from 'react-native-paper';
 
-import { PlaylistPanelVideoRenderer } from '@/schemas';
+import { LIST_ITEM_PRESS_DELAY_MS } from '@/constants';
+import { PlaylistPanelVideoRenderer, QueueSchema } from '@/schemas';
+import { changeActiveSongInQueue } from '@/services';
 
 export type SongListItemProps = {
   song: PlaylistPanelVideoRenderer;
+  index: number;
 };
 
 const styles = StyleSheet.create({
@@ -50,7 +54,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const QueueListItem = ({ song }: SongListItemProps) => {
+const QueueListItem = ({ song, index }: SongListItemProps) => {
   const theme = useTheme();
 
   const { t } = useTranslation('translation', { keyPrefix: 'queue' });
@@ -64,54 +68,111 @@ const QueueListItem = ({ song }: SongListItemProps) => {
     .fade(0.9)
     .string();
 
+  const queryClient = useQueryClient();
+
+  const playSelectedSong = async () => {
+    const currentQueue = queryClient.getQueryData<QueueSchema>(['queue']);
+
+    // Optimistically update the queue due to delay
+    queryClient.setQueryData<QueueSchema>(['queue'], (data) => {
+      if (!data) return data;
+
+      return {
+        ...data,
+        items: data.items.map((item) => {
+          if (item.playlistPanelVideoWrapperRenderer) {
+            return {
+              ...item,
+              playlistPanelVideoWrapperRenderer: {
+                ...item.playlistPanelVideoWrapperRenderer,
+                primaryRenderer: {
+                  ...item.playlistPanelVideoWrapperRenderer.primaryRenderer,
+                  playlistPanelVideoRenderer: {
+                    ...item.playlistPanelVideoWrapperRenderer.primaryRenderer
+                      .playlistPanelVideoRenderer,
+                    selected:
+                      item.playlistPanelVideoWrapperRenderer.primaryRenderer
+                        .playlistPanelVideoRenderer.videoId === song.videoId,
+                  },
+                },
+              },
+            };
+          }
+
+          if (item.playlistPanelVideoRenderer) {
+            return {
+              ...item,
+              playlistPanelVideoRenderer: {
+                ...item.playlistPanelVideoRenderer,
+                selected:
+                  item.playlistPanelVideoRenderer.videoId === song.videoId,
+              },
+            };
+          }
+        }) as QueueSchema['items'],
+      };
+    });
+
+    try {
+      await changeActiveSongInQueue(index);
+    } catch {
+      queryClient.setQueryData<QueueSchema>(['queue'], currentQueue);
+    }
+  };
+
   return (
-    <View
-      style={[
-        styles.listItemContainer,
-        isPlaying && {
-          backgroundColor: activeBackgroundColor,
-        },
-      ]}
+    <TouchableRipple
+      onPress={playSelectedSong}
+      unstable_pressDelay={LIST_ITEM_PRESS_DELAY_MS}
     >
       <View
         style={[
-          styles.albumArtContainer,
-          { backgroundColor: theme.dark ? '#000000' : '#ffffff' },
+          styles.listItemContainer,
+          isPlaying && {
+            backgroundColor: activeBackgroundColor,
+          },
         ]}
       >
-        <Image
-          source={{ uri: smallestThumbnailUrl }}
+        <View
           style={[
-            styles.albumArt,
-            isPlaying && {
-              opacity: theme.dark ? 0.15 : 0.25,
-            },
+            styles.albumArtContainer,
+            { backgroundColor: theme.dark ? '#000000' : '#ffffff' },
           ]}
-        />
-        {isPlaying && (
-          <>
-            <View style={styles.albumArtPlayingIcon}>
-              <Icon
-                source='equalizer'
-                size={30}
-                color={theme.colors.onSurface}
-              />
-            </View>
-          </>
-        )}
-      </View>
-      <View style={styles.songTextContainer}>
-        <Text
-          numberOfLines={1}
-          style={[styles.title, isPlaying && { color: theme.colors.primary }]}
         >
-          {title}
-        </Text>
-        <Text numberOfLines={1} style={styles.artist}>
-          {artist}
-        </Text>
+          <Image
+            source={{ uri: smallestThumbnailUrl }}
+            style={[
+              styles.albumArt,
+              isPlaying && {
+                opacity: theme.dark ? 0.15 : 0.25,
+              },
+            ]}
+          />
+          {isPlaying && (
+            <>
+              <View style={styles.albumArtPlayingIcon}>
+                <Icon
+                  source='equalizer'
+                  size={30}
+                  color={theme.colors.onSurface}
+                />
+              </View>
+            </>
+          )}
+        </View>
+        <View style={styles.songTextContainer}>
+          <Text
+            numberOfLines={1}
+            style={[styles.title, isPlaying && { color: theme.colors.primary }]}
+          >
+            {title}
+          </Text>
+          <Text numberOfLines={1} style={styles.artist}>
+            {artist}
+          </Text>
+        </View>
       </View>
-    </View>
+    </TouchableRipple>
   );
 };
 
