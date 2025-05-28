@@ -25,6 +25,10 @@
       "allowedVersions": "18.2.0"
     },
     {
+      "matchPackageNames": ["@types/react-test-renderer"],
+      "allowedVersions": "^18.0.7"
+    },
+    {
       "matchPackageNames": ["typescript"],
       "allowedVersions": "~5.3.3"
     },
