@@ -17,6 +17,14 @@
       "allowedVersions": "^2.12.2"
     },
     {
+      "matchPackageNames": ["@types/react"],
+      "allowedVersions": "~18.2.79"
+    },
+    {
+      "matchPackageNames": ["typescript"],
+      "allowedVersions": "~5.3.3"
+    },
+    {
       "matchPackageNames": ["@expo/metro-runtime"],
       "allowedVersions": "~3.2.3",
       "groupName": "expo-51-0-39"
