@@ -1797,11 +1797,13 @@ __metadata:
   linkType: hard
 
 "@expo/vector-icons@npm:^14.0.2, @expo/vector-icons@npm:^14.0.3":
-  version: 14.0.4
-  resolution: "@expo/vector-icons@npm:14.0.4"
-  dependencies:
-    prop-types: "npm:^15.8.1"
-  checksum: 10c0/230543be93212f538200b5a6d708a22697c29c00faf054b5c224e5a1fde1feacf96d04ab870d780e1351975503035084fd2187acca2cc2bbd09d8935b2efbfa0
+  version: 14.1.0
+  resolution: "@expo/vector-icons@npm:14.1.0"
+  peerDependencies:
+    expo-font: "*"
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/f1dcea2c43c0808f48d1953395c6f8025ae5e811648e86b79158492c9ef8af7a40781e42844dfb1434242a08fcf6ab14886825eb2c79bad2a792aebd1eb5077c
   languageName: node
   linkType: hard
 
