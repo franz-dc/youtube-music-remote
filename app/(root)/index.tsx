@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import { FlashList } from '@shopify/flash-list';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -13,6 +15,7 @@ import {
 import { useSettingAtom } from '@/configs';
 import { MINI_PLAYER_HEIGHT } from '@/constants';
 import { useQueue } from '@/hooks/useQueue';
+import { QueueSchema } from '@/schemas';
 
 const Queue = () => {
   const { t } = useTranslation('translation');
@@ -31,6 +34,16 @@ const Queue = () => {
   const { bottom: bottomInset } = useSafeAreaInsets();
 
   const paddingBottom = MINI_PLAYER_HEIGHT + bottomInset;
+
+  const keyExtractor = useCallback(
+    (item: QueueSchema['items'][number], idx: number) =>
+      `${idx}-${
+        item.playlistPanelVideoRenderer?.videoId ||
+        item.playlistPanelVideoWrapperRenderer?.primaryRenderer
+          .playlistPanelVideoRenderer.videoId
+      }`,
+    []
+  );
 
   if (!ipAddress)
     return (
@@ -92,11 +105,7 @@ const Queue = () => {
               index={index}
             />
           )}
-          keyExtractor={(item) =>
-            (item.playlistPanelVideoRenderer?.videoId ||
-              item.playlistPanelVideoWrapperRenderer?.primaryRenderer
-                .playlistPanelVideoRenderer.videoId) as string
-          }
+          keyExtractor={keyExtractor}
           estimatedItemSize={64}
           contentContainerStyle={{ paddingBottom: 8 }}
         />
