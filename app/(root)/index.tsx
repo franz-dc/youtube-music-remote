@@ -82,13 +82,14 @@ const Queue = () => {
               item.playlistPanelVideoWrapperRenderer?.primaryRenderer
                 .playlistPanelVideoRenderer.videoId
           )}
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <QueueListItem
               song={
                 (item.playlistPanelVideoRenderer ||
                   item.playlistPanelVideoWrapperRenderer?.primaryRenderer
                     ?.playlistPanelVideoRenderer)!
               }
+              index={index}
             />
           )}
           keyExtractor={(item) =>
