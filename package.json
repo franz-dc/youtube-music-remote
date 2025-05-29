@@ -43,7 +43,7 @@
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.7",
     "expo-web-browser": "~13.0.3",
-    "i18next": "^24.0.0",
+    "i18next": "^25.0.0",
     "intl-pluralrules": "^2.0.1",
     "jotai": "^2.10.2",
     "react": "18.2.0",

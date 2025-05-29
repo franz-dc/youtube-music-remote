@@ -1240,7 +1240,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.26.10":
+"@babel/runtime@npm:^7.27.1":
   version: 7.27.3
   resolution: "@babel/runtime@npm:7.27.3"
   checksum: 10c0/b860fe374a36fddbeeb238e52e59443abcacc046eebda1bf278bffbc67b5c8f713b939e09c126b086ca5f97cba1987ea17fd1737568bc50fedb1f6ef1cf46f69
@@ -8034,17 +8034,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^24.0.0":
-  version: 24.2.3
-  resolution: "i18next@npm:24.2.3"
+"i18next@npm:^25.0.0":
+  version: 25.2.1
+  resolution: "i18next@npm:25.2.1"
   dependencies:
-    "@babel/runtime": "npm:^7.26.10"
+    "@babel/runtime": "npm:^7.27.1"
   peerDependencies:
     typescript: ^5
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/7ac11a67d618ec714beef303aa497c1249bf5f1977dd3ebe9ca2673dfa6cadbba9e2d39ec1337688903ae3866ce9c1bc22cd6b265e66cce54c5db3a9bbedd390
+  checksum: 10c0/9e8817bdb930c15467ba31edfd834dcfc0a8979bb04f089b8249547a5c50ded820c1cce224563fc1dfe0a6f51e67e0e2d5231fb80a50fd7bd95320f120dfd0ae
   languageName: node
   linkType: hard
 
@@ -15110,7 +15110,7 @@ __metadata:
     expo-status-bar: "npm:~1.12.1"
     expo-system-ui: "npm:~3.0.7"
     expo-web-browser: "npm:~13.0.3"
-    i18next: "npm:^24.0.0"
+    i18next: "npm:^25.0.0"
     intl-pluralrules: "npm:^2.0.1"
     jest: "npm:^29.2.1"
     jest-expo: "npm:~51.0.3"
