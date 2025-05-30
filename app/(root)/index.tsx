@@ -14,7 +14,7 @@ import {
 } from '@/components';
 import { useSettingAtom } from '@/configs';
 import { MINI_PLAYER_HEIGHT } from '@/constants';
-import { useQueue } from '@/hooks/useQueue';
+import { useQueue } from '@/hooks';
 import { QueueSchema } from '@/schemas';
 
 const Queue = () => {

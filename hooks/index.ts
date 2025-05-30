@@ -4,5 +4,6 @@ export * from './useFullScreen';
 export * from './useGetLatestRelease';
 export * from './useNowPlaying';
 export * from './usePrevious';
+export * from './useQueue';
 export * from './useRepeat';
 export * from './useStartupUpdateChecker';
