@@ -56,42 +56,49 @@ export const formatSearchResult = (
                 thumbnail:
                   content.musicCardShelfRenderer.thumbnail
                     .musicThumbnailRenderer.thumbnail.thumbnails[0].url,
-                contents: content.musicCardShelfRenderer.contents
-                  .map((content) => {
-                    if (content.messageRenderer) {
-                      return {
-                        type: 'text',
-                        label: content.messageRenderer.text.runs[0].text,
-                      };
-                    } else if (content.musicResponsiveListItemRenderer) {
-                      return {
-                        type: 'song',
-                        title: formatTextRuns(
-                          content.musicResponsiveListItemRenderer.flexColumns[0]
-                            .musicResponsiveListItemFlexColumnRenderer.text.runs
-                        ),
-                        subtitle: formatTextRuns(
-                          content.musicResponsiveListItemRenderer.flexColumns[1]
-                            ?.musicResponsiveListItemFlexColumnRenderer.text
-                            .runs
-                        ),
-                        videoId:
-                          content.musicResponsiveListItemRenderer.flexColumns[0]
-                            .musicResponsiveListItemFlexColumnRenderer.text
-                            .runs[0].navigationEndpoint?.watchEndpoint?.videoId,
-                        thumbnail:
-                          content.musicResponsiveListItemRenderer.thumbnail
-                            .musicThumbnailRenderer.thumbnail.thumbnails[0].url,
-                      };
-                    }
-                  })
-                  .filter(
-                    (
-                      item
-                    ): item is
-                      | MusicCardShelfRendererTextContent
-                      | MusicCardShelfRendererSongContent => !!item
-                  ),
+                contents:
+                  content.musicCardShelfRenderer.contents
+                    ?.map((content) => {
+                      if (content.messageRenderer) {
+                        return {
+                          type: 'text',
+                          label: content.messageRenderer.text.runs[0].text,
+                        };
+                      } else if (content.musicResponsiveListItemRenderer) {
+                        return {
+                          type: 'song',
+                          title: formatTextRuns(
+                            content.musicResponsiveListItemRenderer
+                              .flexColumns[0]
+                              .musicResponsiveListItemFlexColumnRenderer.text
+                              .runs
+                          ),
+                          subtitle: formatTextRuns(
+                            content.musicResponsiveListItemRenderer
+                              .flexColumns[1]
+                              ?.musicResponsiveListItemFlexColumnRenderer.text
+                              .runs
+                          ),
+                          videoId:
+                            content.musicResponsiveListItemRenderer
+                              .flexColumns[0]
+                              .musicResponsiveListItemFlexColumnRenderer.text
+                              .runs[0].navigationEndpoint?.watchEndpoint
+                              ?.videoId,
+                          thumbnail:
+                            content.musicResponsiveListItemRenderer.thumbnail
+                              .musicThumbnailRenderer.thumbnail.thumbnails[0]
+                              .url,
+                        };
+                      }
+                    })
+                    .filter(
+                      (
+                        item
+                      ): item is
+                        | MusicCardShelfRendererTextContent
+                        | MusicCardShelfRendererSongContent => !!item
+                    ) || [],
               };
             }
 

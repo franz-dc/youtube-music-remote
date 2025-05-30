@@ -80,7 +80,7 @@ export type SearchResultSchema = {
                       };
                     };
                   };
-                  contents: {
+                  contents?: {
                     messageRenderer?: {
                       text: {
                         runs: {
