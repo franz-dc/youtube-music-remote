@@ -63,8 +63,12 @@ export const getQueue = async () => {
   return data;
 };
 
-export const addSongToQueue = async (videoId: string) =>
-  await api.post('/queue', { videoId });
+export const addSongToQueue = async (
+  videoId: string,
+  insertPosition:
+    | 'INSERT_AT_END'
+    | 'INSERT_AFTER_CURRENT_VIDEO' = 'INSERT_AT_END'
+) => await api.post('/queue', { videoId, insertPosition });
 
 export const changeActiveSongInQueue = async (index: number) =>
   await api.patch('/queue', { index });
