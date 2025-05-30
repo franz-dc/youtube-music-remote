@@ -2,6 +2,7 @@ export * from './useBottomSheetBackHandler';
 export * from './useDominantColor';
 export * from './useFullScreen';
 export * from './useGetLatestRelease';
+export * from './useMediaQuery';
 export * from './useNowPlaying';
 export * from './usePrevious';
 export * from './useQueue';
