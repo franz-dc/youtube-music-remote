@@ -5,6 +5,7 @@ import {
   QueueSchema,
   ReleaseSchema,
   RepeatModeStateSchema,
+  SearchResultSchema,
   SongInfoSchema,
 } from '@/schemas';
 
@@ -78,6 +79,12 @@ export const moveSongInQueue = async (fromIndex: number, toIndex: number) =>
 
 export const removeSongFromQueue = async (index: number) =>
   await api.delete(`/queue/${index}`);
+
+// Search
+export const search = async (query: string) => {
+  const { data } = await api.post<SearchResultSchema>('/search', { query });
+  return data;
+};
 
 // GitHub
 export const getLatestRelease = async () => {

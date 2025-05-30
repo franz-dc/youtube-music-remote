@@ -7,4 +7,5 @@ export * from './useNowPlaying';
 export * from './usePrevious';
 export * from './useQueue';
 export * from './useRepeat';
+export * from './useSearch';
 export * from './useStartupUpdateChecker';
