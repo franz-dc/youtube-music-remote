@@ -32,9 +32,6 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
   },
-  albumArtPlaying: {
-    opacity: 0.15,
-  },
   albumArtPlayingIcon: {
     position: 'absolute',
     top: '50%',
