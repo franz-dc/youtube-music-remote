@@ -1,16 +1,265 @@
 // Inferred type based from a small sample of YouTube Music search results.
-export type SearchResultSchema = {
-  responseContext: {
-    serviceTrackingParams: {
-      service: string;
-      params: {
-        key: string;
-        value: string;
-      }[];
-    }[];
-    maxAgeSeconds: number;
+// Some properties have been omitted (tracking, etc.).
+
+// Extracted common types
+type TextRun = {
+  text: string;
+  navigationEndpoint?: NavigationEndpoint;
+};
+
+type Runs = {
+  runs: TextRun[];
+};
+
+type Icon = {
+  iconType: string;
+};
+
+type WatchEndpoint = {
+  videoId: string;
+  playerParams?: string;
+  watchEndpointMusicSupportedConfigs: {
+    watchEndpointMusicConfig: {
+      musicVideoType: string;
+    };
   };
-  contents: {
+  playlistId?: string;
+  params?: string;
+  loggingContext?: {
+    vssLoggingContext: {
+      serializedContextData: string;
+    };
+  };
+};
+
+type BrowseEndpoint = {
+  browseId: string;
+  browseEndpointContextSupportedConfigs: {
+    browseEndpointContextMusicConfig: {
+      pageType: string;
+    };
+  };
+};
+
+type SearchEndpoint = {
+  query: string;
+  params: string;
+};
+
+type NavigationEndpoint = {
+  browseEndpoint?: BrowseEndpoint;
+  watchEndpoint?: WatchEndpoint;
+  addToPlaylistEndpoint?: {
+    videoId?: string;
+    playlistId?: string;
+  };
+  shareEntityEndpoint?: {
+    serializedShareEntity: string;
+    sharePanelType: string;
+  };
+  watchPlaylistEndpoint?: {
+    playlistId: string;
+    params: string;
+  };
+  searchEndpoint?: SearchEndpoint;
+};
+
+type AccessibilityData = {
+  accessibilityData: {
+    label: string;
+  };
+};
+
+type MenuNavigationItemRenderer = {
+  text: Runs;
+  icon: Icon;
+  navigationEndpoint: NavigationEndpoint;
+};
+
+type MenuServiceItemRenderer = {
+  text: Runs;
+  icon: Icon;
+  serviceEndpoint: {
+    queueAddEndpoint?: {
+      queueTarget: {
+        videoId?: string;
+        playlistId?: string;
+        onEmptyQueue: {
+          watchEndpoint: WatchEndpoint;
+        };
+      };
+      queueInsertPosition: string;
+      commands: {
+        addToToastAction: {
+          item: {
+            notificationTextRenderer: {
+              successResponseText: Runs;
+            };
+          };
+        };
+      }[];
+    };
+    offlineVideoEndpoint?: {
+      videoId: string;
+      onAddCommand: {
+        getDownloadActionCommand: {
+          videoId: string;
+          params: string;
+        };
+      };
+    };
+  };
+};
+
+type ToggleMenuServiceItemRenderer = {
+  defaultText: Runs;
+  defaultIcon: Icon;
+  defaultServiceEndpoint: {
+    feedbackEndpoint?: { feedbackToken: string };
+    likeEndpoint?: {
+      status: string;
+      target: { videoId?: string; playlistId?: string };
+      actions?: {
+        musicLibraryStatusUpdateCommand: {
+          libraryStatus: string;
+          addToLibraryFeedbackToken: string;
+        };
+      }[];
+    };
+    playlistEditEndpoint?: {
+      playlistId: string;
+      actions: {
+        addedVideoId: string;
+        action: string;
+        dedupeOption: string;
+        addedVideoPositionIfManualSort: number;
+      }[];
+      params: string;
+    };
+  };
+  toggledText: Runs;
+  toggledIcon: Icon;
+  toggledServiceEndpoint: {
+    feedbackEndpoint?: { feedbackToken: string; actions?: any[] };
+    likeEndpoint?: {
+      status: string;
+      target: { videoId?: string; playlistId?: string };
+      actions?: any[];
+    };
+    playlistEditEndpoint?: {
+      playlistId: string;
+      actions: { action: string; removedVideoId: string }[];
+    };
+  };
+  isToggled?: boolean;
+};
+
+type MenuServiceItemDownloadRenderer = {
+  serviceEndpoint: {
+    offlineVideoEndpoint: {
+      videoId: string;
+      onAddCommand: {
+        getDownloadActionCommand: {
+          videoId: string;
+          params: string;
+        };
+      };
+    };
+  };
+};
+
+type LikeButtonRenderer = {
+  target: { videoId: string };
+  likeStatus: string;
+  likesAllowed: boolean;
+  serviceEndpoints: {
+    likeEndpoint: {
+      status: string;
+      target: { videoId: string };
+    };
+  }[];
+};
+
+type MenuRenderer = {
+  items: (
+    | { menuNavigationItemRenderer?: MenuNavigationItemRenderer }
+    | { menuServiceItemRenderer?: MenuServiceItemRenderer }
+    | { toggleMenuServiceItemRenderer?: ToggleMenuServiceItemRenderer }
+    | { menuServiceItemDownloadRenderer?: MenuServiceItemDownloadRenderer }
+  )[];
+  accessibility: AccessibilityData;
+  topLevelButtons?: { likeButtonRenderer: LikeButtonRenderer }[];
+};
+
+type Menu = {
+  menuRenderer: MenuRenderer;
+};
+
+// Extracted overlay types
+type MusicPlayButtonRenderer = {
+  playNavigationEndpoint: {
+    watchEndpoint?: WatchEndpoint;
+    watchPlaylistEndpoint?: {
+      playlistId: string;
+      params?: string;
+    };
+  };
+  playIcon: Icon;
+  pauseIcon: Icon;
+  iconColor: number;
+  backgroundColor: number;
+  activeBackgroundColor: number;
+  loadingIndicatorColor: number;
+  playingIcon: Icon;
+  iconLoadingColor: number;
+  activeScaleFactor: number;
+  buttonSize: string;
+  rippleTarget: string;
+  accessibilityPlayData: AccessibilityData;
+  accessibilityPauseData: AccessibilityData;
+};
+
+type MusicItemThumbnailOverlayRenderer = {
+  background: {
+    verticalGradient: {
+      gradientLayerColors: string[];
+    };
+  };
+  content: {
+    musicPlayButtonRenderer: MusicPlayButtonRenderer;
+  };
+  contentPosition: string;
+  displayStyle: string;
+};
+
+type Overlay = {
+  musicItemThumbnailOverlayRenderer: MusicItemThumbnailOverlayRenderer;
+};
+
+type Thumbnail = {
+  musicThumbnailRenderer: {
+    thumbnail: {
+      thumbnails: {
+        url: string;
+        width: number;
+        height: number;
+      }[];
+    };
+    thumbnailCrop: string;
+    thumbnailScale: string;
+  };
+};
+
+type FlexColumn = {
+  musicResponsiveListItemFlexColumnRenderer: {
+    text: Runs & { accessibility?: AccessibilityData };
+    displayPriority: string;
+  };
+};
+
+// Main schema
+export type SearchResultSchema = {
+  contents?: {
     tabbedSearchResultsRenderer: {
       tabs: {
         tabRenderer: {
@@ -20,324 +269,21 @@ export type SearchResultSchema = {
             sectionListRenderer: {
               contents?: {
                 musicCardShelfRenderer?: {
-                  trackingParams: string;
-                  thumbnail: {
-                    musicThumbnailRenderer: {
-                      thumbnail: {
-                        thumbnails: {
-                          url: string;
-                          width: number;
-                          height: number;
-                        }[];
-                      };
-                      thumbnailCrop: string;
-                      thumbnailScale: string;
-                      trackingParams: string;
-                    };
-                  };
-                  title: {
-                    runs: {
-                      text: string;
-                      navigationEndpoint: {
-                        clickTrackingParams: string;
-                        browseEndpoint?: {
-                          browseId: string;
-                          browseEndpointContextSupportedConfigs: {
-                            browseEndpointContextMusicConfig: {
-                              pageType: string;
-                            };
-                          };
-                        };
-                        watchEndpoint?: {
-                          videoId: string;
-                          watchEndpointMusicSupportedConfigs: {
-                            watchEndpointMusicConfig: {
-                              musicVideoType: string;
-                            };
-                          };
-                        };
-                      };
-                    }[];
-                  };
-                  subtitle: {
-                    runs: {
-                      text: string;
-                      navigationEndpoint?: {
-                        clickTrackingParams: string;
-                        browseEndpoint: {
-                          browseId: string;
-                          browseEndpointContextSupportedConfigs: {
-                            browseEndpointContextMusicConfig: {
-                              pageType: string;
-                            };
-                          };
-                        };
-                      };
-                    }[];
-                    accessibility: {
-                      accessibilityData: {
-                        label: string;
-                      };
-                    };
-                  };
+                  thumbnail: Thumbnail;
+                  title: Runs;
+                  subtitle: Runs & { accessibility: AccessibilityData };
                   contents?: {
                     messageRenderer?: {
-                      text: {
-                        runs: {
-                          text: string;
-                        }[];
-                      };
-                      trackingParams: string;
+                      text: Runs;
                       style: {
                         value: string;
                       };
                     };
                     musicResponsiveListItemRenderer?: {
-                      trackingParams: string;
-                      thumbnail: {
-                        musicThumbnailRenderer: {
-                          thumbnail: {
-                            thumbnails: {
-                              url: string;
-                              width: number;
-                              height: number;
-                            }[];
-                          };
-                          thumbnailCrop: string;
-                          thumbnailScale: string;
-                          trackingParams: string;
-                        };
-                      };
-                      overlay: {
-                        musicItemThumbnailOverlayRenderer: {
-                          background: {
-                            verticalGradient: {
-                              gradientLayerColors: string[];
-                            };
-                          };
-                          content: {
-                            musicPlayButtonRenderer: {
-                              playNavigationEndpoint: {
-                                clickTrackingParams: string;
-                                watchEndpoint: {
-                                  videoId: string;
-                                  watchEndpointMusicSupportedConfigs: {
-                                    watchEndpointMusicConfig: {
-                                      musicVideoType: string;
-                                    };
-                                  };
-                                  playerParams?: string;
-                                };
-                              };
-                              trackingParams: string;
-                              playIcon: {
-                                iconType: string;
-                              };
-                              pauseIcon: {
-                                iconType: string;
-                              };
-                              iconColor: number;
-                              backgroundColor: number;
-                              activeBackgroundColor: number;
-                              loadingIndicatorColor: number;
-                              playingIcon: {
-                                iconType: string;
-                              };
-                              iconLoadingColor: number;
-                              activeScaleFactor: number;
-                              buttonSize: string;
-                              rippleTarget: string;
-                              accessibilityPlayData: {
-                                accessibilityData: {
-                                  label: string;
-                                };
-                              };
-                              accessibilityPauseData: {
-                                accessibilityData: {
-                                  label: string;
-                                };
-                              };
-                            };
-                          };
-                          contentPosition: string;
-                          displayStyle: string;
-                        };
-                      };
-                      flexColumns: {
-                        musicResponsiveListItemFlexColumnRenderer: {
-                          text: {
-                            runs: {
-                              text: string;
-                              navigationEndpoint?: {
-                                clickTrackingParams: string;
-                                watchEndpoint?: {
-                                  videoId: string;
-                                  watchEndpointMusicSupportedConfigs: {
-                                    watchEndpointMusicConfig: {
-                                      musicVideoType: string;
-                                    };
-                                  };
-                                  playerParams?: string;
-                                };
-                                browseEndpoint?: {
-                                  browseId: string;
-                                  browseEndpointContextSupportedConfigs: {
-                                    browseEndpointContextMusicConfig: {
-                                      pageType: string;
-                                    };
-                                  };
-                                };
-                              };
-                            }[];
-                            accessibility?: {
-                              accessibilityData: {
-                                label: string;
-                              };
-                            };
-                          };
-                          displayPriority: string;
-                        };
-                      }[];
-                      menu: {
-                        menuRenderer: {
-                          items: {
-                            menuNavigationItemRenderer?: {
-                              text: {
-                                runs: {
-                                  text: string;
-                                }[];
-                              };
-                              icon: {
-                                iconType: string;
-                              };
-                              navigationEndpoint: {
-                                clickTrackingParams: string;
-                                shareEntityEndpoint?: {
-                                  serializedShareEntity: string;
-                                  sharePanelType: string;
-                                };
-                                addToPlaylistEndpoint?: {
-                                  videoId: string;
-                                };
-                                watchEndpoint?: {
-                                  videoId: string;
-                                  playlistId: string;
-                                  params: string;
-                                  loggingContext: {
-                                    vssLoggingContext: {
-                                      serializedContextData: string;
-                                    };
-                                  };
-                                  watchEndpointMusicSupportedConfigs: {
-                                    watchEndpointMusicConfig: {
-                                      musicVideoType: string;
-                                    };
-                                  };
-                                };
-                                browseEndpoint?: {
-                                  browseId: string;
-                                  browseEndpointContextSupportedConfigs: {
-                                    browseEndpointContextMusicConfig: {
-                                      pageType: string;
-                                    };
-                                  };
-                                };
-                              };
-                              trackingParams: string;
-                            };
-                            menuServiceItemRenderer?: {
-                              text: {
-                                runs: {
-                                  text: string;
-                                }[];
-                              };
-                              icon: {
-                                iconType: string;
-                              };
-                              serviceEndpoint: {
-                                clickTrackingParams: string;
-                                queueAddEndpoint: {
-                                  queueTarget: {
-                                    videoId: string;
-                                    onEmptyQueue: {
-                                      clickTrackingParams: string;
-                                      watchEndpoint: {
-                                        videoId: string;
-                                      };
-                                    };
-                                  };
-                                  queueInsertPosition: string;
-                                  commands: {
-                                    clickTrackingParams: string;
-                                    addToToastAction: {
-                                      item: {
-                                        notificationTextRenderer: {
-                                          successResponseText: {
-                                            runs: {
-                                              text: string;
-                                            }[];
-                                          };
-                                          trackingParams: string;
-                                        };
-                                      };
-                                    };
-                                  }[];
-                                };
-                              };
-                              trackingParams: string;
-                            };
-                            toggleMenuServiceItemRenderer?: {
-                              defaultText: {
-                                runs: {
-                                  text: string;
-                                }[];
-                              };
-                              defaultIcon: {
-                                iconType: string;
-                              };
-                              defaultServiceEndpoint: {
-                                clickTrackingParams: string;
-                                feedbackEndpoint?: {
-                                  feedbackToken: string;
-                                };
-                                likeEndpoint?: {
-                                  status: string;
-                                  target: {
-                                    videoId: string;
-                                  };
-                                };
-                              };
-                              toggledText: {
-                                runs: {
-                                  text: string;
-                                }[];
-                              };
-                              toggledIcon: {
-                                iconType: string;
-                              };
-                              toggledServiceEndpoint: {
-                                clickTrackingParams: string;
-                                feedbackEndpoint?: {
-                                  feedbackToken: string;
-                                };
-                                likeEndpoint?: {
-                                  status: string;
-                                  target: {
-                                    videoId: string;
-                                  };
-                                };
-                              };
-                              trackingParams: string;
-                            };
-                          }[];
-                          trackingParams: string;
-                          accessibility: {
-                            accessibilityData: {
-                              label: string;
-                            };
-                          };
-                        };
-                      };
+                      thumbnail: Thumbnail;
+                      overlay: Overlay;
+                      flexColumns: FlexColumn[];
+                      menu: Menu;
                       playlistItemData: {
                         videoId: string;
                       };
@@ -350,655 +296,63 @@ export type SearchResultSchema = {
                       style: string;
                       size?: string;
                       isDisabled?: boolean;
-                      text: {
-                        runs: {
-                          text: string;
-                        }[];
-                      };
-                      icon: {
-                        iconType: string;
-                      };
+                      text: Runs;
+                      icon: Icon;
                       accessibility: {
                         label: string;
                       };
-                      trackingParams: string;
-                      accessibilityData: {
-                        accessibilityData: {
-                          label: string;
-                        };
-                      };
+                      accessibilityData: AccessibilityData;
                       command: {
-                        clickTrackingParams: string;
-                        watchEndpoint?: {
-                          videoId: string;
-                          params: string;
-                          watchEndpointMusicSupportedConfigs: {
-                            watchEndpointMusicConfig: {
-                              musicVideoType: string;
-                            };
-                          };
-                        };
+                        watchEndpoint?: WatchEndpoint;
                         addToPlaylistEndpoint?: {
                           videoId: string;
                         };
                       };
                     };
                   }[];
-                  menu: {
-                    menuRenderer: {
-                      items: {
-                        menuNavigationItemRenderer?: {
-                          text: {
-                            runs: {
-                              text: string;
-                            }[];
-                          };
-                          icon: {
-                            iconType: string;
-                          };
-                          navigationEndpoint: {
-                            clickTrackingParams: string;
-                            shareEntityEndpoint?: {
-                              serializedShareEntity: string;
-                              sharePanelType: string;
-                            };
-                            addToPlaylistEndpoint?: {
-                              videoId: string;
-                            };
-                            watchEndpoint?: {
-                              videoId: string;
-                              playlistId: string;
-                              params: string;
-                              loggingContext: {
-                                vssLoggingContext: {
-                                  serializedContextData: string;
-                                };
-                              };
-                              watchEndpointMusicSupportedConfigs: {
-                                watchEndpointMusicConfig: {
-                                  musicVideoType: string;
-                                };
-                              };
-                            };
-                          };
-                          trackingParams: string;
-                        };
-                        menuServiceItemRenderer?: {
-                          text: {
-                            runs: {
-                              text: string;
-                            }[];
-                          };
-                          icon: {
-                            iconType: string;
-                          };
-                          serviceEndpoint: {
-                            clickTrackingParams: string;
-                            queueAddEndpoint: {
-                              queueTarget: {
-                                videoId: string;
-                                onEmptyQueue: {
-                                  clickTrackingParams: string;
-                                  watchEndpoint: {
-                                    videoId: string;
-                                  };
-                                };
-                              };
-                              queueInsertPosition: string;
-                              commands: {
-                                clickTrackingParams: string;
-                                addToToastAction: {
-                                  item: {
-                                    notificationTextRenderer: {
-                                      successResponseText: {
-                                        runs: {
-                                          text: string;
-                                        }[];
-                                      };
-                                      trackingParams: string;
-                                    };
-                                  };
-                                };
-                              }[];
-                            };
-                          };
-                          trackingParams: string;
-                        };
-                        toggleMenuServiceItemRenderer?: {
-                          defaultText: {
-                            runs: {
-                              text: string;
-                            }[];
-                          };
-                          defaultIcon: {
-                            iconType: string;
-                          };
-                          defaultServiceEndpoint: {
-                            clickTrackingParams: string;
-                            feedbackEndpoint?: {
-                              feedbackToken: string;
-                            };
-                            likeEndpoint?: {
-                              status: string;
-                              target: {
-                                videoId: string;
-                              };
-                            };
-                          };
-                          toggledText: {
-                            runs: {
-                              text: string;
-                            }[];
-                          };
-                          toggledIcon: {
-                            iconType: string;
-                          };
-                          toggledServiceEndpoint: {
-                            clickTrackingParams: string;
-                            feedbackEndpoint?: {
-                              feedbackToken: string;
-                            };
-                            likeEndpoint?: {
-                              status: string;
-                              target: {
-                                videoId: string;
-                              };
-                            };
-                          };
-                          trackingParams: string;
-                        };
-                      }[];
-                      trackingParams: string;
-                      accessibility: {
-                        accessibilityData: {
-                          label: string;
-                        };
-                      };
-                    };
-                  };
+                  menu: Menu;
                   onTap: {
-                    clickTrackingParams: string;
-                    watchEndpoint: {
-                      videoId: string;
-                      watchEndpointMusicSupportedConfigs: {
-                        watchEndpointMusicConfig: {
-                          musicVideoType: string;
-                        };
-                      };
-                    };
+                    watchEndpoint: WatchEndpoint;
                   };
                   header: {
                     musicCardShelfHeaderBasicRenderer: {
-                      title: {
-                        runs: {
-                          text: string;
-                        }[];
-                      };
-                      trackingParams: string;
-                      strapline: {
-                        runs: {
-                          text: string;
-                        }[];
-                      };
+                      title: Runs;
+                      strapline: Runs;
                     };
                   };
-                  thumbnailOverlay: {
-                    musicItemThumbnailOverlayRenderer: {
-                      background: {
-                        verticalGradient: {
-                          gradientLayerColors: string[];
-                        };
-                      };
-                      content: {
-                        musicPlayButtonRenderer: {
-                          playNavigationEndpoint: {
-                            clickTrackingParams: string;
-                            watchEndpoint: {
-                              videoId: string;
-                              watchEndpointMusicSupportedConfigs: {
-                                watchEndpointMusicConfig: {
-                                  musicVideoType: string;
-                                };
-                              };
-                            };
-                          };
-                          trackingParams: string;
-                          playIcon: {
-                            iconType: string;
-                          };
-                          pauseIcon: {
-                            iconType: string;
-                          };
-                          iconColor: number;
-                          backgroundColor: number;
-                          activeBackgroundColor: number;
-                          loadingIndicatorColor: number;
-                          playingIcon: {
-                            iconType: string;
-                          };
-                          iconLoadingColor: number;
-                          activeScaleFactor: number;
-                          buttonSize: string;
-                          rippleTarget: string;
-                          accessibilityPlayData: {
-                            accessibilityData: {
-                              label: string;
-                            };
-                          };
-                          accessibilityPauseData: {
-                            accessibilityData: {
-                              label: string;
-                            };
-                          };
-                        };
-                      };
-                      contentPosition: string;
-                      displayStyle: string;
-                    };
-                  };
+                  thumbnailOverlay: Overlay;
                 };
                 musicShelfRenderer?: {
-                  title: {
-                    runs: {
-                      text: string;
-                    }[];
-                  };
+                  title: Runs;
                   contents: {
                     musicResponsiveListItemRenderer: {
-                      trackingParams: string;
-                      thumbnail: {
-                        musicThumbnailRenderer: {
-                          thumbnail: {
-                            thumbnails: {
-                              url: string;
-                              width: number;
-                              height: number;
-                            }[];
-                          };
-                          thumbnailCrop: string;
-                          thumbnailScale: string;
-                          trackingParams: string;
-                        };
-                      };
-                      flexColumns: {
-                        musicResponsiveListItemFlexColumnRenderer: {
-                          text: {
-                            runs: {
-                              text: string;
-                              navigationEndpoint?: {
-                                clickTrackingParams: string;
-                                browseEndpoint?: {
-                                  browseId: string;
-                                  browseEndpointContextSupportedConfigs: {
-                                    browseEndpointContextMusicConfig: {
-                                      pageType: string;
-                                    };
-                                  };
-                                };
-                                watchEndpoint?: {
-                                  videoId: string;
-                                  playerParams?: string;
-                                  watchEndpointMusicSupportedConfigs: {
-                                    watchEndpointMusicConfig: {
-                                      musicVideoType: string;
-                                    };
-                                  };
-                                };
-                              };
-                            }[];
-                            accessibility?: {
-                              accessibilityData: {
-                                label: string;
-                              };
-                            };
-                          };
-                          displayPriority: string;
-                        };
-                      }[];
-                      menu: {
-                        menuRenderer: {
-                          items: {
-                            menuNavigationItemRenderer?: {
-                              text: {
-                                runs: {
-                                  text: string;
-                                }[];
-                              };
-                              icon: {
-                                iconType: string;
-                              };
-                              navigationEndpoint: {
-                                clickTrackingParams: string;
-                                shareEntityEndpoint?: {
-                                  serializedShareEntity: string;
-                                  sharePanelType: string;
-                                };
-                                browseEndpoint?: {
-                                  browseId: string;
-                                  browseEndpointContextSupportedConfigs: {
-                                    browseEndpointContextMusicConfig: {
-                                      pageType: string;
-                                    };
-                                  };
-                                };
-                                addToPlaylistEndpoint?: {
-                                  videoId?: string;
-                                  playlistId?: string;
-                                };
-                                watchPlaylistEndpoint?: {
-                                  playlistId: string;
-                                  params: string;
-                                };
-                                watchEndpoint?: {
-                                  videoId: string;
-                                  playlistId: string;
-                                  params: string;
-                                  loggingContext: {
-                                    vssLoggingContext: {
-                                      serializedContextData: string;
-                                    };
-                                  };
-                                  watchEndpointMusicSupportedConfigs: {
-                                    watchEndpointMusicConfig: {
-                                      musicVideoType: string;
-                                    };
-                                  };
-                                  playerParams?: string;
-                                };
-                              };
-                              trackingParams: string;
-                            };
-                            menuServiceItemRenderer?: {
-                              text: {
-                                runs: {
-                                  text: string;
-                                }[];
-                              };
-                              icon: {
-                                iconType: string;
-                              };
-                              serviceEndpoint: {
-                                clickTrackingParams: string;
-                                queueAddEndpoint: {
-                                  queueTarget: {
-                                    videoId?: string;
-                                    onEmptyQueue: {
-                                      clickTrackingParams: string;
-                                      watchEndpoint: {
-                                        videoId?: string;
-                                        playlistId?: string;
-                                      };
-                                    };
-                                    playlistId?: string;
-                                  };
-                                  queueInsertPosition: string;
-                                  commands: {
-                                    clickTrackingParams: string;
-                                    addToToastAction: {
-                                      item: {
-                                        notificationTextRenderer: {
-                                          successResponseText: {
-                                            runs: {
-                                              text: string;
-                                            }[];
-                                          };
-                                          trackingParams: string;
-                                        };
-                                      };
-                                    };
-                                  }[];
-                                };
-                              };
-                              trackingParams: string;
-                            };
-                            toggleMenuServiceItemRenderer?: {
-                              defaultText: {
-                                runs: {
-                                  text: string;
-                                }[];
-                              };
-                              defaultIcon: {
-                                iconType: string;
-                              };
-                              defaultServiceEndpoint: {
-                                clickTrackingParams: string;
-                                playlistEditEndpoint?: {
-                                  playlistId: string;
-                                  actions: {
-                                    addedVideoId: string;
-                                    action: string;
-                                    dedupeOption: string;
-                                    addedVideoPositionIfManualSort: number;
-                                  }[];
-                                  params: string;
-                                };
-                                feedbackEndpoint?: {
-                                  feedbackToken: string;
-                                  actions?: {
-                                    clickTrackingParams: string;
-                                    addToToastAction: {
-                                      item: {
-                                        notificationActionRenderer: {
-                                          responseText: {
-                                            runs: {
-                                              text: string;
-                                            }[];
-                                          };
-                                          trackingParams: string;
-                                        };
-                                      };
-                                    };
-                                  }[];
-                                };
-                                likeEndpoint?: {
-                                  status: string;
-                                  target: {
-                                    videoId?: string;
-                                    playlistId?: string;
-                                  };
-                                  actions?: {
-                                    clickTrackingParams: string;
-                                    musicLibraryStatusUpdateCommand: {
-                                      libraryStatus: string;
-                                      addToLibraryFeedbackToken: string;
-                                    };
-                                  }[];
-                                };
-                              };
-                              toggledText: {
-                                runs: {
-                                  text: string;
-                                }[];
-                              };
-                              toggledIcon: {
-                                iconType: string;
-                              };
-                              toggledServiceEndpoint: {
-                                clickTrackingParams: string;
-                                playlistEditEndpoint?: {
-                                  playlistId: string;
-                                  actions: {
-                                    action: string;
-                                    removedVideoId: string;
-                                  }[];
-                                };
-                                feedbackEndpoint?: {
-                                  feedbackToken: string;
-                                  actions?: {
-                                    clickTrackingParams: string;
-                                    addToToastAction: {
-                                      item: {
-                                        notificationActionRenderer: {
-                                          responseText: {
-                                            runs: {
-                                              text: string;
-                                            }[];
-                                          };
-                                          trackingParams: string;
-                                        };
-                                      };
-                                    };
-                                  }[];
-                                };
-                                likeEndpoint?: {
-                                  status: string;
-                                  target: {
-                                    videoId?: string;
-                                    playlistId?: string;
-                                  };
-                                };
-                              };
-                              trackingParams: string;
-                              isToggled?: boolean;
-                            };
-                            menuServiceItemDownloadRenderer?: {
-                              serviceEndpoint: {
-                                clickTrackingParams: string;
-                                offlineVideoEndpoint: {
-                                  videoId: string;
-                                  onAddCommand: {
-                                    clickTrackingParams: string;
-                                    getDownloadActionCommand: {
-                                      videoId: string;
-                                      params: string;
-                                    };
-                                  };
-                                };
-                              };
-                              trackingParams: string;
-                            };
-                          }[];
-                          trackingParams: string;
-                          accessibility: {
-                            accessibilityData: {
-                              label: string;
-                            };
-                          };
-                          topLevelButtons?: {
-                            likeButtonRenderer: {
-                              target: {
-                                videoId: string;
-                              };
-                              likeStatus: string;
-                              trackingParams: string;
-                              likesAllowed: boolean;
-                              serviceEndpoints: {
-                                clickTrackingParams: string;
-                                likeEndpoint: {
-                                  status: string;
-                                  target: {
-                                    videoId: string;
-                                  };
-                                };
-                              }[];
-                            };
-                          }[];
-                        };
-                      };
+                      thumbnail: Thumbnail;
+                      flexColumns: FlexColumn[];
+                      menu: Menu;
                       flexColumnDisplayStyle: string;
-                      navigationEndpoint?: {
-                        clickTrackingParams: string;
-                        browseEndpoint: {
-                          browseId: string;
-                          browseEndpointContextSupportedConfigs: {
-                            browseEndpointContextMusicConfig: {
-                              pageType: string;
-                            };
-                          };
-                        };
-                      };
+                      navigationEndpoint?: NavigationEndpoint;
                       itemHeight: string;
-                      overlay?: {
-                        musicItemThumbnailOverlayRenderer: {
-                          background: {
-                            verticalGradient: {
-                              gradientLayerColors: string[];
-                            };
-                          };
-                          content: {
-                            musicPlayButtonRenderer: {
-                              playNavigationEndpoint: {
-                                clickTrackingParams: string;
-                                watchEndpoint?: {
-                                  videoId: string;
-                                  params?: string;
-                                  watchEndpointMusicSupportedConfigs: {
-                                    watchEndpointMusicConfig: {
-                                      musicVideoType: string;
-                                    };
-                                  };
-                                  playerParams?: string;
-                                };
-                                watchPlaylistEndpoint?: {
-                                  playlistId: string;
-                                  params?: string;
-                                };
-                              };
-                              trackingParams: string;
-                              playIcon: {
-                                iconType: string;
-                              };
-                              pauseIcon: {
-                                iconType: string;
-                              };
-                              iconColor: number;
-                              backgroundColor: number;
-                              activeBackgroundColor: number;
-                              loadingIndicatorColor: number;
-                              playingIcon: {
-                                iconType: string;
-                              };
-                              iconLoadingColor: number;
-                              activeScaleFactor: number;
-                              buttonSize: string;
-                              rippleTarget: string;
-                              accessibilityPlayData: {
-                                accessibilityData: {
-                                  label: string;
-                                };
-                              };
-                              accessibilityPauseData: {
-                                accessibilityData: {
-                                  label: string;
-                                };
-                              };
-                            };
-                          };
-                          contentPosition: string;
-                          displayStyle: string;
-                        };
-                      };
+                      overlay?: Overlay;
                       playlistItemData?: {
                         videoId: string;
                       };
                       badges?: {
                         musicInlineBadgeRenderer: {
-                          trackingParams: string;
-                          icon: {
-                            iconType: string;
-                          };
-                          accessibilityData: {
-                            accessibilityData: {
-                              label: string;
-                            };
-                          };
+                          icon: Icon;
+                          accessibilityData: AccessibilityData;
                         };
                       }[];
                     };
                   }[];
-                  trackingParams: string;
-                  bottomText: {
-                    runs: {
-                      text: string;
-                    }[];
+                  bottomText?: Runs;
+                  bottomEndpoint?: {
+                    searchEndpoint: SearchEndpoint;
                   };
-                  bottomEndpoint: {
-                    clickTrackingParams: string;
-                    searchEndpoint: {
-                      query: string;
-                      params: string;
+                  continuations?: {
+                    nextContinuationData: {
+                      continuation: string;
                     };
-                  };
+                  }[];
                   shelfDivider: {
                     musicShelfDividerRenderer: {
                       hidden: boolean;
@@ -1006,7 +360,6 @@ export type SearchResultSchema = {
                   };
                 };
               }[];
-              trackingParams: string;
               header?: {
                 chipCloudRenderer: {
                   chips: {
@@ -1014,53 +367,62 @@ export type SearchResultSchema = {
                       style: {
                         styleType: string;
                       };
-                      text: {
-                        runs: {
-                          text: string;
-                        }[];
-                      };
+                      text: Runs;
                       navigationEndpoint: {
-                        clickTrackingParams: string;
-                        searchEndpoint: {
-                          query: string;
-                          params: string;
-                        };
+                        searchEndpoint: SearchEndpoint;
                       };
-                      trackingParams: string;
-                      accessibilityData: {
-                        accessibilityData: {
-                          label: string;
-                        };
-                      };
+                      accessibilityData: AccessibilityData;
                       isSelected: boolean;
                       uniqueId: string;
                     };
                   }[];
                   collapsedRowCount: number;
-                  trackingParams: string;
                   horizontalScrollable: boolean;
                 };
               };
-              continuations?: {
-                reloadContinuationData: {
-                  continuation: string;
-                  clickTrackingParams: string;
-                };
-              }[];
             };
           };
           tabIdentifier: string;
-          trackingParams: string;
           endpoint?: {
-            clickTrackingParams: string;
-            searchEndpoint: {
-              query: string;
-              params: string;
-            };
+            searchEndpoint: SearchEndpoint;
           };
         };
       }[];
     };
   };
-  trackingParams: string;
+  continuationContents?: {
+    musicShelfContinuation: {
+      contents: {
+        musicResponsiveListItemRenderer: {
+          thumbnail: Thumbnail;
+          overlay: Overlay;
+          flexColumns: FlexColumn[];
+          menu: Menu;
+          playlistItemData: {
+            videoId: string;
+          };
+          flexColumnDisplayStyle: string;
+          itemHeight: string;
+          badges?: {
+            musicInlineBadgeRenderer: {
+              icon: Icon;
+              accessibilityData: AccessibilityData;
+            };
+          }[];
+          navigationEndpoint?: NavigationEndpoint;
+        };
+      }[];
+      continuations: {
+        nextContinuationData: {
+          continuation: string;
+        };
+      }[];
+      shelfDivider: {
+        musicShelfDividerRenderer: {
+          hidden: boolean;
+        };
+      };
+      autoReloadWhenEmpty: boolean;
+    };
+  };
 };

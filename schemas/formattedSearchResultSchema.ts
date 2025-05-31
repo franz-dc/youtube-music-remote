@@ -27,9 +27,17 @@ export type MusicShelfRendererObj = {
   type: 'musicShelfRenderer';
   header: string;
   contents: SearchResultSong[];
+  params?: string;
+  continuation?: string;
 };
 
 export type FormattedSearchResult = {
   category: string; // YT Music, Library, etc.
+  pageType: 'main' | 'category';
   contents: (MusicCardShelfRendererObj | MusicShelfRendererObj)[];
+};
+
+export type FormattedSearchResultContinuation = {
+  contents: SearchResultSong[];
+  continuation?: string;
 };
