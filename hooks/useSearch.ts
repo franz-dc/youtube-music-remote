@@ -4,11 +4,18 @@ import { search } from '@/services';
 
 /**
  * Hook to fetch search results based on a query string.
+ *
+ * Also used for getting continuation results when pressing "Show more" in the
+ * search results.
  */
-export const useSearch = (query?: string) =>
+export const useSearch = (params: {
+  query?: string;
+  params?: string;
+  continuation?: string;
+}) =>
   useQuery({
-    queryKey: ['search', query],
-    queryFn: async () => await search(query ?? ''),
-    enabled: !!query && query.trim().length > 0,
+    queryKey: ['search', params],
+    queryFn: async () => await search(params.query ?? ''),
+    enabled: !!params.query && params.query.trim().length > 0,
     staleTime: 1000 * 60 * 5, // 5 minutes, same as default gcTime
   });
