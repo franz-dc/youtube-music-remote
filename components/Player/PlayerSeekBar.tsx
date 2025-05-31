@@ -33,6 +33,8 @@ const PlayerSeekBar = ({ songInfo }: PlayerSeekBarProps) => {
     await seek(value * songInfo.songDuration);
   };
 
+  // TODO: optimisticElapsedSeconds - to avoid seek lag
+
   return (
     <View>
       <Slider

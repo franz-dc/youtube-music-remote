@@ -32,6 +32,7 @@ const Layout = () => {
     <GestureHandlerRootView style={styles.container}>
       <Appbar.Header>
         <Appbar.Content title={t('queue.title')} />
+        <Appbar.Action icon='magnify' onPress={() => pushFromMenu('/search')} />
         <Menu
           visible={menuVisible}
           onDismiss={closeMenu}
