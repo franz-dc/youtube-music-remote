@@ -4,6 +4,9 @@ import { Easing } from 'react-native-reanimated';
 import { TextDialogProps } from '@/components';
 import { SettingsSchema } from '@/schemas';
 
+// External
+export * from './breakpoints';
+
 // Languages - should be sorted in English alphabetical order
 export const LANGUAGES = ['en', 'ja'] as const;
 
