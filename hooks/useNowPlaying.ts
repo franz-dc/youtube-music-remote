@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useSettingAtom } from '@/configs';
 import { getQueue, getSongInfo } from '@/services';
@@ -23,11 +23,21 @@ export const useNowPlaying = () => {
 
   const [refetchInterval, setRefetchInterval] = useState(POLLING_RATE);
 
+  const queryClient = useQueryClient();
+
   const useQueryResult = useQuery({
     queryKey: ['nowPlaying'],
     queryFn: getSongInfo,
     refetchInterval,
     retry: false,
+    // Remove elapsed seconds from the data to prevent unnecessary re-renders
+    select: (data) => {
+      if (!data) return null;
+      const { elapsedSeconds, ...rest } = data;
+      // Update the query cache with the current song elapsed seconds
+      queryClient.setQueryData(['nowPlayingElapsedSeconds'], elapsedSeconds);
+      return rest;
+    },
     enabled,
   });
 
@@ -84,3 +94,14 @@ export const useNowPlaying = () => {
 
   return useQueryResult;
 };
+
+/**
+ * Separate hook to fetch the now playing song elapsed seconds.
+ *
+ * This is done due to prevent unnecessary re-renders when the song elapsed
+ * seconds changes.
+ */
+export const useNowPlayingElapsedSeconds = () =>
+  useQuery<unknown, Error, number>({
+    queryKey: ['nowPlayingElapsedSeconds'],
+  });

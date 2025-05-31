@@ -6,7 +6,7 @@ export type SongInfoSchema = {
   imageSrc?: string | null;
   isPaused: boolean;
   songDuration: number;
-  elapsedSeconds: number;
+  elapsedSeconds?: number;
   url: string;
   album?: string | null;
   videoId: string;
