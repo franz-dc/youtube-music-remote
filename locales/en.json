@@ -105,5 +105,16 @@
     "webVersion": "Web version",
     "changelog": "Changelog",
     "license": "License"
+  },
+  "search": {
+    "title": "Search",
+    "searchPlaceholder": "Search songs, albums, artists",
+    "noResults": "No results found",
+    "noResultsMessage": "Try searching for something else.",
+    "errorMessage": "An error occurred while searching. Please try again.",
+    "unknownArtist": "Unknown artist",
+    "moreActions": "More actions",
+    "addToQueue": "Add to queue",
+    "playNext": "Play next"
   }
 }
