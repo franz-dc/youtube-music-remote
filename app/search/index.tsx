@@ -218,49 +218,57 @@ const Search = () => {
   );
 
   const renderScene = useCallback(
-    ({ route }: RenderSceneProps) => (
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={{ paddingBottom: bottomInset }}
-      >
-        {(searchResults || [])[parseInt(route.key)].contents.map((shelf) => (
-          <View key={shelf.header}>
-            <Text
-              style={{
-                marginHorizontal: 16,
-                fontSize: 20,
-                fontWeight: 'bold',
-              }}
-            >
-              {shelf.header}
-            </Text>
-            {shelf.type === 'musicCardShelfRenderer' && (
-              <MusicCardShelf
-                {...shelf}
-                onSelect={handleSelectSong}
-                onMoreActionsOpen={setSelectedSong}
-              />
-            )}
-            {shelf.type === 'musicShelfRenderer' && (
-              <List.Section
+    ({ route }: RenderSceneProps) => {
+      const contents = (searchResults || [])[parseInt(route.key)].contents;
+
+      if (contents.length === 0) {
+        return <NoResults />;
+      }
+
+      return (
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={{ paddingBottom: bottomInset }}
+        >
+          {contents.map((shelf) => (
+            <View key={shelf.header}>
+              <Text
                 style={{
-                  marginBottom: 16,
+                  marginHorizontal: 16,
+                  fontSize: 20,
+                  fontWeight: 'bold',
                 }}
               >
-                {shelf.contents.map((item) => (
-                  <SearchResultItem
-                    key={item.videoId}
-                    onSelect={handleSelectSong}
-                    onMoreActionsOpen={setSelectedSong}
-                    {...item}
-                  />
-                ))}
-              </List.Section>
-            )}
-          </View>
-        ))}
-      </ScrollView>
-    ),
+                {shelf.header}
+              </Text>
+              {shelf.type === 'musicCardShelfRenderer' && (
+                <MusicCardShelf
+                  {...shelf}
+                  onSelect={handleSelectSong}
+                  onMoreActionsOpen={setSelectedSong}
+                />
+              )}
+              {shelf.type === 'musicShelfRenderer' && (
+                <List.Section
+                  style={{
+                    marginBottom: 16,
+                  }}
+                >
+                  {shelf.contents.map((item) => (
+                    <SearchResultItem
+                      key={item.videoId}
+                      onSelect={handleSelectSong}
+                      onMoreActionsOpen={setSelectedSong}
+                      {...item}
+                    />
+                  ))}
+                </List.Section>
+              )}
+            </View>
+          ))}
+        </ScrollView>
+      );
+    },
     [searchResults, bottomInset, handleSelectSong]
   );
 
