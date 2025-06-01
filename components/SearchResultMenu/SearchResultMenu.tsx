@@ -123,7 +123,7 @@ const SearchResultMenu = forwardRef<
                 style={[styles.albumArt]}
               />
             </View>
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, justifyContent: 'center' }}>
               <Text
                 numberOfLines={1}
                 style={{
