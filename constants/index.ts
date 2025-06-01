@@ -122,3 +122,4 @@ export const APP_FILE_EXTENSION = Platform.select({
   android: 'apk',
 });
 export const LIST_ITEM_PRESS_DELAY_MS = 100;
+export const LONG_PRESS_DELAY_MS = 250;

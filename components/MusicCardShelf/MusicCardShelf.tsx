@@ -11,7 +11,7 @@ import {
   useTheme,
 } from 'react-native-paper';
 
-import { LIST_ITEM_PRESS_DELAY_MS } from '@/constants';
+import { LIST_ITEM_PRESS_DELAY_MS, LONG_PRESS_DELAY_MS } from '@/constants';
 import { useMediaQuery } from '@/hooks';
 import { MusicCardShelfRendererObj, SearchResultSong } from '@/schemas';
 
@@ -150,6 +150,7 @@ const MusicCardShelf = ({
           },
         ]}
         unstable_pressDelay={LIST_ITEM_PRESS_DELAY_MS}
+        delayLongPress={LONG_PRESS_DELAY_MS}
       >
         <View style={styles.mainCardContainer}>
           <View

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, View } from 'react-native';
 import { Icon, Text, TouchableRipple, useTheme } from 'react-native-paper';
 
-import { LIST_ITEM_PRESS_DELAY_MS } from '@/constants';
+import { LIST_ITEM_PRESS_DELAY_MS, LONG_PRESS_DELAY_MS } from '@/constants';
 import {
   PlaylistPanelVideoRenderer,
   QueueSchema,
@@ -141,6 +141,7 @@ const QueueListItem = ({
       onPress={playSelectedSong}
       onLongPress={handleMoreActionsOpen}
       unstable_pressDelay={LIST_ITEM_PRESS_DELAY_MS}
+      delayLongPress={LONG_PRESS_DELAY_MS}
     >
       <View
         style={[
