@@ -18,6 +18,8 @@ const POLLING_RATE = 1000; // 1 second
 export const useNowPlayingElapsedSeconds = () =>
   useQuery<unknown, Error, number>({
     queryKey: ['nowPlayingElapsedSeconds'],
+    // Placeholder function, as this is only used for cache management
+    queryFn: () => 0,
   });
 
 /**
