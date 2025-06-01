@@ -132,13 +132,6 @@ const SearchResultMenu = forwardRef<
                 }}
               >
                 {song.title}
-                {song.title}
-                {song.title}
-                {song.title}
-                {song.title}
-                {song.title}
-                {song.title}
-                {song.title}
               </Text>
               <Text
                 numberOfLines={1}
