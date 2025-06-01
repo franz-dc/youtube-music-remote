@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
@@ -29,11 +30,14 @@ const PlayerSeekBar = ({ songInfo }: PlayerSeekBarProps) => {
 
   const { data: elapsedSeconds = 0 } = useNowPlayingElapsedSeconds();
 
-  const seekSeconds = async (value: number) => {
-    await seek(value * songInfo.songDuration);
-  };
+  const queryClient = useQueryClient();
 
-  // TODO: optimisticElapsedSeconds - to avoid seek lag
+  const seekSeconds = async (value: number) => {
+    const seekValue = Math.round(value * songInfo.songDuration);
+    // optimistic update elapsedSeconds to avoid seek lag or jumps
+    queryClient.setQueryData(['nowPlayingElapsedSeconds'], seekValue);
+    await seek(seekValue);
+  };
 
   return (
     <View>
