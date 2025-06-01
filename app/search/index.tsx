@@ -100,7 +100,7 @@ const Search = () => {
       action,
     }: {
       videoId: string;
-      action: 'play' | 'addToQueue' | 'playNext';
+      action: 'play' | 'addToQueue' | 'playNext' | 'removeFromQueue';
     }) => {
       // The API does not support playing a song directly via its ID.
       // Workaround: Insert song next to the current song in the queue,
@@ -249,6 +249,7 @@ const Search = () => {
                 ref={searchResultMenuRef}
                 song={selectedSong}
                 onSongActionSelect={handleSelectSong}
+                source='search'
               />
             )}
           </>

@@ -15,15 +15,16 @@ import { ANIMATION_CONFIGS } from '@/constants';
 import { useBottomSheetModalBackHandler } from '@/hooks';
 import { SearchResultSong } from '@/schemas';
 
-type SongAction = 'addToQueue' | 'playNext';
+type SongAction = 'addToQueue' | 'playNext' | 'removeFromQueue';
 
 export type SearchResultMenuProps = {
-  song: SearchResultSong;
+  song: SearchResultSong & { index?: number };
   onSongActionSelect: (params: {
     videoId: string;
     index?: number;
     action: SongAction;
   }) => Promise<void> | void;
+  source?: 'search' | 'queue';
 };
 
 export type SearchResultMenuMethods = {
@@ -57,10 +58,13 @@ const styles = StyleSheet.create({
   },
 });
 
+/**
+ * More actions menu for search results. This is also used in the queue.
+ */
 const SearchResultMenu = forwardRef<
   SearchResultMenuMethods,
   SearchResultMenuProps
->(({ song, onSongActionSelect }, ref) => {
+>(({ song, onSongActionSelect, source = 'search' }, ref) => {
   const { t } = useTranslation('translation', { keyPrefix: 'queue' });
 
   const { bottom: bottomInset } = useSafeAreaInsets();
@@ -85,6 +89,7 @@ const SearchResultMenu = forwardRef<
     handleDismissModalPress();
     await onSongActionSelect({
       videoId: song.videoId,
+      index: song.index,
       action,
     });
   };
@@ -158,6 +163,16 @@ const SearchResultMenu = forwardRef<
             onPress={() => handleSongActionSelect('addToQueue')}
             style={styles.listItem}
           />
+          {source === 'queue' && (
+            <>
+              <List.Item
+                title={t('removeFromQueue')}
+                left={() => <List.Icon icon='trash-can' />}
+                onPress={() => handleSongActionSelect('removeFromQueue')}
+                style={styles.listItem}
+              />
+            </>
+          )}
         </BottomSheetScrollView>
       </BottomSheetModal>
     </BottomSheetModalProvider>

@@ -51,9 +51,9 @@ const Queue = () => {
   );
 
   // more actions handler
-  const [selectedSong, setSelectedSong] = useState<SearchResultSong | null>(
-    null
-  );
+  const [selectedSong, setSelectedSong] = useState<
+    (SearchResultSong & { index: number }) | null
+  >(null);
   const searchResultMenuRef = useRef<SearchResultMenuMethods>(null);
 
   useEffect(() => {
@@ -170,6 +170,7 @@ const Queue = () => {
           ref={searchResultMenuRef}
           song={selectedSong}
           onSongActionSelect={handleSelectSong}
+          source='queue'
         />
       )}
     </>
