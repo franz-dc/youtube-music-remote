@@ -6,7 +6,6 @@ import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Appbar, Menu } from 'react-native-paper';
 
-import { Player } from '@/components';
 import { MORE_ICON } from '@/constants';
 
 const styles = StyleSheet.create({
@@ -52,7 +51,6 @@ const Layout = () => {
         </Menu>
       </Appbar.Header>
       <Slot />
-      <Player />
     </GestureHandlerRootView>
   );
 };

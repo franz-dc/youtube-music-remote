@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { FlashList } from '@shopify/flash-list';
 import { router } from 'expo-router';
@@ -10,12 +10,17 @@ import {
   ConnectionError,
   InfoView,
   LoadingView,
+  Player,
   QueueListItem,
+  SearchResultMenu,
+  SearchResultMenuMethods,
 } from '@/components';
 import { useSettingAtom } from '@/configs';
 import { MINI_PLAYER_HEIGHT } from '@/constants';
 import { useQueue } from '@/hooks';
-import { QueueSchema } from '@/schemas';
+import { QueueSchema, SearchResultSong } from '@/schemas';
+import { addSongToQueue, removeSongFromQueue } from '@/services';
+import { pollQueue, pollQueueForIndex } from '@/utils';
 
 const Queue = () => {
   const { t } = useTranslation('translation');
@@ -43,6 +48,54 @@ const Queue = () => {
           .playlistPanelVideoRenderer.videoId
       }`,
     []
+  );
+
+  // more actions handler
+  const [selectedSong, setSelectedSong] = useState<SearchResultSong | null>(
+    null
+  );
+  const searchResultMenuRef = useRef<SearchResultMenuMethods>(null);
+
+  useEffect(() => {
+    if (selectedSong) {
+      searchResultMenuRef.current?.show();
+    }
+  }, [selectedSong]);
+
+  const { refetch: refetchQueue } = useQueue();
+
+  const handleSelectSong = useCallback(
+    async ({
+      videoId,
+      index,
+      action,
+    }: {
+      videoId: string;
+      index?: number;
+      action: 'addToQueue' | 'playNext' | 'removeFromQueue';
+    }) => {
+      // The API does not support playing a song directly via its ID.
+      // Workaround: Insert song next to the current song in the queue,
+      // then, play the next song in the queue (newly added song).
+      switch (action) {
+        case 'addToQueue': {
+          await addSongToQueue(videoId, 'INSERT_AT_END');
+          await pollQueue(videoId, refetchQueue);
+          break;
+        }
+        case 'playNext': {
+          await addSongToQueue(videoId, 'INSERT_AFTER_CURRENT_VIDEO');
+          await pollQueue(videoId, refetchQueue);
+          break;
+        }
+        case 'removeFromQueue': {
+          if (!index) return;
+          await removeSongFromQueue(index);
+          await pollQueueForIndex(videoId, index, refetchQueue);
+        }
+      }
+    },
+    [refetchQueue]
   );
 
   if (!ipAddress)
@@ -103,6 +156,7 @@ const Queue = () => {
                     ?.playlistPanelVideoRenderer)!
               }
               index={index}
+              onMoreActionsOpen={setSelectedSong}
             />
           )}
           keyExtractor={keyExtractor}
@@ -110,6 +164,14 @@ const Queue = () => {
           contentContainerStyle={{ paddingBottom: 8 }}
         />
       </View>
+      <Player />
+      {selectedSong && (
+        <SearchResultMenu
+          ref={searchResultMenuRef}
+          song={selectedSong}
+          onSongActionSelect={handleSelectSong}
+        />
+      )}
     </>
   );
 };

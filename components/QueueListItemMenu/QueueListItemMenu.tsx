@@ -13,20 +13,23 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ANIMATION_CONFIGS } from '@/constants';
 import { useBottomSheetModalBackHandler } from '@/hooks';
-import { SearchResultSong } from '@/schemas';
 
-type SongAction = 'addToQueue' | 'playNext';
+type SongAction = 'addToQueue' | 'playNext' | 'removeFromQueue';
 
-export type SearchResultMenuProps = {
-  song: SearchResultSong;
+export type QueueListItemMenuProps = {
+  song: {
+    videoId: string;
+    title: string;
+    artist: string;
+    thumbnail: string;
+  };
   onSongActionSelect: (params: {
     videoId: string;
-    index?: number;
     action: SongAction;
   }) => Promise<void> | void;
 };
 
-export type SearchResultMenuMethods = {
+export type QueueListItemMenuMethods = {
   show: () => void;
 };
 
@@ -57,9 +60,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const SearchResultMenu = forwardRef<
-  SearchResultMenuMethods,
-  SearchResultMenuProps
+const QueueListItemMenu = forwardRef<
+  QueueListItemMenuMethods,
+  QueueListItemMenuProps
 >(({ song, onSongActionSelect }, ref) => {
   const { t } = useTranslation('translation', { keyPrefix: 'queue' });
 
@@ -141,7 +144,7 @@ const SearchResultMenu = forwardRef<
                   opacity: 0.5,
                 }}
               >
-                {song.subtitle}
+                {song.artist}
               </Text>
             </View>
           </View>
@@ -158,12 +161,18 @@ const SearchResultMenu = forwardRef<
             onPress={() => handleSongActionSelect('addToQueue')}
             style={styles.listItem}
           />
+          <List.Item
+            title={t('removeFromQueue')}
+            left={() => <List.Icon icon='trash-can' />}
+            onPress={() => handleSongActionSelect('removeFromQueue')}
+            style={styles.listItem}
+          />
         </BottomSheetScrollView>
       </BottomSheetModal>
     </BottomSheetModalProvider>
   );
 });
 
-SearchResultMenu.displayName = 'SearchResultMenu';
+QueueListItemMenu.displayName = 'QueueListItemMenu';
 
-export default SearchResultMenu;
+export default QueueListItemMenu;
