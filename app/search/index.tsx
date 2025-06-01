@@ -53,11 +53,13 @@ const StyledTabBar: TabViewProps<Route>['renderTabBar'] = (props) => {
   return (
     <TabBar
       {...props}
-      indicatorStyle={{ backgroundColor: 'white' }}
+      indicatorStyle={{ backgroundColor: theme.colors.primary }}
       style={{
         backgroundColor: theme.colors.background,
         shadowColor: theme.colors.background,
       }}
+      activeColor={theme.colors.primary}
+      inactiveColor={theme.colors.onSurface}
       android_ripple={{
         color: getTouchableRippleColors({ theme }).calculatedRippleColor,
       }}
