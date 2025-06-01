@@ -88,6 +88,14 @@ const StackWithConfig = () => {
           background: '#000000',
           surface: '#000000',
           backdrop: '#00000066', // 40% opacity
+          elevation: {
+            ...MD3DarkTheme.colors.elevation,
+            level1: 'rgb(30, 30, 30)',
+            level2: 'rgb(35, 35, 35)',
+            level3: 'rgb(38, 38, 38)',
+            level4: 'rgb(42, 42, 42)',
+            level5: 'rgb(44, 44, 44)',
+          },
         },
       },
     };

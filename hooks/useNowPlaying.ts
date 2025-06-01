@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useSettingAtom } from '@/configs';
 import { getQueue, getSongInfo } from '@/services';
@@ -8,6 +8,19 @@ import { getQueue, getSongInfo } from '@/services';
 import { usePrevious } from './usePrevious';
 
 const POLLING_RATE = 1000; // 1 second
+
+/**
+ * Separate hook to fetch the now playing song elapsed seconds.
+ *
+ * This is done due to prevent unnecessary re-renders when the song elapsed
+ * seconds changes.
+ */
+export const useNowPlayingElapsedSeconds = () =>
+  useQuery<unknown, Error, number>({
+    queryKey: ['nowPlayingElapsedSeconds'],
+    // Placeholder function, as this is only used for cache management
+    queryFn: () => 0,
+  });
 
 /**
  * Fetches the current song information at a regular interval.
@@ -23,11 +36,31 @@ export const useNowPlaying = () => {
 
   const [refetchInterval, setRefetchInterval] = useState(POLLING_RATE);
 
+  const queryClient = useQueryClient();
+
   const useQueryResult = useQuery({
     queryKey: ['nowPlaying'],
     queryFn: getSongInfo,
     refetchInterval,
     retry: false,
+    select: (data) => {
+      if (!data) return null;
+      // Remove elapsed seconds from the data to prevent unnecessary re-renders
+      const { elapsedSeconds, ...rest } = data;
+      // If the elapsed seconds were updated more than a set fraction of
+      // POLLING_RATE ago, update the query cache with the current song elapsed
+      // seconds. This reduces the occurrences of seek lag or jumps.
+      const elapsedSecondsUpdatedAt = queryClient.getQueryState([
+        'nowPlayingElapsedSeconds',
+      ])?.dataUpdatedAt;
+      if (
+        !elapsedSecondsUpdatedAt ||
+        Date.now() - elapsedSecondsUpdatedAt > POLLING_RATE / 4
+      ) {
+        queryClient.setQueryData(['nowPlayingElapsedSeconds'], elapsedSeconds);
+      }
+      return rest;
+    },
     enabled,
   });
 

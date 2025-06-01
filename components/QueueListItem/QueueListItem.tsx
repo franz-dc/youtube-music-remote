@@ -4,13 +4,18 @@ import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, View } from 'react-native';
 import { Icon, Text, TouchableRipple, useTheme } from 'react-native-paper';
 
-import { LIST_ITEM_PRESS_DELAY_MS } from '@/constants';
-import { PlaylistPanelVideoRenderer, QueueSchema } from '@/schemas';
+import { LIST_ITEM_PRESS_DELAY_MS, LONG_PRESS_DELAY_MS } from '@/constants';
+import {
+  PlaylistPanelVideoRenderer,
+  QueueSchema,
+  SearchResultSong,
+} from '@/schemas';
 import { changeActiveSongInQueue } from '@/services';
 
 export type SongListItemProps = {
   song: PlaylistPanelVideoRenderer;
   index: number;
+  onMoreActionsOpen: (params: SearchResultSong & { index: number }) => void;
 };
 
 const styles = StyleSheet.create({
@@ -32,9 +37,6 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
   },
-  albumArtPlaying: {
-    opacity: 0.15,
-  },
   albumArtPlayingIcon: {
     position: 'absolute',
     top: '50%',
@@ -54,7 +56,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const QueueListItem = ({ song, index }: SongListItemProps) => {
+const QueueListItem = ({
+  song,
+  index,
+  onMoreActionsOpen,
+}: SongListItemProps) => {
   const theme = useTheme();
 
   const { t } = useTranslation('translation', { keyPrefix: 'queue' });
@@ -120,10 +126,22 @@ const QueueListItem = ({ song, index }: SongListItemProps) => {
     }
   };
 
+  const handleMoreActionsOpen = () => {
+    onMoreActionsOpen({
+      title,
+      subtitle: artist,
+      thumbnail: smallestThumbnailUrl,
+      videoId: song.videoId,
+      index,
+    });
+  };
+
   return (
     <TouchableRipple
       onPress={playSelectedSong}
+      onLongPress={handleMoreActionsOpen}
       unstable_pressDelay={LIST_ITEM_PRESS_DELAY_MS}
+      delayLongPress={LONG_PRESS_DELAY_MS}
     >
       <View
         style={[

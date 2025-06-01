@@ -49,7 +49,10 @@
     "unknownTitle": "Unknown title",
     "unknownArtist": "Unknown artist",
     "nothingIsInQueue": "Nothing is in queue",
-    "nothingIsInQueueMessage": "Play something on YouTube Music to see it here."
+    "nothingIsInQueueMessage": "Play something on YouTube Music to see it here.",
+    "addToQueue": "Add to queue",
+    "playNext": "Play next",
+    "removeFromQueue": "Remove from queue"
   },
   "settings": {
     "title": "Settings",
@@ -105,5 +108,14 @@
     "webVersion": "Web version",
     "changelog": "Changelog",
     "license": "License"
+  },
+  "search": {
+    "title": "Search",
+    "searchPlaceholder": "Search songs, albums, artists",
+    "noResults": "No results found",
+    "noResultsMessage": "Try searching for something else.",
+    "errorMessage": "An error occurred while searching. Please try again.",
+    "unknownArtist": "Unknown artist",
+    "moreActions": "More actions"
   }
 }

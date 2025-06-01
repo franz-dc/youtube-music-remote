@@ -4,6 +4,9 @@ import { Easing } from 'react-native-reanimated';
 import { TextDialogProps } from '@/components';
 import { SettingsSchema } from '@/schemas';
 
+// External
+export * from './breakpoints';
+
 // Languages - should be sorted in English alphabetical order
 export const LANGUAGES = ['en', 'ja'] as const;
 
@@ -119,3 +122,4 @@ export const APP_FILE_EXTENSION = Platform.select({
   android: 'apk',
 });
 export const LIST_ITEM_PRESS_DELAY_MS = 100;
+export const LONG_PRESS_DELAY_MS = 250;

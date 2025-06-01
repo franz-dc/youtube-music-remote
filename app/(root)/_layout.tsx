@@ -6,7 +6,6 @@ import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Appbar, Menu } from 'react-native-paper';
 
-import { Player } from '@/components';
 import { MORE_ICON } from '@/constants';
 
 const styles = StyleSheet.create({
@@ -32,6 +31,7 @@ const Layout = () => {
     <GestureHandlerRootView style={styles.container}>
       <Appbar.Header>
         <Appbar.Content title={t('queue.title')} />
+        <Appbar.Action icon='magnify' onPress={() => pushFromMenu('/search')} />
         <Menu
           visible={menuVisible}
           onDismiss={closeMenu}
@@ -51,7 +51,6 @@ const Layout = () => {
         </Menu>
       </Appbar.Header>
       <Slot />
-      <Player />
     </GestureHandlerRootView>
   );
 };

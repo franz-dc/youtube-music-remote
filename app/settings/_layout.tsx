@@ -1,8 +1,10 @@
-import { Slot, router } from 'expo-router';
+import { Slot } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Appbar } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { goBack } from '@/utils';
 
 const styles = StyleSheet.create({
   container: {
@@ -18,7 +20,7 @@ const Settings = () => {
   return (
     <View style={styles.container}>
       <Appbar.Header>
-        <Appbar.BackAction onPress={router.back} />
+        <Appbar.BackAction onPress={goBack} />
         <Appbar.Content title={t('title')} />
       </Appbar.Header>
       <ScrollView

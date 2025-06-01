@@ -29,4 +29,5 @@ const SongDetails = ({ title, artist, sideBySide }: SongDetailsProps) => {
     </View>
   );
 };
+
 export default SongDetails;
