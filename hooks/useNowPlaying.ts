@@ -36,9 +36,6 @@ export const useNowPlaying = () => {
 
   const queryClient = useQueryClient();
 
-  const { dataUpdatedAt: elapsedSecondsUpdatedAt } =
-    useNowPlayingElapsedSeconds();
-
   const useQueryResult = useQuery({
     queryKey: ['nowPlaying'],
     queryFn: getSongInfo,
@@ -51,7 +48,13 @@ export const useNowPlaying = () => {
       // If the elapsed seconds were updated more than a set fraction of
       // POLLING_RATE ago, update the query cache with the current song elapsed
       // seconds. This reduces the occurrences of seek lag or jumps.
-      if (Date.now() - elapsedSecondsUpdatedAt > POLLING_RATE / 4) {
+      const elapsedSecondsUpdatedAt = queryClient.getQueryState([
+        'nowPlayingElapsedSeconds',
+      ])?.dataUpdatedAt;
+      if (
+        !elapsedSecondsUpdatedAt ||
+        Date.now() - elapsedSecondsUpdatedAt > POLLING_RATE / 4
+      ) {
         queryClient.setQueryData(['nowPlayingElapsedSeconds'], elapsedSeconds);
       }
       return rest;
