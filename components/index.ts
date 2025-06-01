@@ -16,6 +16,9 @@ export * from './OptionDialog';
 
 export { default as Player } from './Player';
 
+export { default as Searchbar } from './Searchbar';
+export * from './Searchbar';
+
 export { default as SearchResultItem } from './SearchResultItem';
 
 export { default as SearchResultMenu } from './SearchResultMenu';
