@@ -6629,8 +6629,8 @@ __metadata:
   linkType: hard
 
 "eslint-import-resolver-typescript@npm:^4.0.0":
-  version: 4.4.1
-  resolution: "eslint-import-resolver-typescript@npm:4.4.1"
+  version: 4.4.2
+  resolution: "eslint-import-resolver-typescript@npm:4.4.2"
   dependencies:
     debug: "npm:^4.4.1"
     eslint-import-context: "npm:^0.1.5"
@@ -6648,7 +6648,7 @@ __metadata:
       optional: true
     eslint-plugin-import-x:
       optional: true
-  checksum: 10c0/a03df85e4e7136e3ae36842a417a1a91f74054d999f32e9a40a2ea732c541be522d1382e18ace0e8c26e0505868f12a5de4a6b978d73ea91ca21d314f0f01f30
+  checksum: 10c0/92d241ff5abf7d48cd89da73e708b9d52536bc5f66016fa6fe4eea383bf91a03911b83cefed6d747ab8311a5483c7b8b7e9c36165d831f5ef9ddb91b71afd590
   languageName: node
   linkType: hard
 
