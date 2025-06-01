@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { QueryObserverResult } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
@@ -18,7 +18,6 @@ import {
 import { useQueue, useSearch } from '@/hooks';
 import { QueueSchema, SearchResultSong } from '@/schemas';
 import { addSongToQueue, playNextTrack } from '@/services';
-import { formatSearchResult } from '@/utils';
 
 const styles = StyleSheet.create({
   container: {
@@ -101,15 +100,11 @@ const Search = () => {
 
   const { q } = useLocalSearchParams<{ q: string }>();
   const {
-    data: rawSearchResult,
+    data: searchResults,
     isLoading,
     isError,
     refetch,
   } = useSearch({ query: q });
-  const searchResults = useMemo(
-    () => (rawSearchResult ? formatSearchResult(rawSearchResult) : null),
-    [rawSearchResult]
-  );
 
   const handleSelectSong = async ({
     videoId,
