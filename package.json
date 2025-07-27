@@ -87,5 +87,5 @@
     "typescript": "~5.3.3"
   },
   "private": true,
-  "packageManager": "yarn@4.9.1"
+  "packageManager": "yarn@4.9.2"
 }
