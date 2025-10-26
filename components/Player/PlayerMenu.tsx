@@ -13,7 +13,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ANIMATION_CONFIGS } from '@/constants';
 import { useBottomSheetModalBackHandler } from '@/hooks';
-import { useLikeState } from '@/hooks/useLikeState';
+import { useLike } from '@/hooks/useLike';
 import { SongInfoSchema } from '@/schemas';
 
 import SleepTimer from './SleepTimer';
@@ -79,9 +79,7 @@ const PlayerMenu = forwardRef<PlayerMenuMethods, PlayerMenuProps>(
       }
     };
 
-    const { likeState, toggleLike, toggleDislike } = useLikeState(
-      songInfo.videoId
-    );
+    const { likeState, toggleLike, toggleDislike } = useLike(songInfo.videoId);
 
     const handleLikePress = async () => {
       handleDismissModalPress();

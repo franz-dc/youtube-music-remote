@@ -7,7 +7,7 @@ import { IconButton } from 'react-native-paper';
 import { useSettingAtom } from '@/configs';
 import { SAFE_LOW_VOLUME } from '@/constants';
 import { useIsFullScreen, useSetFullScreen } from '@/hooks';
-import { useLikeState } from '@/hooks/useLikeState';
+import { useLike } from '@/hooks/useLike';
 import { SongInfoSchema } from '@/schemas';
 import { updateVolume } from '@/services';
 
@@ -115,9 +115,7 @@ const PlayerExtraActions = ({ songInfo }: PlayerExtraActionsProps) => {
     }
   };
 
-  const { likeState, toggleLike, toggleDislike } = useLikeState(
-    songInfo.videoId
-  );
+  const { likeState, toggleLike, toggleDislike } = useLike(songInfo.videoId);
 
   if (!showPlayerActions) return null;
 

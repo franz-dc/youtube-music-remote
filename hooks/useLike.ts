@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { LikeStateSchema } from '@/schemas';
 import { getLikeState, toggleDislikeSong, toggleLikeSong } from '@/services';
 
-export const useLikeState = (videoId: string) => {
+export const useLike = (videoId: string) => {
   const queryClient = useQueryClient();
 
   const { data: likeState } = useQuery({
