@@ -50,10 +50,10 @@ export const formatSearchResult = (
 
                   return {
                     type: 'musicCardShelfRenderer',
-                    header: formatTextRuns(
-                      content.musicCardShelfRenderer.header
-                        .musicCardShelfHeaderBasicRenderer.title.runs
-                    ),
+                    // header: formatTextRuns(
+                    //   content.musicCardShelfRenderer.header
+                    //     .musicCardShelfHeaderBasicRenderer.title.runs
+                    // ),
                     title: formatTextRuns(
                       content.musicCardShelfRenderer.title.runs
                     ),
@@ -149,7 +149,8 @@ export const formatSearchResult = (
 
                   return {
                     type: 'musicShelfRenderer',
-                    header: content.musicShelfRenderer?.title.runs[0].text,
+                    // header:
+                    //   content.musicShelfRenderer?.title?.runs[0].text || '',
                     contents: musicShelfRendererContents,
                     params:
                       content.musicShelfRenderer?.bottomEndpoint?.searchEndpoint

@@ -8,7 +8,7 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import { List, Text, useTheme } from 'react-native-paper';
+import { List, useTheme } from 'react-native-paper';
 import { getTouchableRippleColors } from 'react-native-paper/src/components/TouchableRipple/utils';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
@@ -167,8 +167,8 @@ const Search = () => {
           contentContainerStyle={{ paddingBottom: bottomInset }}
         >
           {contents.map((shelf) => (
-            <View key={shelf.header}>
-              <Text
+            <View key={shelf.type}>
+              {/* <Text
                 style={{
                   marginHorizontal: 16,
                   fontSize: 20,
@@ -176,7 +176,7 @@ const Search = () => {
                 }}
               >
                 {shelf.header}
-              </Text>
+              </Text> */}
               {shelf.type === 'musicCardShelfRenderer' && (
                 <MusicCardShelf
                   {...shelf}
@@ -219,7 +219,7 @@ const Search = () => {
         message={t('search.errorMessage')}
         icon='image-broken-variant'
         onActionPress={refetch}
-        actionLabel={t('retry')}
+        actionLabel={t('common.retry')}
       />
     );
   }

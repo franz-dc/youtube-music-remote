@@ -16,7 +16,7 @@ export type MusicCardShelfRendererSongContent = SearchResultSong & {
 
 export type MusicCardShelfRendererObj = SearchResultSong & {
   type: 'musicCardShelfRenderer';
-  header: string;
+  // header: string;
   contents: (
     | MusicCardShelfRendererTextContent
     | MusicCardShelfRendererSongContent
@@ -25,7 +25,7 @@ export type MusicCardShelfRendererObj = SearchResultSong & {
 
 export type MusicShelfRendererObj = {
   type: 'musicShelfRenderer';
-  header: string;
+  // header: string;
   contents: SearchResultSong[];
   params?: string;
   continuation?: string;
