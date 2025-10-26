@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import { api } from '@/configs';
 import {
+  LikeStateSchema,
   QueueSchema,
   ReleaseSchema,
   RepeatModeStateSchema,
@@ -47,6 +48,11 @@ export const setFullScreen = async (state: boolean) =>
 export const toggleMute = async () => await api.post('/toggle-mute');
 
 // Song
+export const getLikeState = async () => {
+  const { data } = await api.get<{ state: LikeStateSchema }>('/like-state');
+  return data.state;
+};
+
 export const toggleLikeSong = async () => await api.post('/like');
 
 export const toggleDislikeSong = async () => await api.post('/dislike');

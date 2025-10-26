@@ -382,7 +382,7 @@ const Player = () => {
                       isPlaying={isPlayingOptimistic}
                       onPlayPause={handlePlayPause}
                     />
-                    <PlayerExtraActions />
+                    <PlayerExtraActions songInfo={songInfo} />
                   </Animated.View>
                 </>
               )}

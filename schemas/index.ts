@@ -1,4 +1,5 @@
 export * from './formattedSearchResultSchema';
+export * from './likeStateSchema';
 export * from './settingsSchema';
 export * from './songInfoSchema';
 export * from './queueSchema';
