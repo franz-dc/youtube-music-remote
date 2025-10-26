@@ -2,7 +2,7 @@
   "expo": {
     "name": "YT Music Remote",
     "slug": "youtube-music-remote",
-    "version": "0.5.0",
+    "version": "0.5.1",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
