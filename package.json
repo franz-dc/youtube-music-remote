@@ -11,7 +11,7 @@
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "expo lint",
-    "build:android": "expo prebuild --clean && yarn android --variant release"
+    "build:android": "expo prebuild --clean && expo run:android --variant release"
   },
   "jest": {
     "preset": "jest-expo"
