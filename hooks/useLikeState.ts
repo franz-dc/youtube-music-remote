@@ -6,10 +6,11 @@ import { getLikeState, toggleDislikeSong, toggleLikeSong } from '@/services';
 export const useLikeState = (videoId: string) => {
   const queryClient = useQueryClient();
 
-  const { data: likeState = 'INDIFFERENT' } = useQuery({
+  const { data: likeState } = useQuery({
     queryKey: ['likeState', videoId],
     queryFn: getLikeState,
     enabled: !!videoId,
+    initialData: 'INDIFFERENT' as LikeStateSchema,
   });
 
   const toggleLike = async () => {
