@@ -10,7 +10,8 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "build:android": "expo prebuild --clean && yarn android --variant release"
   },
   "jest": {
     "preset": "jest-expo"
