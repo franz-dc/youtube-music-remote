@@ -24,6 +24,11 @@ export const playNextTrack = async () => await api.post('/next');
 export const seek = async (seconds: number) =>
   await api.post('/seek-to', { seconds });
 
+export const getShuffleState = async () => {
+  const { data } = await api.get<{ state: boolean }>('/shuffle');
+  return data.state;
+};
+
 export const toggleShuffle = async () => await api.post('/shuffle');
 
 export const getRepeatMode = async () => {

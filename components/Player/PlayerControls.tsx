@@ -2,8 +2,8 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { IconButton } from 'react-native-paper';
 
-import { useRepeat } from '@/hooks';
-import { playNextTrack, playPreviousTrack, toggleShuffle } from '@/services';
+import { useRepeat, useShuffle } from '@/hooks';
+import { playNextTrack, playPreviousTrack } from '@/services';
 
 export type PlayerControlsProps = {
   isPlaying: boolean;
@@ -40,6 +40,8 @@ const PlayerControls = ({ isPlaying, onPlayPause }: PlayerControlsProps) => {
 
   const { repeatMode, switchRepeat } = useRepeat();
 
+  const { isShuffle, toggleShuffle } = useShuffle();
+
   return (
     <View style={styles.playerControlsContainer}>
       <IconButton
@@ -47,6 +49,7 @@ const PlayerControls = ({ isPlaying, onPlayPause }: PlayerControlsProps) => {
         size={28}
         onPress={toggleShuffle}
         accessibilityLabel={t('toggleShuffle')}
+        style={{ opacity: isShuffle ? 1 : 0.5 }}
       />
       <IconButton
         icon='skip-previous'

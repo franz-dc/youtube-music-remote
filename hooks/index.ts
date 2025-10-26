@@ -9,4 +9,5 @@ export * from './useQueue';
 export * from './useRepeat';
 export * from './useSearch';
 export * from './useSearchContinuation';
+export * from './useShuffle';
 export * from './useStartupUpdateChecker';
