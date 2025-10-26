@@ -12440,15 +12440,15 @@ __metadata:
   linkType: hard
 
 "react-native-tab-view@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "react-native-tab-view@npm:4.1.1"
+  version: 4.2.0
+  resolution: "react-native-tab-view@npm:4.2.0"
   dependencies:
-    use-latest-callback: "npm:^0.2.3"
+    use-latest-callback: "npm:^0.2.4"
   peerDependencies:
     react: ">= 18.2.0"
     react-native: "*"
     react-native-pager-view: ">= 6.0.0"
-  checksum: 10c0/6a0f5d76a1b9fc83a2c06a77542067dcbffb4725d76800f2fb1380ec7a17ce8f50a101b787d226db536ab7e52ad4181b172d4531715c9d5caeb99b943c8ebc3e
+  checksum: 10c0/14f1f619cc656cb0e7b19108fb2421de9c613d7659ef978fe2f8081950a1756c8aa7b65b243c0047079ad3b6846f047e88f667d9e697819f131eef599c3275be
   languageName: node
   linkType: hard
 
@@ -14895,6 +14895,15 @@ __metadata:
   peerDependencies:
     react: ">=16.8"
   checksum: 10c0/dc87503f6279ce2980f78e1019231ba20d7509e9d17adac05285babe4d6ba6f68c52f4ef7b5ad777cbc2af9fbaaa09d7adb664ca556da0aebab9f020022880be
+  languageName: node
+  linkType: hard
+
+"use-latest-callback@npm:^0.2.4":
+  version: 0.2.6
+  resolution: "use-latest-callback@npm:0.2.6"
+  peerDependencies:
+    react: ">=16.8"
+  checksum: 10c0/6523747b2d76f12a91cf80a3cd9803449571e9defa8db69e9a03b8199b211127d88c038063714fe31d3c2e63ca51a491bd05f4e34203795a1c692a5a44416610
   languageName: node
   linkType: hard
 
