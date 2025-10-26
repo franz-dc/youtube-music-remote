@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -34,14 +34,12 @@ export const useNowPlaying = () => {
   const prevIpAddress = usePrevious(ipAddress);
   const prevPort = usePrevious(port);
 
-  const [refetchInterval, setRefetchInterval] = useState(POLLING_RATE);
-
   const queryClient = useQueryClient();
 
   const useQueryResult = useQuery({
     queryKey: ['nowPlaying'],
     queryFn: getSongInfo,
-    refetchInterval,
+    refetchInterval: (query) => (query.state.error ? false : POLLING_RATE),
     retry: false,
     select: (data) => {
       if (!data) return null;
@@ -64,7 +62,7 @@ export const useNowPlaying = () => {
     enabled,
   });
 
-  const { data, isSuccess, isError, refetch, isRefetchError } = useQueryResult;
+  const { data, isSuccess, refetch, isRefetchError } = useQueryResult;
 
   const { isError: isErrorQueue, refetch: refetchQueue } = useQuery({
     queryKey: ['queue'],
@@ -72,10 +70,6 @@ export const useNowPlaying = () => {
     retry: false,
     enabled: enabled && isSuccess,
   });
-
-  useEffect(() => {
-    setRefetchInterval(isError ? Infinity : POLLING_RATE);
-  }, [isError]);
 
   // Refetch song info when queue came from isError to !isError
   useEffect(() => {

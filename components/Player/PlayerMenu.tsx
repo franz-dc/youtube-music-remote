@@ -13,8 +13,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ANIMATION_CONFIGS } from '@/constants';
 import { useBottomSheetModalBackHandler } from '@/hooks';
+import { useLikeState } from '@/hooks/useLikeState';
 import { SongInfoSchema } from '@/schemas';
-import { toggleDislikeSong, toggleLikeSong } from '@/services';
 
 import SleepTimer from './SleepTimer';
 
@@ -79,14 +79,18 @@ const PlayerMenu = forwardRef<PlayerMenuMethods, PlayerMenuProps>(
       }
     };
 
-    const likeSong = async () => {
+    const { likeState, toggleLike, toggleDislike } = useLikeState(
+      songInfo.videoId
+    );
+
+    const handleLikePress = async () => {
       handleDismissModalPress();
-      await toggleLikeSong();
+      await toggleLike();
     };
 
-    const dislikeSong = async () => {
+    const handleDislikePress = async () => {
       handleDismissModalPress();
-      await toggleDislikeSong();
+      await toggleDislike();
     };
 
     return (
@@ -132,14 +136,26 @@ const PlayerMenu = forwardRef<PlayerMenuMethods, PlayerMenuProps>(
             <Divider style={styles.divider} />
             <List.Item
               title={t('like')}
-              left={() => <List.Icon icon='thumb-up-outline' />}
-              onPress={likeSong}
+              left={() => (
+                <List.Icon
+                  icon={likeState === 'LIKE' ? 'thumb-up' : 'thumb-up-outline'}
+                />
+              )}
+              onPress={handleLikePress}
               style={styles.listItem}
             />
             <List.Item
               title={t('dislike')}
-              left={() => <List.Icon icon='thumb-down-outline' />}
-              onPress={dislikeSong}
+              left={() => (
+                <List.Icon
+                  icon={
+                    likeState === 'DISLIKE'
+                      ? 'thumb-down'
+                      : 'thumb-down-outline'
+                  }
+                />
+              )}
+              onPress={handleDislikePress}
               style={styles.listItem}
             />
             <List.Item

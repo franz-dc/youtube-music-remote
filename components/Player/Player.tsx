@@ -153,6 +153,7 @@ const Player = () => {
   );
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsPlayingOptimistic(songInfo ? !songInfo.isPaused : false);
   }, [songInfo]);
 
@@ -381,7 +382,7 @@ const Player = () => {
                       isPlaying={isPlayingOptimistic}
                       onPlayPause={handlePlayPause}
                     />
-                    <PlayerExtraActions />
+                    <PlayerExtraActions songInfo={songInfo} />
                   </Animated.View>
                 </>
               )}

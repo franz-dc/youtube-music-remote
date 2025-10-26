@@ -7,9 +7,15 @@ import { IconButton } from 'react-native-paper';
 import { useSettingAtom } from '@/configs';
 import { SAFE_LOW_VOLUME } from '@/constants';
 import { useIsFullScreen, useSetFullScreen } from '@/hooks';
-import { toggleDislikeSong, toggleLikeSong, updateVolume } from '@/services';
+import { useLikeState } from '@/hooks/useLikeState';
+import { SongInfoSchema } from '@/schemas';
+import { updateVolume } from '@/services';
 
 import Slider from '../Slider';
+
+export type PlayerExtraActionsProps = {
+  songInfo: NonNullable<SongInfoSchema>;
+};
 
 const styles = StyleSheet.create({
   actionsContainer: {
@@ -33,7 +39,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const PlayerExtraActions = () => {
+const PlayerExtraActions = ({ songInfo }: PlayerExtraActionsProps) => {
   const { t } = useTranslation('translation', { keyPrefix: 'player' });
 
   const { width, height } = useWindowDimensions();
@@ -109,6 +115,10 @@ const PlayerExtraActions = () => {
     }
   };
 
+  const { likeState, toggleLike, toggleDislike } = useLikeState(
+    songInfo.videoId
+  );
+
   if (!showPlayerActions) return null;
 
   return (
@@ -117,15 +127,17 @@ const PlayerExtraActions = () => {
         {showLikeAndDislikeButtons && (
           <>
             <IconButton
-              icon='thumb-up-outline'
+              icon={likeState === 'LIKE' ? 'thumb-up' : 'thumb-up-outline'}
               size={20}
-              onPress={toggleLikeSong}
+              onPress={toggleLike}
               accessibilityLabel={t('like')}
             />
             <IconButton
-              icon='thumb-down-outline'
+              icon={
+                likeState === 'DISLIKE' ? 'thumb-down' : 'thumb-down-outline'
+              }
               size={20}
-              onPress={toggleDislikeSong}
+              onPress={toggleDislike}
               accessibilityLabel={t('dislike')}
             />
           </>
