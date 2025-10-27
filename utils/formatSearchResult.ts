@@ -34,6 +34,15 @@ export const formatSearchResult = (
         )
           ? 'main'
           : 'category',
+        categories:
+          tab.tabRenderer.content.sectionListRenderer.header?.chipCloudRenderer.chips.map(
+            (chip) => ({
+              id:
+                chip.chipCloudChipRenderer.navigationEndpoint?.searchEndpoint
+                  .params || '',
+              label: chip.chipCloudChipRenderer.text?.runs[0].text || '',
+            })
+          ) || [],
         contents:
           tab.tabRenderer.content.sectionListRenderer.contents
             ?.map(

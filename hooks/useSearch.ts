@@ -6,17 +6,16 @@ import { formatSearchResult } from '@/utils';
 /**
  * Hook to fetch search results based on a query string.
  *
- * Also used for getting continuation results when pressing "Show more" in the
- * search results.
+ * For search results within a specific category, use `useCategorySearch`
+ * instead.
  */
-export const useSearch = (params: {
-  query?: string;
-  params?: string;
-  continuation?: string;
-}) =>
+export const useSearch = (params: { query?: string }) =>
   useQuery({
     queryKey: ['search', params],
-    queryFn: async () => await search(params.query ?? ''),
+    queryFn: async () =>
+      await search({
+        query: params.query || '',
+      }),
     enabled: !!params.query && params.query.trim().length > 0,
     staleTime: 1000 * 60 * 5, // 5 minutes, same as default gcTime
     select: formatSearchResult,

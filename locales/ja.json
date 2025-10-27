@@ -116,6 +116,7 @@
     "noResultsMessage": "他のものを検索してみてください。",
     "errorMessage": "検索中にエラーが発生しました。もう一度お試しください。",
     "unknownArtist": "不明なアーティスト",
-    "moreActions": "その他のアクション"
+    "moreActions": "その他のアクション",
+    "clear": "クリア"
   }
 }

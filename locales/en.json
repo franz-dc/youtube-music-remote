@@ -116,6 +116,7 @@
     "noResultsMessage": "Try searching for something else.",
     "errorMessage": "An error occurred while searching. Please try again.",
     "unknownArtist": "Unknown artist",
-    "moreActions": "More actions"
+    "moreActions": "More actions",
+    "clear": "Clear"
   }
 }

@@ -34,6 +34,10 @@ export type MusicShelfRendererObj = {
 export type FormattedSearchResult = {
   category: string; // YT Music, Library, etc.
   pageType: 'main' | 'category';
+  categories: {
+    id: string;
+    label: string;
+  }[];
   contents: (MusicCardShelfRendererObj | MusicShelfRendererObj)[];
 };
 

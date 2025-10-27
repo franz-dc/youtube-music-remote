@@ -1,22 +1,33 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
+import { FlashList } from '@shopify/flash-list';
 import { useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import {
+  Platform,
   ScrollView,
   StyleSheet,
   View,
   useWindowDimensions,
 } from 'react-native';
-import { List, useTheme } from 'react-native-paper';
-import { getTouchableRippleColors } from 'react-native-paper/src/components/TouchableRipple/utils';
+import { Chip, IconButton, List, useTheme } from 'react-native-paper';
+import Animated, {
+  Easing,
+  FadeIn,
+  FadeOut,
+  SlideInUp,
+  SlideOutUp,
+} from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import {
-  SceneRendererProps,
-  TabBar,
-  TabView,
-  TabViewProps,
-} from 'react-native-tab-view';
+import { SceneRendererProps, TabView } from 'react-native-tab-view';
 
 import {
   InfoView,
@@ -25,8 +36,9 @@ import {
   SearchResultItem,
   SearchResultMenu,
   SearchResultMenuMethods,
+  TabBar,
 } from '@/components';
-import { useQueue, useSearch } from '@/hooks';
+import { useCategorySearch, useQueue, useSearch } from '@/hooks';
 import { SearchResultSong } from '@/schemas';
 import { addSongToQueue, playNextTrack } from '@/services';
 import { pollQueue } from '@/utils';
@@ -35,6 +47,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 16,
+  },
+  categoriesWrapper: {
+    position: 'absolute',
+    bottom: -66, // -(34 chip height + 16 margin)
+    left: 0,
+    right: 0,
+  },
+  categoriesContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+    margin: 16,
+  },
+  categoryLine: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 1,
   },
 });
 
@@ -45,26 +76,6 @@ type Route = {
 
 type RenderSceneProps = SceneRendererProps & {
   route: Route;
-};
-
-const StyledTabBar: TabViewProps<Route>['renderTabBar'] = (props) => {
-  const theme = useTheme();
-
-  return (
-    <TabBar
-      {...props}
-      indicatorStyle={{ backgroundColor: theme.colors.primary }}
-      style={{
-        backgroundColor: theme.colors.background,
-        shadowColor: theme.colors.background,
-      }}
-      activeColor={theme.colors.primary}
-      inactiveColor={theme.colors.onSurface}
-      android_ripple={{
-        color: getTouchableRippleColors({ theme }).calculatedRippleColor,
-      }}
-    />
-  );
 };
 
 const NoResults = () => {
@@ -79,19 +90,96 @@ const NoResults = () => {
   );
 };
 
-const Search = () => {
+const CategorizedSearchResults = ({
+  q,
+  params,
+  hasCategories,
+  handleSelectSong,
+  setSelectedSong,
+  setShowCategoryLine,
+}: {
+  q: string;
+  params: string;
+  hasCategories: boolean;
+  handleSelectSong: (params: {
+    videoId: string;
+    action: 'play' | 'addToQueue' | 'playNext' | 'removeFromQueue';
+  }) => Promise<void>;
+  setSelectedSong: Dispatch<SetStateAction<SearchResultSong | null>>;
+  setShowCategoryLine: Dispatch<SetStateAction<boolean>>;
+}) => {
   const { bottom: bottomInset } = useSafeAreaInsets();
 
-  const { t } = useTranslation('translation');
+  const {
+    data: categorizedSearchResults,
+    isLoading: isLoadingCategorizedSearchResults,
+    // fetchNextPage,
+    // isFetchingNextPage,
+  } = useCategorySearch({
+    query: q,
+    params,
+  });
 
+  if (isLoadingCategorizedSearchResults) {
+    return <LoadingView />;
+  }
+
+  const categorizedContents =
+    categorizedSearchResults?.pages.flatMap((page) => page?.contents || []) ||
+    [];
+
+  if (categorizedContents.length === 0) {
+    return <NoResults />;
+  }
+
+  return (
+    <View style={{ flex: 1 }}>
+      {hasCategories && <View style={{ height: 66 }} />}
+      <FlashList
+        data={categorizedContents}
+        renderItem={({ item, index }) => (
+          <SearchResultItem
+            key={`${item.videoId}-${index}`}
+            onSelect={handleSelectSong}
+            onMoreActionsOpen={setSelectedSong}
+            {...item}
+          />
+        )}
+        keyExtractor={(item, idx) => `${item.videoId}-${idx}`}
+        estimatedItemSize={64}
+        contentContainerStyle={{
+          paddingBottom: bottomInset,
+        }}
+        onScroll={(e) => {
+          setShowCategoryLine(e.nativeEvent.contentOffset.y > 0);
+        }}
+        scrollEventThrottle={16}
+      />
+    </View>
+  );
+};
+
+const Search = () => {
+  const { bottom: bottomInset } = useSafeAreaInsets();
+  const { t } = useTranslation('translation');
+  const theme = useTheme();
   const { refetch: refetchQueue } = useQueue();
+
+  const [showCategoryLine, setShowCategoryLine] = useState(false);
+  const [tabSelectedCategoryIds, setTabSelectedCategoryIds] = useState<
+    Record<number, string | undefined>
+  >({}); // key: tabIndex, value: categoryId
+
+  // tab
+  const layout = useWindowDimensions();
+  const [tabIndex, setTabIndex] = useState(0);
 
   const { q } = useLocalSearchParams<{ q: string }>();
   const {
     data: searchResults,
-    isLoading,
-    isError,
-    refetch,
+    isLoading: isLoadingSearchResults,
+    isError: isErrorSearchResults,
+    refetch: refetchSearchResults,
   } = useSearch({ query: q });
 
   const handleSelectSong = useCallback(
@@ -140,10 +228,6 @@ const Search = () => {
     }
   }, [selectedSong]);
 
-  // tab
-  const layout = useWindowDimensions();
-  const [index, setIndex] = useState(0);
-
   const routes: Route[] = useMemo(
     () =>
       (searchResults || []).map((result, index) => ({
@@ -155,70 +239,94 @@ const Search = () => {
 
   const renderScene = useCallback(
     ({ route }: RenderSceneProps) => {
-      const contents = (searchResults || [])[parseInt(route.key)].contents;
+      const localTabIndex = parseInt(route.key);
+      const tab = (searchResults || [])[localTabIndex];
+      const contents = tab?.contents || [];
+      const hasCategories = tab?.categories.length > 0;
+      const selectedCategoryId = tabSelectedCategoryIds[localTabIndex];
 
       if (contents.length === 0) {
         return <NoResults />;
       }
 
+      if (!selectedCategoryId) {
+        return (
+          <ScrollView
+            style={[
+              styles.container,
+              Platform.OS === 'web' && {
+                marginTop: hasCategories ? 66 : 0,
+                paddingTop: 0,
+              },
+            ]}
+            contentContainerStyle={{ paddingBottom: bottomInset }}
+            onScroll={(e) => {
+              setShowCategoryLine(e.nativeEvent.contentOffset.y > 0);
+            }}
+            scrollEventThrottle={16}
+          >
+            {hasCategories && Platform.OS !== 'web' && (
+              <View style={{ height: 50 }} />
+            )}
+            {contents.map((shelf) => (
+              <View key={shelf.type}>
+                {shelf.type === 'musicCardShelfRenderer' && (
+                  <MusicCardShelf
+                    {...shelf}
+                    onSelect={handleSelectSong}
+                    onMoreActionsOpen={setSelectedSong}
+                  />
+                )}
+                {shelf.type === 'musicShelfRenderer' && (
+                  <List.Section
+                    style={{
+                      marginTop: 0,
+                      marginBottom: 16,
+                    }}
+                  >
+                    {shelf.contents.map((item, idx) => (
+                      <SearchResultItem
+                        // Ideally, the key should be just item.videoId,
+                        // but YouTube always returns duplicate videoIds
+                        key={`${item.videoId}-${idx}`}
+                        onSelect={handleSelectSong}
+                        onMoreActionsOpen={setSelectedSong}
+                        {...item}
+                      />
+                    ))}
+                  </List.Section>
+                )}
+              </View>
+            ))}
+          </ScrollView>
+        );
+      }
+
       return (
-        <ScrollView
-          style={styles.container}
-          contentContainerStyle={{ paddingBottom: bottomInset }}
-        >
-          {contents.map((shelf) => (
-            <View key={shelf.type}>
-              {/* <Text
-                style={{
-                  marginHorizontal: 16,
-                  fontSize: 20,
-                  fontWeight: 'bold',
-                }}
-              >
-                {shelf.header}
-              </Text> */}
-              {shelf.type === 'musicCardShelfRenderer' && (
-                <MusicCardShelf
-                  {...shelf}
-                  onSelect={handleSelectSong}
-                  onMoreActionsOpen={setSelectedSong}
-                />
-              )}
-              {shelf.type === 'musicShelfRenderer' && (
-                <List.Section
-                  style={{
-                    marginBottom: 16,
-                  }}
-                >
-                  {shelf.contents.map((item) => (
-                    <SearchResultItem
-                      key={item.videoId}
-                      onSelect={handleSelectSong}
-                      onMoreActionsOpen={setSelectedSong}
-                      {...item}
-                    />
-                  ))}
-                </List.Section>
-              )}
-            </View>
-          ))}
-        </ScrollView>
+        <CategorizedSearchResults
+          q={q}
+          params={selectedCategoryId}
+          hasCategories={hasCategories}
+          handleSelectSong={handleSelectSong}
+          setSelectedSong={setSelectedSong}
+          setShowCategoryLine={setShowCategoryLine}
+        />
       );
     },
-    [searchResults, bottomInset, handleSelectSong]
+    [searchResults, bottomInset, handleSelectSong, tabSelectedCategoryIds, q]
   );
 
-  if (isLoading) {
+  if (isLoadingSearchResults) {
     return <LoadingView />;
   }
 
-  if (isError) {
+  if (isErrorSearchResults) {
     return (
       <InfoView
         title={t('common.somethingWentWrong')}
         message={t('search.errorMessage')}
         icon='image-broken-variant'
-        onActionPress={refetch}
+        onActionPress={refetchSearchResults}
         actionLabel={t('common.retry')}
       />
     );
@@ -238,11 +346,112 @@ const Search = () => {
         return (
           <>
             <TabView
-              navigationState={{ index, routes }}
-              onIndexChange={setIndex}
+              navigationState={{ index: tabIndex, routes }}
+              onIndexChange={setTabIndex}
               initialLayout={{ width: layout.width }}
               renderScene={renderScene}
-              renderTabBar={StyledTabBar}
+              renderTabBar={(props) => {
+                const localTabIndex = props.navigationState.index;
+                const categories =
+                  searchResults[localTabIndex]?.categories || [];
+                const selectedCategoryId =
+                  tabSelectedCategoryIds[localTabIndex];
+                return (
+                  <View style={{ position: 'relative', zIndex: 1 }}>
+                    <TabBar {...props} />
+                    {categories.length > 0 && (
+                      <Animated.View
+                        style={[
+                          styles.categoriesWrapper,
+                          { backgroundColor: theme.colors.background },
+                        ]}
+                        entering={
+                          Platform.OS !== 'web'
+                            ? SlideInUp.duration(250).easing(
+                                Easing.bezierFn(0.75, 0.1, 0.25, 1)
+                              )
+                            : FadeIn.duration(100)
+                        }
+                        exiting={
+                          Platform.OS !== 'web'
+                            ? SlideOutUp.duration(500).easing(
+                                Easing.bezierFn(0.75, 0.1, 0.25, 1)
+                              )
+                            : FadeOut.duration(100)
+                        }
+                      >
+                        {showCategoryLine && (
+                          <Animated.View
+                            key='category-line'
+                            entering={FadeIn.duration(50)}
+                            exiting={FadeOut.duration(50)}
+                            style={[
+                              styles.categoryLine,
+                              {
+                                backgroundColor: theme.colors.inverseOnSurface,
+                              },
+                            ]}
+                          />
+                        )}
+                        <ScrollView
+                          horizontal
+                          showsHorizontalScrollIndicator={false}
+                        >
+                          <View style={styles.categoriesContainer}>
+                            {!!selectedCategoryId && (
+                              <IconButton
+                                icon='close'
+                                mode='contained-tonal'
+                                size={18} // arbitrary size to be in line with chips
+                                onPress={() => {
+                                  setShowCategoryLine(false);
+                                  setTabSelectedCategoryIds((prev) => ({
+                                    ...prev,
+                                    [localTabIndex]: undefined,
+                                  }));
+                                }}
+                                style={{
+                                  margin: 0,
+                                  backgroundColor:
+                                    theme.colors.inverseOnSurface,
+                                }}
+                                accessibilityLabel={t('search.clear')}
+                              />
+                            )}
+                            {categories.map((category) => (
+                              <Chip
+                                key={category.id}
+                                onPress={() => {
+                                  setShowCategoryLine(false);
+                                  setTabSelectedCategoryIds((prev) => ({
+                                    ...prev,
+                                    [localTabIndex]: category.id,
+                                  }));
+                                }}
+                                selected={selectedCategoryId === category.id}
+                                showSelectedCheck={false}
+                                style={{
+                                  backgroundColor:
+                                    selectedCategoryId === category.id
+                                      ? theme.colors.onSurface
+                                      : theme.colors.inverseOnSurface,
+                                }}
+                                selectedColor={
+                                  selectedCategoryId === category.id
+                                    ? theme.colors.surface
+                                    : theme.colors.onSurface
+                                }
+                              >
+                                {category.label}
+                              </Chip>
+                            ))}
+                          </View>
+                        </ScrollView>
+                      </Animated.View>
+                    )}
+                  </View>
+                );
+              }}
             />
             {selectedSong && (
               <SearchResultMenu

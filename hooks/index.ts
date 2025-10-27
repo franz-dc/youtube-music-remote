@@ -1,4 +1,5 @@
 export * from './useBottomSheetBackHandler';
+export * from './useCategorySearch';
 export * from './useDominantColor';
 export * from './useFullScreen';
 export * from './useGetLatestRelease';
@@ -9,7 +10,6 @@ export * from './usePrevious';
 export * from './useQueue';
 export * from './useRepeat';
 export * from './useSearch';
-export * from './useSearchContinuation';
 export * from './useShuffle';
 export * from './useStartupUpdateChecker';
 export * from './useVolume';

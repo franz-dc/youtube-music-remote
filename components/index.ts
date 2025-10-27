@@ -33,6 +33,8 @@ export { default as Slider } from './Slider';
 
 export { default as Switch } from './Switch';
 
+export { default as TabBar } from './TabBar';
+
 export { default as QueueListItem } from './QueueListItem';
 export * from './QueueListItem';
 
