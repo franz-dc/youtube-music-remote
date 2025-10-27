@@ -5,11 +5,10 @@ import { Platform, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { IconButton } from 'react-native-paper';
 
 import { useSettingAtom } from '@/configs';
-import { SAFE_LOW_VOLUME } from '@/constants';
 import { useIsFullScreen, useSetFullScreen } from '@/hooks';
 import { useLike } from '@/hooks/useLike';
+import { useVolume } from '@/hooks/useVolume';
 import { SongInfoSchema } from '@/schemas';
-import { updateVolume } from '@/services';
 
 import Slider from '../Slider';
 
@@ -72,13 +71,7 @@ const PlayerExtraActions = ({ songInfo }: PlayerExtraActionsProps) => {
     }
   };
 
-  // Volume state (local only)
-  // Fetching for volume does not exist so it will be initialized as max volume
-  // All server side volume changes will not be awaited and will be optimistic
-  const [volume, setVolume] = useState(1);
-
-  // Local mute state to revert back to the previous volume
-  const [isMuted, setIsMuted] = useState(false);
+  const { volume, setVolume, isMuted, toggleMute } = useVolume();
 
   const volumeIcon =
     isMuted || volume === 0
@@ -88,32 +81,6 @@ const PlayerExtraActions = ({ songInfo }: PlayerExtraActionsProps) => {
         : volume > 1 / 3
           ? 'volume-medium'
           : 'volume-low';
-
-  const setVolumeState = (newVolume: number) => {
-    if (newVolume === 0) {
-      setIsMuted(true);
-    }
-    if (newVolume > 0 && isMuted) {
-      setIsMuted(false);
-    }
-    setVolume(newVolume);
-    updateVolume(newVolume * 100);
-  };
-
-  const toggleMute = () => {
-    const newIsMuted = !isMuted;
-
-    // If the volume is 0 and the user tries to unmute,
-    // set the volume to a safe value
-    if (!newIsMuted && volume === 0) {
-      setVolume(SAFE_LOW_VOLUME);
-      setIsMuted(newIsMuted);
-      updateVolume(SAFE_LOW_VOLUME * 100);
-    } else {
-      setIsMuted(newIsMuted);
-      updateVolume(newIsMuted ? 0 : volume * 100);
-    }
-  };
 
   const { likeState, toggleLike, toggleDislike } = useLike(songInfo.videoId);
 
@@ -160,7 +127,7 @@ const PlayerExtraActions = ({ songInfo }: PlayerExtraActionsProps) => {
               ]}
               step={0.01}
               value={isMuted ? 0 : volume}
-              onValueChange={(value) => setVolumeState(value)}
+              onValueChange={(value) => setVolume(value)}
               accessibilityLabel={t('adjustVolume')}
             />
           </View>
