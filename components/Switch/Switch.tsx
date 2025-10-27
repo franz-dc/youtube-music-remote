@@ -52,7 +52,12 @@ const Switch = ({
   const handleWidth = useSharedValue(selected ? 24 : 16);
   const [active, setActive] = useState(selected);
   const [isPressed, setIsPressed] = useState(false);
-  //#region
+
+  const callbackFunction = () => {
+    onPress();
+    setIsPressed(false);
+  };
+
   const pan = Gesture.Pan()
     .activateAfterLongPress(100)
     .onTouchesUp(() => setIsPressed(false))
@@ -100,7 +105,7 @@ const Switch = ({
         return;
       }
     });
-  //#endregion
+
   const handleStyle = useAnimatedStyle(() =>
     disabled
       ? {
@@ -136,6 +141,7 @@ const Switch = ({
           alignItems: 'center',
         }
   );
+
   const trackStyle = useAnimatedStyle(() =>
     disabled
       ? {
@@ -170,6 +176,7 @@ const Switch = ({
           width: 52,
         }
   );
+
   const handleOutlineStyle = useAnimatedStyle(() => ({
     height: 40,
     width: 40,
@@ -187,10 +194,7 @@ const Switch = ({
     opacity: 0.18,
     justifyContent: 'center',
   }));
-  const callbackFunction = () => {
-    onSwitchPress();
-    setIsPressed(false);
-  };
+
   const iconOnStyle = useAnimatedStyle(() => ({
     opacity: disabled
       ? 0.38
@@ -210,6 +214,7 @@ const Switch = ({
       },
     ],
   }));
+
   const iconOffStyle = useAnimatedStyle(() => ({
     position: 'absolute',
     opacity: disabled
@@ -231,6 +236,7 @@ const Switch = ({
     ],
     // width: interpolate(position.value, [5, 10], [0, 16]),
   }));
+
   const changeSwitch = (withCallback: boolean) => {
     if (active) {
       handleHeight.value = withTiming(16, { duration: 100 });
@@ -266,10 +272,6 @@ const Switch = ({
       );
       setActive(true);
     }
-  };
-
-  const onSwitchPress = () => {
-    onPress?.();
   };
 
   useEffect(() => {
