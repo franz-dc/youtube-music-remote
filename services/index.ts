@@ -39,6 +39,13 @@ export const getRepeatMode = async () => {
 export const switchRepeat = async () =>
   await api.post('/switch-repeat', { iteration: 1 });
 
+export const getVolume = async () => {
+  const { data } = await api.get<{ state: number; isMuted: boolean }>(
+    '/volume'
+  );
+  return data;
+};
+
 export const updateVolume = async (volume: number) =>
   await api.post('/volume', { volume: Math.floor(volume) });
 
