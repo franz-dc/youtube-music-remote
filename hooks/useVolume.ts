@@ -1,12 +1,11 @@
 import { useState } from 'react';
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { SAFE_LOW_VOLUME } from '@/constants';
 import { getVolume, toggleMute, updateVolume } from '@/services';
 
-const VOLUME_QUERY_KEY = ['volume'];
-const MUTE_QUERY_KEY = ['isMuted'];
+const QUERY_KEY = ['volume'];
 
 /**
  * Hook to manipulate the volume and mute state.
@@ -19,11 +18,11 @@ const MUTE_QUERY_KEY = ['isMuted'];
 export const useVolume = () => {
   const queryClient = useQueryClient();
 
-  const [localVolume, setLocalVolume] = useState(1);
+  const [localVolume, setLocalVolume] = useState(1); // (0-1)
   const [isLocalMuted, setIsLocalMuted] = useState(false);
 
   const { data } = useQuery({
-    queryKey: VOLUME_QUERY_KEY,
+    queryKey: QUERY_KEY,
     queryFn: async () => {
       const data = await getVolume();
       setLocalVolume(data.state / 100);
@@ -36,20 +35,18 @@ export const useVolume = () => {
     },
   });
 
-  const mutateVolume = (volume: number) => {
+  const mutateVolume = async (volume: number) => {
     try {
       setLocalVolume(volume / 100);
-      updateVolume(volume);
-      queryClient.setQueryData(VOLUME_QUERY_KEY, volume);
-      queryClient.setQueryData(MUTE_QUERY_KEY, false);
+      await updateVolume(volume);
+      queryClient.setQueryData(QUERY_KEY, { state: volume, isMuted: false });
     } catch {
       setLocalVolume(data?.state ? data.state / 100 : 1);
     }
   };
 
-  const { mutateAsync: mutateMute } = useMutation({
-    mutationKey: MUTE_QUERY_KEY,
-    mutationFn: async () => {
+  const mutateMute = async () => {
+    try {
       const newIsLocalMuted = !isLocalMuted;
 
       // If the volume is 0 and the user tries to unmute,
@@ -63,12 +60,16 @@ export const useVolume = () => {
       }
 
       await toggleMute();
-    },
-    onError: async () => {
+
+      queryClient.setQueryData(QUERY_KEY, {
+        state: data?.state ?? 100,
+        isMuted: newIsLocalMuted,
+      });
+    } catch {
       setLocalVolume(data?.state ? data.state / 100 : 1);
       setIsLocalMuted(data?.isMuted ?? false);
-    },
-  });
+    }
+  };
 
   return {
     volume: localVolume,
