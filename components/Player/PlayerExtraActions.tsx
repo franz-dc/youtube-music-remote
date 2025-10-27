@@ -5,9 +5,7 @@ import { Platform, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { IconButton } from 'react-native-paper';
 
 import { useSettingAtom } from '@/configs';
-import { useIsFullScreen, useSetFullScreen } from '@/hooks';
-import { useLike } from '@/hooks/useLike';
-import { useVolume } from '@/hooks/useVolume';
+import { useIsFullScreen, useLike, useSetFullScreen, useVolume } from '@/hooks';
 import { SongInfoSchema } from '@/schemas';
 
 import Slider from '../Slider';
