@@ -52,7 +52,6 @@ export const useVolume = () => {
       // If the volume is 0 and the user tries to unmute,
       // set the volume to a safe value
       if (!newIsLocalMuted && localVolume === 0) {
-        setLocalVolume(SAFE_LOW_VOLUME);
         setIsLocalMuted(newIsLocalMuted);
         mutateVolume(SAFE_LOW_VOLUME * 100);
       } else {
@@ -61,10 +60,7 @@ export const useVolume = () => {
 
       await toggleMute();
 
-      queryClient.setQueryData(QUERY_KEY, {
-        state: data?.state ?? 100,
-        isMuted: newIsLocalMuted,
-      });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEY });
     } catch {
       setLocalVolume(data?.state ? data.state / 100 : 1);
       setIsLocalMuted(data?.isMuted ?? false);
