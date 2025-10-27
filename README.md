@@ -64,4 +64,4 @@ yarn android # or yarn web
 There are some limitations to the app mostly due to the limitations of the API server:
 
 - Authorization strategy must be set to `No authorization` in the plugin configuration (for now).
-- Only songs are shown in the search results (for now).
+- Only songs are shown in the search results.
