@@ -191,7 +191,12 @@ const StackWithConfig = () => {
         <UpdateRedirect isInitialized={isInitialized} />
       )}
       <View
-        style={{ flex: 1, backgroundColor: activeTheme.colors!.background }}
+        style={{
+          flex: 1,
+          backgroundColor: activeTheme.colors!.background,
+          // @ts-ignore: color-scheme for web scrollbars
+          colorScheme: activeTheme.dark ? 'dark' : 'light',
+        }}
       >
         <Stack
           screenOptions={{
