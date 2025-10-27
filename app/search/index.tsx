@@ -18,7 +18,13 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import { Chip, IconButton, List, useTheme } from 'react-native-paper';
+import {
+  ActivityIndicator,
+  Chip,
+  IconButton,
+  List,
+  useTheme,
+} from 'react-native-paper';
 import Animated, {
   Easing,
   FadeIn,
@@ -113,8 +119,8 @@ const CategorizedSearchResults = ({
   const {
     data: categorizedSearchResults,
     isLoading: isLoadingCategorizedSearchResults,
-    // fetchNextPage,
-    // isFetchingNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
   } = useCategorySearch({
     query: q,
     params,
@@ -154,6 +160,17 @@ const CategorizedSearchResults = ({
           setShowCategoryLine(e.nativeEvent.contentOffset.y > 0);
         }}
         scrollEventThrottle={16}
+        onEndReached={fetchNextPage}
+        onEndReachedThreshold={1}
+        ListFooterComponent={
+          isFetchingNextPage ? (
+            <ActivityIndicator
+              animating
+              size='large'
+              style={{ marginVertical: 16 }}
+            />
+          ) : null
+        }
       />
     </View>
   );
@@ -286,7 +303,7 @@ const Search = () => {
                   >
                     {shelf.contents.map((item, idx) => (
                       <SearchResultItem
-                        // Ideally, the key should be just item.videoId,
+                        // Ideally, the key should just be item.videoId,
                         // but YouTube always returns duplicate videoIds
                         key={`${item.videoId}-${idx}`}
                         onSelect={handleSelectSong}
