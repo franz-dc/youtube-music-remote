@@ -20,8 +20,7 @@ import SearchResultItem from '../SearchResultItem';
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 16,
-    marginTop: 8,
-    marginBottom: 20, // 16 + 4 SearchResultItem allowance
+    marginBottom: 8,
   },
   mainCardPressable: {
     borderTopLeftRadius: 8,

@@ -99,8 +99,12 @@ export const removeSongFromQueue = async (index: number) =>
   await api.delete(`/queue/${index}`);
 
 // Search
-export const search = async (query: string) => {
-  const { data } = await api.post<SearchResultSchema>('/search', { query });
+export const search = async (searchParams: {
+  query: string;
+  params?: string;
+  continuation?: string;
+}) => {
+  const { data } = await api.post<SearchResultSchema>('/search', searchParams);
   return data;
 };
 
