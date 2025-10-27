@@ -18,6 +18,7 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
+import { ScrollView as GHScrollView } from 'react-native-gesture-handler';
 import {
   ActivityIndicator,
   Chip,
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
   },
   categoriesContainer: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexWrap: 'nowrap',
     gap: 12,
     margin: 16,
   },
@@ -410,7 +411,7 @@ const Search = () => {
                             ]}
                           />
                         )}
-                        <ScrollView
+                        <GHScrollView
                           horizontal
                           showsHorizontalScrollIndicator={false}
                         >
@@ -431,7 +432,11 @@ const Search = () => {
                                   margin: 0,
                                   backgroundColor:
                                     theme.colors.inverseOnSurface,
+                                  height: '100%',
+                                  width: 'auto',
+                                  borderRadius: 8,
                                 }}
+                                contentStyle={{ paddingHorizontal: 12 }}
                                 accessibilityLabel={t('search.clear')}
                               />
                             )}
@@ -463,7 +468,7 @@ const Search = () => {
                               </Chip>
                             ))}
                           </View>
-                        </ScrollView>
+                        </GHScrollView>
                       </Animated.View>
                     )}
                   </View>
