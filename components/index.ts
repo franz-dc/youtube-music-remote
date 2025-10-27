@@ -31,6 +31,8 @@ export { default as SettingsSubheader } from './SettingsSubheader';
 
 export { default as Slider } from './Slider';
 
+export { default as Switch } from './Switch';
+
 export { default as QueueListItem } from './QueueListItem';
 export * from './QueueListItem';
 

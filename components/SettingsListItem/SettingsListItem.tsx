@@ -1,10 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { StyleSheet } from 'react-native';
-import { List, ListItemProps, Switch } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { List, ListItemProps } from 'react-native-paper';
 
 import { useSettingAtom } from '@/configs';
 import { LIST_ITEM_PRESS_DELAY_MS } from '@/constants';
 import { SettingsSchema } from '@/schemas';
+
+import Switch from '../Switch';
 
 const styles = StyleSheet.create({
   listItem: {
@@ -51,7 +53,12 @@ const SettingsListItem = ({
       }
       right={() =>
         type === 'switch' ? (
-          <Switch value={value as boolean} onValueChange={setValue} />
+          <View>
+            <Switch
+              selected={value as boolean}
+              onPress={() => setValue((prev) => !prev)}
+            />
+          </View>
         ) : undefined
       }
       onPress={() =>
