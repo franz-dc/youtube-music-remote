@@ -80,11 +80,11 @@ const RepeatButton = () => {
 
   return (
     <IconButton
-      icon={repeatMap[repeatMode || 'NONE'].icon}
+      icon={repeatMap[repeatMode || RepeatMode.NONE].icon}
       size={28}
       onPress={switchRepeat}
-      accessibilityLabel={t(repeatMap[repeatMode || 'NONE'].label)}
-      style={{ opacity: repeatMode === 'NONE' ? 0.5 : 1 }}
+      accessibilityLabel={t(repeatMap[repeatMode || RepeatMode.NONE].label)}
+      style={{ opacity: repeatMode === RepeatMode.NONE ? 0.5 : 1 }}
     />
   );
 };

@@ -12,6 +12,7 @@ import {
   useSetFullScreen,
   useVolume,
 } from '@/hooks';
+import { LikeState } from '@/schemas';
 import { toggleMute } from '@/services';
 
 import Slider from '../Slider';
@@ -46,13 +47,15 @@ const LikeButtons = () => {
   return (
     <>
       <IconButton
-        icon={likeState === 'LIKE' ? 'thumb-up' : 'thumb-up-outline'}
+        icon={likeState === LikeState.LIKE ? 'thumb-up' : 'thumb-up-outline'}
         size={20}
         onPress={toggleLike}
         accessibilityLabel={t('like')}
       />
       <IconButton
-        icon={likeState === 'DISLIKE' ? 'thumb-down' : 'thumb-down-outline'}
+        icon={
+          likeState === LikeState.DISLIKE ? 'thumb-down' : 'thumb-down-outline'
+        }
         size={20}
         onPress={toggleDislike}
         accessibilityLabel={t('dislike')}

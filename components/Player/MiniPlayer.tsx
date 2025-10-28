@@ -80,7 +80,7 @@ const MiniPlayer = ({ songInfo }: MiniPlayerProps) => {
 
   const theme = useTheme();
 
-  const { elapsedSeconds } = useNowPlayingElapsedSeconds();
+  const { seekBarValue } = useNowPlayingElapsedSeconds();
 
   const [showAlbumArtColor] = useSettingAtom('showAlbumArtColor');
 
@@ -101,7 +101,7 @@ const MiniPlayer = ({ songInfo }: MiniPlayerProps) => {
             styles.progressBarMinimumTrack,
             {
               backgroundColor: theme.colors.onSurface,
-              width: `${(elapsedSeconds / songInfo.songDuration || 0) * 100}%`,
+              width: `${seekBarValue * 100}%`,
             },
           ]}
         />

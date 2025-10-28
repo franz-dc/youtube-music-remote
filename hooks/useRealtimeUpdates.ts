@@ -5,7 +5,7 @@ import useWebSocket, { ReadyState } from 'react-use-websocket-lite';
 
 import {
   API_VERSION,
-  isWebsocketConnectingAtom as isWebsocketConnectingAtom,
+  isWebsocketConnectingAtom,
   isWebsocketErrorAtom,
   queryClient,
   seekBarValueAtom,
