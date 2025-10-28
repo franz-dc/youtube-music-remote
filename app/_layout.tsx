@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import * as FileSystem from 'expo-file-system';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import * as NavigationBar from 'expo-navigation-bar';
@@ -21,9 +21,9 @@ import 'intl-pluralrules';
 import '@/i18n';
 
 import { UpdateRedirect } from '@/components';
-import { store, useSettingAtom } from '@/configs';
+import { queryClient, store, useSettingAtom } from '@/configs';
 import { APP_FILE_EXTENSION, SETTINGS_OPTIONS } from '@/constants';
-import { useStartupUpdateChecker } from '@/hooks';
+import { useRealtimeUpdates, useStartupUpdateChecker } from '@/hooks';
 
 const systemColorScheme = Appearance.getColorScheme() || 'dark';
 
@@ -36,8 +36,6 @@ setNotificationHandler({
     shouldSetBadge: false,
   }),
 });
-
-const queryClient = new QueryClient();
 
 const StackWithConfig = () => {
   const [isInitialized, setIsInitialized] = useState(false);
@@ -182,6 +180,8 @@ const StackWithConfig = () => {
     setStatusBarHidden(isLandscape);
     NavigationBar.setVisibilityAsync(isLandscape ? 'hidden' : 'visible');
   }, [isLandscape]);
+
+  useRealtimeUpdates(isInitialized);
 
   if (!isInitialized) return null;
 

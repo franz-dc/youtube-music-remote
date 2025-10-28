@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -29,7 +29,6 @@ import {
   useDominantColor,
   useNowPlaying,
 } from '@/hooks';
-import { pause, togglePlayPause } from '@/services';
 
 import InfoView from '../InfoView';
 
@@ -128,8 +127,6 @@ const Player = () => {
   const isLandscape = width > height;
   const isAlbumArtAndDetailsSideBySide = isLandscape && height < 600;
 
-  const [isPlayingOptimistic, setIsPlayingOptimistic] = useState(false);
-
   // Arbitrarily calculate image width due to image requiring dimensions.
   // Not that elegant but it works. Refactor if necessary.
   const maxAlbumArtWidthLandscape = (width - 48) * 0.4;
@@ -151,25 +148,6 @@ const Player = () => {
     albumArtWidthLandscapeRaw - 52 - PLAYER_PADDING,
     height / 2
   );
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsPlayingOptimistic(songInfo ? !songInfo.isPaused : false);
-  }, [songInfo]);
-
-  const handlePlayPause = async () => {
-    setIsPlayingOptimistic((prev) => !prev);
-    try {
-      await togglePlayPause();
-    } catch {
-      setIsPlayingOptimistic((prev) => !prev);
-    }
-  };
-
-  const handlePause = async () => {
-    setIsPlayingOptimistic(false);
-    await pause();
-  };
 
   const { color: dominantColor, isBright: isDominantColorBright } =
     useDominantColor(songInfo?.imageSrc);
@@ -292,11 +270,7 @@ const Player = () => {
                       <Text>{t('nothingIsPlaying')}</Text>
                     </View>
                   ) : (
-                    <MiniPlayer
-                      songInfo={songInfo}
-                      isPlaying={isPlayingOptimistic}
-                      onPlayPause={handlePlayPause}
-                    />
+                    <MiniPlayer songInfo={songInfo} />
                   )}
                 </Pressable>
               </Animated.View>
@@ -378,11 +352,8 @@ const Player = () => {
                       <SongDetails {...songInfo} />
                     )}
                     <PlayerSeekBar songInfo={songInfo} />
-                    <PlayerControls
-                      isPlaying={isPlayingOptimistic}
-                      onPlayPause={handlePlayPause}
-                    />
-                    <PlayerExtraActions songInfo={songInfo} />
+                    <PlayerControls />
+                    <PlayerExtraActions />
                   </Animated.View>
                 </>
               )}
@@ -396,7 +367,6 @@ const Player = () => {
             ref={playerMenuRef}
             songInfo={songInfo}
             onSleepTimerMenuOpen={handleSleepTimerMenuOpen}
-            onPause={handlePause}
           />
           <SleepTimerMenu ref={sleepTimerMenuRef} />
         </>

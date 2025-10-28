@@ -2,13 +2,15 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { IconButton } from 'react-native-paper';
 
-import { useRepeat, useShuffle } from '@/hooks';
-import { playNextTrack, playPreviousTrack } from '@/services';
-
-export type PlayerControlsProps = {
-  isPlaying: boolean;
-  onPlayPause: () => void;
-};
+import { usePlay, useRepeat, useShuffle } from '@/hooks';
+import { RepeatMode } from '@/schemas';
+import {
+  playNextTrack,
+  playPreviousTrack,
+  switchRepeat,
+  togglePlayPause,
+  toggleShuffle,
+} from '@/services';
 
 const styles = StyleSheet.create({
   playerControlsContainer: {
@@ -23,34 +25,76 @@ const styles = StyleSheet.create({
   },
 });
 
-const repeatIconMap = {
-  NONE: 'repeat',
-  ALL: 'repeat',
-  ONE: 'repeat-once',
+const repeatMap = {
+  [RepeatMode.NONE]: {
+    icon: 'repeat',
+    label: 'repeatOff',
+  },
+  [RepeatMode.ALL]: {
+    icon: 'repeat',
+    label: 'repeatAll',
+  },
+  [RepeatMode.ONE]: {
+    icon: 'repeat-once',
+    label: 'repeatOne',
+  },
 };
 
-const repeatLabelMap = {
-  NONE: 'repeatOff',
-  ALL: 'repeatAll',
-  ONE: 'repeatOne',
-};
-
-const PlayerControls = ({ isPlaying, onPlayPause }: PlayerControlsProps) => {
+const ShuffleButton = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'player' });
 
-  const { repeatMode, switchRepeat } = useRepeat();
+  const { isShuffle } = useShuffle();
 
-  const { isShuffle, toggleShuffle } = useShuffle();
+  return (
+    <IconButton
+      icon='shuffle'
+      size={28}
+      onPress={toggleShuffle}
+      accessibilityLabel={t('toggleShuffle')}
+      style={{ opacity: isShuffle ? 1 : 0.5 }}
+    />
+  );
+};
+
+const PlayButton = () => {
+  const { t } = useTranslation('translation', { keyPrefix: 'player' });
+
+  const { isPlaying } = usePlay();
+
+  return (
+    <IconButton
+      icon={isPlaying ? 'pause-circle' : 'play-circle'}
+      size={80}
+      animated
+      onPress={togglePlayPause}
+      accessibilityLabel={t(isPlaying ? 'pause' : 'play')}
+      style={styles.innerIcon}
+    />
+  );
+};
+
+const RepeatButton = () => {
+  const { t } = useTranslation('translation', { keyPrefix: 'player' });
+
+  const { repeatMode } = useRepeat();
+
+  return (
+    <IconButton
+      icon={repeatMap[repeatMode || RepeatMode.NONE].icon}
+      size={28}
+      onPress={switchRepeat}
+      accessibilityLabel={t(repeatMap[repeatMode || RepeatMode.NONE].label)}
+      style={{ opacity: repeatMode === RepeatMode.NONE ? 0.5 : 1 }}
+    />
+  );
+};
+
+const PlayerControls = () => {
+  const { t } = useTranslation('translation', { keyPrefix: 'player' });
 
   return (
     <View style={styles.playerControlsContainer}>
-      <IconButton
-        icon='shuffle'
-        size={28}
-        onPress={toggleShuffle}
-        accessibilityLabel={t('toggleShuffle')}
-        style={{ opacity: isShuffle ? 1 : 0.5 }}
-      />
+      <ShuffleButton />
       <IconButton
         icon='skip-previous'
         size={40}
@@ -58,14 +102,7 @@ const PlayerControls = ({ isPlaying, onPlayPause }: PlayerControlsProps) => {
         accessibilityLabel={t('playPrevious')}
         style={styles.innerIcon}
       />
-      <IconButton
-        icon={isPlaying ? 'pause-circle' : 'play-circle'}
-        size={80}
-        animated
-        onPress={onPlayPause}
-        accessibilityLabel={t(isPlaying ? 'pause' : 'play')}
-        style={styles.innerIcon}
-      />
+      <PlayButton />
       <IconButton
         icon='skip-next'
         size={40}
@@ -73,13 +110,7 @@ const PlayerControls = ({ isPlaying, onPlayPause }: PlayerControlsProps) => {
         accessibilityLabel={t('playNext')}
         style={styles.innerIcon}
       />
-      <IconButton
-        icon={repeatIconMap[repeatMode || 'NONE']}
-        size={28}
-        onPress={() => switchRepeat()}
-        accessibilityLabel={t(repeatLabelMap[repeatMode || 'NONE'])}
-        style={{ opacity: repeatMode === 'NONE' ? 0.5 : 1 }}
-      />
+      <RepeatButton />
     </View>
   );
 };

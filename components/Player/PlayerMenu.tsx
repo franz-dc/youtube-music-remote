@@ -20,7 +20,6 @@ import SleepTimer from './SleepTimer';
 
 export type PlayerMenuProps = {
   songInfo: NonNullable<SongInfoSchema>;
-  onPause: () => Promise<void>;
   onSleepTimerMenuOpen: () => void;
 };
 
@@ -45,7 +44,7 @@ const styles = StyleSheet.create({
 });
 
 const PlayerMenu = forwardRef<PlayerMenuMethods, PlayerMenuProps>(
-  ({ songInfo, onPause, onSleepTimerMenuOpen }, ref) => {
+  ({ songInfo, onSleepTimerMenuOpen }, ref) => {
     const { t } = useTranslation('translation', { keyPrefix: 'player' });
 
     const { bottom: bottomInset } = useSafeAreaInsets();
@@ -163,7 +162,6 @@ const PlayerMenu = forwardRef<PlayerMenuMethods, PlayerMenuProps>(
               style={styles.listItem}
             />
             <SleepTimer
-              onPause={onPause}
               onPlayerMenuDismiss={handleDismissModalPress}
               onSleepTimerMenuOpen={onSleepTimerMenuOpen}
             />

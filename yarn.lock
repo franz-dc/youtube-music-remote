@@ -12995,6 +12995,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-use-websocket-lite@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "react-use-websocket-lite@npm:1.0.1"
+  peerDependencies:
+    react: ^18.0.0 || ^19.0.0
+  checksum: 10c0/766329b4a87cdeab797679d1d9aafd62b0f4184f2ce86b4a8ba9f5393073244d9f9f460d5189523c700317695f768638861a47ccebb14cb7ef4d1e453f7e2c27
+  languageName: node
+  linkType: hard
+
 "react@npm:18.2.0":
   version: 18.2.0
   resolution: "react@npm:18.2.0"
@@ -16093,6 +16102,7 @@ __metadata:
     react-native-vector-icons: "npm:^10.2.0"
     react-native-web: "npm:~0.19.10"
     react-test-renderer: "npm:18.2.0"
+    react-use-websocket-lite: "npm:^1.0.1"
     semver: "npm:^7.6.3"
     typescript: "npm:~5.3.3"
   languageName: unknown

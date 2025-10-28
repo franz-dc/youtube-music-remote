@@ -4,17 +4,17 @@ import { DEFAULT_SETTINGS } from '@/constants';
 
 import { accessTokenAtom, settingAtomFamily, store } from './storage';
 
-const API_VERSION = 'v1';
+export const API_VERSION = 'v1';
 
 // explicitly set the timeout to 5s due to React Native not failing requests
 axios.defaults.timeout = 5000;
 
-const getHost = () => {
+export const getHost = (protocol: 'http' | 'ws' = 'http') => {
   const ipAddress =
     (store.get(settingAtomFamily('ipAddress')) as string) || '0.0.0.0';
   const port =
     (store.get(settingAtomFamily('port')) as string) || DEFAULT_SETTINGS.port;
-  return `http://${ipAddress}:${port}`;
+  return `${protocol}://${ipAddress}:${port}`;
 };
 
 const authenticate = async () => {

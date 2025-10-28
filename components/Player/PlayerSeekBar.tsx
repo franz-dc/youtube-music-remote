@@ -1,6 +1,5 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 
 import { useNowPlayingElapsedSeconds } from '@/hooks';
@@ -28,14 +27,19 @@ const styles = StyleSheet.create({
 const PlayerSeekBar = ({ songInfo }: PlayerSeekBarProps) => {
   const { t } = useTranslation('translation', { keyPrefix: 'player' });
 
-  const { data: elapsedSeconds = 0 } = useNowPlayingElapsedSeconds();
-
-  const queryClient = useQueryClient();
+  const { elapsedSeconds, seekBarValue, setSeekBarValue } =
+    useNowPlayingElapsedSeconds();
 
   const seekSeconds = async (value: number) => {
     const seekValue = Math.round(value * songInfo.songDuration);
-    // optimistic update elapsedSeconds to avoid seek lag or jumps
-    queryClient.setQueryData(['nowPlayingElapsedSeconds'], seekValue);
+
+    // Web jitter reduction fix: Do not update if new value is just within
+    // threshold (1 second) from current server elapsed seconds
+    if (Platform.OS === 'web') {
+      if (Math.abs(elapsedSeconds - seekValue) <= 1) return;
+    }
+
+    setSeekBarValue(value);
     await seek(seekValue);
   };
 
@@ -43,9 +47,10 @@ const PlayerSeekBar = ({ songInfo }: PlayerSeekBarProps) => {
     <View>
       <Slider
         style={styles.seekBar}
-        value={elapsedSeconds / songInfo.songDuration || 0}
+        value={seekBarValue}
         step={0.001}
         onValueChange={seekSeconds}
+        hitSlop={10}
         accessibilityLabel={t('seek')}
       />
       <View style={styles.seekBarTime}>

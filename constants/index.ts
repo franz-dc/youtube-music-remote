@@ -108,7 +108,6 @@ export const OPTION_SETTINGS: Record<
 };
 
 // App
-export const SAFE_LOW_VOLUME = 0.1;
 export const MINI_PLAYER_HEIGHT = 64;
 export const MINI_PLAYER_ALBUM_ART_WIDTH = MINI_PLAYER_HEIGHT - 20; // 10 vertical padding
 export const MORE_ICON =
@@ -123,3 +122,4 @@ export const APP_FILE_EXTENSION = Platform.select({
 });
 export const LIST_ITEM_PRESS_DELAY_MS = 100;
 export const LONG_PRESS_DELAY_MS = 250;
+export const PLAYER_STATE_POLLING_INTERVAL_MS = 10000; // 10 seconds

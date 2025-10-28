@@ -6,10 +6,10 @@ import { StyleSheet } from 'react-native';
 import { List } from 'react-native-paper';
 
 import { sleepTimerActiveAtom, sleepTimerAtom } from '@/configs';
+import { pause } from '@/services';
 import { formatSecondsToDuration } from '@/utils';
 
 export type SleepTimerProps = {
-  onPause: () => Promise<void>;
   onPlayerMenuDismiss: () => void;
   onSleepTimerMenuOpen: () => void;
 };
@@ -21,7 +21,6 @@ const styles = StyleSheet.create({
 });
 
 const SleepTimer = ({
-  onPause,
   onPlayerMenuDismiss,
   onSleepTimerMenuOpen,
 }: SleepTimerProps) => {
@@ -58,9 +57,9 @@ const SleepTimer = ({
   useEffect(() => {
     if (isSleepTimerActive && timeRemaining === 0) {
       setIsSleepTimerActive(false);
-      onPause();
+      pause();
     }
-  }, [isSleepTimerActive, timeRemaining, setIsSleepTimerActive, onPause]);
+  }, [isSleepTimerActive, timeRemaining, setIsSleepTimerActive]);
 
   const onPress = () => {
     onPlayerMenuDismiss();

@@ -4,14 +4,12 @@ import { IconButton, Text, useTheme } from 'react-native-paper';
 
 import { useSettingAtom } from '@/configs';
 import { MINI_PLAYER_ALBUM_ART_WIDTH } from '@/constants';
-import { useNowPlayingElapsedSeconds } from '@/hooks';
+import { useNowPlayingElapsedSeconds, usePlay } from '@/hooks';
 import { SongInfoSchema } from '@/schemas';
-import { playNextTrack, playPreviousTrack } from '@/services';
+import { playNextTrack, playPreviousTrack, togglePlayPause } from '@/services';
 
 export type MiniPlayerProps = {
   songInfo: NonNullable<SongInfoSchema>;
-  isPlaying: boolean;
-  onPlayPause: () => Promise<void>;
 };
 
 const styles = StyleSheet.create({
@@ -61,12 +59,28 @@ const styles = StyleSheet.create({
   },
 });
 
-const MiniPlayer = ({ songInfo, isPlaying, onPlayPause }: MiniPlayerProps) => {
+const PlayButton = () => {
+  const { t } = useTranslation('translation', { keyPrefix: 'player' });
+
+  const { isPlaying } = usePlay();
+
+  return (
+    <IconButton
+      icon={isPlaying ? 'pause' : 'play'}
+      size={30}
+      onPress={togglePlayPause}
+      accessibilityLabel={t(isPlaying ? 'pause' : 'play')}
+      style={styles.innerIcon}
+    />
+  );
+};
+
+const MiniPlayer = ({ songInfo }: MiniPlayerProps) => {
   const { t } = useTranslation('translation', { keyPrefix: 'player' });
 
   const theme = useTheme();
 
-  const { data: elapsedSeconds = 0 } = useNowPlayingElapsedSeconds();
+  const { seekBarValue } = useNowPlayingElapsedSeconds();
 
   const [showAlbumArtColor] = useSettingAtom('showAlbumArtColor');
 
@@ -87,7 +101,7 @@ const MiniPlayer = ({ songInfo, isPlaying, onPlayPause }: MiniPlayerProps) => {
             styles.progressBarMinimumTrack,
             {
               backgroundColor: theme.colors.onSurface,
-              width: `${(elapsedSeconds / songInfo.songDuration || 0) * 100}%`,
+              width: `${seekBarValue * 100}%`,
             },
           ]}
         />
@@ -110,13 +124,7 @@ const MiniPlayer = ({ songInfo, isPlaying, onPlayPause }: MiniPlayerProps) => {
           onPress={playPreviousTrack}
           accessibilityLabel={t('playPrevious')}
         />
-        <IconButton
-          icon={isPlaying ? 'pause' : 'play'}
-          size={30}
-          onPress={onPlayPause}
-          accessibilityLabel={t(isPlaying ? 'pause' : 'play')}
-          style={styles.innerIcon}
-        />
+        <PlayButton />
         <IconButton
           icon='skip-next'
           size={30}

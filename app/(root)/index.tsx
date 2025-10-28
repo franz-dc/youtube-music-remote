@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { FlashList } from '@shopify/flash-list';
 import { router } from 'expo-router';
+import { useAtomValue } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -15,7 +16,11 @@ import {
   SearchResultMenu,
   SearchResultMenuMethods,
 } from '@/components';
-import { useSettingAtom } from '@/configs';
+import {
+  isWebsocketConnectingAtom,
+  isWebsocketErrorAtom,
+  useSettingAtom,
+} from '@/configs';
 import { MINI_PLAYER_HEIGHT } from '@/constants';
 import { useQueue } from '@/hooks';
 import { QueueSchema, SearchResultSong } from '@/schemas';
@@ -29,12 +34,16 @@ const Queue = () => {
 
   const {
     data: queue,
-    isLoading,
-    isError,
+    isLoading: isLoadingQueue,
     error,
-    refetch,
     isFetched,
   } = useQueue();
+
+  const isWebsocketLoading = useAtomValue(isWebsocketConnectingAtom);
+  const isWebsocketError = useAtomValue(isWebsocketErrorAtom);
+
+  const isLoading = isLoadingQueue || isWebsocketLoading;
+  const isError = isWebsocketError;
 
   const { bottom: bottomInset } = useSafeAreaInsets();
 
@@ -109,24 +118,12 @@ const Queue = () => {
     );
 
   if (error?.message === 'Network Error')
-    return (
-      <ConnectionError
-        type='noConnection'
-        onActionPress={refetch}
-        style={{ paddingBottom }}
-      />
-    );
+    return <ConnectionError type='noConnection' style={{ paddingBottom }} />;
 
   if (isLoading || !isFetched) return <LoadingView />;
 
   if (isError)
-    return (
-      <ConnectionError
-        type='serverError'
-        onActionPress={refetch}
-        style={{ paddingBottom }}
-      />
-    );
+    return <ConnectionError type='serverError' style={{ paddingBottom }} />;
 
   if (!queue || !queue.items?.length)
     return (
