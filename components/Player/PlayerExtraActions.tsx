@@ -71,9 +71,9 @@ const VolumeControl = () => {
   const volumeIcon =
     isMuted || volume === 0
       ? 'volume-mute'
-      : volume > 2 / 3
+      : volume > 66
         ? 'volume-high'
-        : volume > 1 / 3
+        : volume > 33
           ? 'volume-medium'
           : 'volume-low';
 
