@@ -1,3 +1,9 @@
+export enum RepeatMode {
+  NONE = 'NONE',
+  ALL = 'ALL',
+  ONE = 'ONE',
+}
+
 export type RepeatModeStateSchema = {
-  mode: 'NONE' | 'ALL' | 'ONE' | null;
+  mode: RepeatMode | null;
 };

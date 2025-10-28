@@ -6,3 +6,4 @@ export * from './queueSchema';
 export * from './releaseSchema';
 export * from './repeatModeStateSchema';
 export * from './searchResultSchema';
+export * from './websocketDataSchema';

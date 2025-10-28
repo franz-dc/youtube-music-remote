@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
@@ -28,14 +27,14 @@ const styles = StyleSheet.create({
 const PlayerSeekBar = ({ songInfo }: PlayerSeekBarProps) => {
   const { t } = useTranslation('translation', { keyPrefix: 'player' });
 
-  const { data: elapsedSeconds = 0 } = useNowPlayingElapsedSeconds();
-
-  const queryClient = useQueryClient();
+  const { elapsedSeconds, seekBarValue, setSeekBarValue } =
+    useNowPlayingElapsedSeconds();
 
   const seekSeconds = async (value: number) => {
     const seekValue = Math.round(value * songInfo.songDuration);
-    // optimistic update elapsedSeconds to avoid seek lag or jumps
-    queryClient.setQueryData(['nowPlayingElapsedSeconds'], seekValue);
+    // FIXME: jittery on web, but not on mobile
+    if (elapsedSeconds === seekValue) return;
+    setSeekBarValue(value);
     await seek(seekValue);
   };
 
@@ -43,7 +42,7 @@ const PlayerSeekBar = ({ songInfo }: PlayerSeekBarProps) => {
     <View>
       <Slider
         style={styles.seekBar}
-        value={elapsedSeconds / songInfo.songDuration || 0}
+        value={seekBarValue}
         step={0.001}
         onValueChange={seekSeconds}
         accessibilityLabel={t('seek')}

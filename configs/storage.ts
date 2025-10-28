@@ -57,3 +57,10 @@ export const accessTokenAtom = atomWithMMKV('accessToken', '');
 // sleep timer
 export const sleepTimerAtom = atom(0); // in seconds
 export const sleepTimerActiveAtom = atom(false);
+
+// elapsed seconds
+export const seekBarValueAtom = atom(0);
+
+// realtime updates
+export const isWebsocketConnectingAtom = atom(true);
+export const isWebsocketErrorAtom = atom(false);
