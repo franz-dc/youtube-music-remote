@@ -1,5 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { PLAYER_STATE_POLLING_INTERVAL_MS } from '@/constants';
 import { LikeState } from '@/schemas';
 import { getLikeState, toggleDislikeSong, toggleLikeSong } from '@/services';
 
@@ -12,6 +13,7 @@ export const useLike = (videoId?: string) => {
     queryFn: getLikeState,
     enabled: !!videoId,
     initialData: LikeState.INDIFFERENT,
+    refetchInterval: PLAYER_STATE_POLLING_INTERVAL_MS,
   });
 
   const toggleLike = async () => {
