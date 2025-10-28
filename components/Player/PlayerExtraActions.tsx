@@ -5,14 +5,16 @@ import { Platform, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { IconButton } from 'react-native-paper';
 
 import { useSettingAtom } from '@/configs';
-import { useIsFullScreen, useLike, useSetFullScreen, useVolume } from '@/hooks';
-import { SongInfoSchema } from '@/schemas';
+import {
+  useIsFullScreen,
+  useLike,
+  useNowPlaying,
+  useSetFullScreen,
+  useVolume,
+} from '@/hooks';
+import { toggleMute } from '@/services';
 
 import Slider from '../Slider';
-
-export type PlayerExtraActionsProps = {
-  songInfo: NonNullable<SongInfoSchema>;
-};
 
 const styles = StyleSheet.create({
   actionsContainer: {
@@ -36,20 +38,75 @@ const styles = StyleSheet.create({
   },
 });
 
-const PlayerExtraActions = ({ songInfo }: PlayerExtraActionsProps) => {
+const LikeButtons = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'player' });
+  const { data: songInfo } = useNowPlaying();
+  const { likeState, toggleLike, toggleDislike } = useLike(songInfo?.videoId);
 
-  const { width, height } = useWindowDimensions();
-  const isLandscape = width > height;
-
-  const [showLikeAndDislikeButtons] = useSettingAtom(
-    'showLikeAndDislikeButtons'
+  return (
+    <>
+      <IconButton
+        icon={likeState === 'LIKE' ? 'thumb-up' : 'thumb-up-outline'}
+        size={20}
+        onPress={toggleLike}
+        accessibilityLabel={t('like')}
+      />
+      <IconButton
+        icon={likeState === 'DISLIKE' ? 'thumb-down' : 'thumb-down-outline'}
+        size={20}
+        onPress={toggleDislike}
+        accessibilityLabel={t('dislike')}
+      />
+    </>
   );
-  const [showVolumeControl] = useSettingAtom('showVolumeControl');
-  const [showFullScreenButton] = useSettingAtom('showFullScreenButton');
+};
 
-  const showPlayerActions =
-    showLikeAndDislikeButtons || showVolumeControl || showFullScreenButton;
+const VolumeControl = () => {
+  const { t } = useTranslation('translation', { keyPrefix: 'player' });
+  const { width, height } = useWindowDimensions();
+  const [showFullScreenButton] = useSettingAtom('showFullScreenButton');
+  const { volume, isMuted, adjustVolume } = useVolume();
+
+  const isLandscape = width > height;
+  const volumeIcon =
+    isMuted || volume === 0
+      ? 'volume-mute'
+      : volume > 2 / 3
+        ? 'volume-high'
+        : volume > 1 / 3
+          ? 'volume-medium'
+          : 'volume-low';
+
+  return (
+    <View style={styles.volumeContainer}>
+      <IconButton
+        icon={volumeIcon}
+        size={20}
+        onPress={toggleMute}
+        accessibilityLabel={t(isMuted ? 'unmute' : 'mute')}
+      />
+      <Slider
+        style={[
+          styles.volumeSlider,
+          isLandscape && styles.volumeSliderLandscape,
+          !showFullScreenButton && {
+            marginRight: Platform.OS === 'web' ? 16 : 0,
+          },
+        ]}
+        step={1}
+        minimumValue={0}
+        maximumValue={100}
+        value={isMuted ? 0 : volume}
+        onValueChange={adjustVolume}
+        hitSlop={5}
+        accessibilityLabel={t('adjustVolume')}
+      />
+    </View>
+  );
+};
+
+const FullScreenButton = () => {
+  const { t } = useTranslation('translation', { keyPrefix: 'player' });
 
   // Fullscreen state (optimistic)
   const [isFullScreen, setIsFullscreen] = useState(false);
@@ -69,77 +126,38 @@ const PlayerExtraActions = ({ songInfo }: PlayerExtraActionsProps) => {
     }
   };
 
-  const { volume, setVolume, isMuted, toggleMute } = useVolume();
+  return (
+    <IconButton
+      icon={isFullScreen ? 'fullscreen-exit' : 'fullscreen'}
+      size={20}
+      onPress={toggleFullScreen}
+      accessibilityLabel={t(
+        isFullScreen ? 'exitFullscreen' : 'enterFullscreen'
+      )}
+    />
+  );
+};
 
-  const volumeIcon =
-    isMuted || volume === 0
-      ? 'volume-mute'
-      : volume > 2 / 3
-        ? 'volume-high'
-        : volume > 1 / 3
-          ? 'volume-medium'
-          : 'volume-low';
+const PlayerExtraActions = () => {
+  const [showLikeAndDislikeButtons] = useSettingAtom(
+    'showLikeAndDislikeButtons'
+  );
+  const [showVolumeControl] = useSettingAtom('showVolumeControl');
+  const [showFullScreenButton] = useSettingAtom('showFullScreenButton');
 
-  const { likeState, toggleLike, toggleDislike } = useLike(songInfo.videoId);
+  const showPlayerActions =
+    showLikeAndDislikeButtons || showVolumeControl || showFullScreenButton;
 
   if (!showPlayerActions) return null;
 
   return (
     <View style={styles.actionsContainer}>
       <View style={styles.stack}>
-        {showLikeAndDislikeButtons && (
-          <>
-            <IconButton
-              icon={likeState === 'LIKE' ? 'thumb-up' : 'thumb-up-outline'}
-              size={20}
-              onPress={toggleLike}
-              accessibilityLabel={t('like')}
-            />
-            <IconButton
-              icon={
-                likeState === 'DISLIKE' ? 'thumb-down' : 'thumb-down-outline'
-              }
-              size={20}
-              onPress={toggleDislike}
-              accessibilityLabel={t('dislike')}
-            />
-          </>
-        )}
+        {showLikeAndDislikeButtons && <LikeButtons />}
       </View>
       <View style={styles.stack}>
-        {showVolumeControl && (
-          <View style={styles.volumeContainer}>
-            <IconButton
-              icon={volumeIcon}
-              size={20}
-              onPress={toggleMute}
-              accessibilityLabel={t(isMuted ? 'unmute' : 'mute')}
-            />
-            <Slider
-              style={[
-                styles.volumeSlider,
-                isLandscape && styles.volumeSliderLandscape,
-                !showFullScreenButton && {
-                  marginRight: Platform.OS === 'web' ? 16 : 0,
-                },
-              ]}
-              step={0.01}
-              value={isMuted ? 0 : volume}
-              onValueChange={(value) => setVolume(value)}
-              accessibilityLabel={t('adjustVolume')}
-            />
-          </View>
-        )}
-        {showFullScreenButton && (
-          <IconButton
-            icon={isFullScreen ? 'fullscreen-exit' : 'fullscreen'}
-            size={20}
-            onPress={toggleFullScreen}
-            accessibilityLabel={t(
-              isFullScreen ? 'exitFullscreen' : 'enterFullscreen'
-            )}
-          />
-        )}
+        {showVolumeControl && <VolumeControl />}
+        {showFullScreenButton && <FullScreenButton />}
       </View>
     </View>
   );

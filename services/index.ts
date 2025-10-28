@@ -2,17 +2,15 @@ import axios from 'axios';
 
 import { api } from '@/configs';
 import {
-  LikeStateSchema,
+  LikeState,
   QueueSchema,
   ReleaseSchema,
-  RepeatModeStateSchema,
+  RepeatMode,
   SearchResultSchema,
   SongInfoSchema,
 } from '@/schemas';
 
 // Player
-// export const play = async () => await api.post('/play');
-
 export const pause = async () => {
   await api.post('/pause');
 };
@@ -43,7 +41,7 @@ export const toggleShuffle = async () => {
 };
 
 export const getRepeatMode = async () => {
-  const { data } = await api.get<RepeatModeStateSchema>('/repeat-mode');
+  const { data } = await api.get<{ mode: RepeatMode | null }>('/repeat-mode');
   return data.mode;
 };
 
@@ -77,7 +75,7 @@ export const toggleMute = async () => {
 
 // Song
 export const getLikeState = async () => {
-  const { data } = await api.get<{ state: LikeStateSchema }>('/like-state');
+  const { data } = await api.get<{ state: LikeState }>('/like-state');
   return data.state;
 };
 

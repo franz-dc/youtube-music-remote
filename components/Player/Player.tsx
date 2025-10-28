@@ -353,7 +353,7 @@ const Player = () => {
                     )}
                     <PlayerSeekBar songInfo={songInfo} />
                     <PlayerControls />
-                    <PlayerExtraActions songInfo={songInfo} />
+                    <PlayerExtraActions />
                   </Animated.View>
                 </>
               )}

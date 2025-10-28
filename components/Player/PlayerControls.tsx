@@ -4,7 +4,13 @@ import { IconButton } from 'react-native-paper';
 
 import { usePlay, useRepeat, useShuffle } from '@/hooks';
 import { RepeatMode } from '@/schemas';
-import { playNextTrack, playPreviousTrack, togglePlayPause } from '@/services';
+import {
+  playNextTrack,
+  playPreviousTrack,
+  switchRepeat,
+  togglePlayPause,
+  toggleShuffle,
+} from '@/services';
 
 const styles = StyleSheet.create({
   playerControlsContainer: {
@@ -37,7 +43,7 @@ const repeatMap = {
 const ShuffleButton = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'player' });
 
-  const { isShuffle, toggleShuffle } = useShuffle();
+  const { isShuffle } = useShuffle();
 
   return (
     <IconButton
@@ -70,13 +76,13 @@ const PlayButton = () => {
 const RepeatButton = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'player' });
 
-  const { repeatMode, switchRepeat } = useRepeat();
+  const { repeatMode } = useRepeat();
 
   return (
     <IconButton
       icon={repeatMap[repeatMode || 'NONE'].icon}
       size={28}
-      onPress={() => switchRepeat()}
+      onPress={switchRepeat}
       accessibilityLabel={t(repeatMap[repeatMode || 'NONE'].label)}
       style={{ opacity: repeatMode === 'NONE' ? 0.5 : 1 }}
     />

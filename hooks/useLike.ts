@@ -1,43 +1,42 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { LikeStateSchema } from '@/schemas';
+import { LikeState } from '@/schemas';
 import { getLikeState, toggleDislikeSong, toggleLikeSong } from '@/services';
 
-export const useLike = (videoId: string) => {
+export const useLike = (videoId?: string) => {
   const queryClient = useQueryClient();
+  const queryKey = ['likeState', videoId];
 
   const { data: likeState } = useQuery({
-    queryKey: ['likeState', videoId],
+    queryKey,
     queryFn: getLikeState,
     enabled: !!videoId,
-    initialData: 'INDIFFERENT' as LikeStateSchema,
+    initialData: LikeState.INDIFFERENT,
   });
 
   const toggleLike = async () => {
+    if (!videoId) return;
+
     // optimistic update
-    queryClient.setQueryData(
-      ['likeState', videoId],
-      (oldState?: LikeStateSchema) => {
-        if (oldState === 'LIKE') return 'INDIFFERENT';
-        return 'LIKE';
-      }
-    );
+    queryClient.setQueryData(queryKey, (oldState?: LikeState) => {
+      if (oldState === LikeState.LIKE) return LikeState.INDIFFERENT;
+      return LikeState.LIKE;
+    });
     await toggleLikeSong();
 
     // refetch to ensure data is correct
-    await queryClient.invalidateQueries({ queryKey: ['likeState', videoId] });
+    await queryClient.invalidateQueries({ queryKey });
   };
 
   const toggleDislike = async () => {
-    queryClient.setQueryData(
-      ['likeState', videoId],
-      (oldState?: LikeStateSchema) => {
-        if (oldState === 'DISLIKE') return 'INDIFFERENT';
-        return 'DISLIKE';
-      }
-    );
+    if (!videoId) return;
+
+    queryClient.setQueryData(queryKey, (oldState?: LikeState) => {
+      if (oldState === LikeState.DISLIKE) return LikeState.INDIFFERENT;
+      return LikeState.DISLIKE;
+    });
     await toggleDislikeSong();
-    await queryClient.invalidateQueries({ queryKey: ['likeState', videoId] });
+    await queryClient.invalidateQueries({ queryKey });
   };
 
   return { likeState, toggleLike, toggleDislike };

@@ -58,8 +58,9 @@ export const accessTokenAtom = atomWithMMKV('accessToken', '');
 export const sleepTimerAtom = atom(0); // in seconds
 export const sleepTimerActiveAtom = atom(false);
 
-// elapsed seconds
-export const seekBarValueAtom = atom(0);
+// slider states (due to web slider jitteriness)
+export const seekBarValueAtom = atom(0); // 0 to 1
+export const volumeSliderValueAtom = atom(0); // 0 to 100
 
 // realtime updates
 export const isWebsocketConnectingAtom = atom(true);

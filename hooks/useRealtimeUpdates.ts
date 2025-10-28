@@ -11,6 +11,7 @@ import {
   seekBarValueAtom,
   settingAtomFamily,
   store,
+  volumeSliderValueAtom,
 } from '@/configs';
 import { DEFAULT_SETTINGS } from '@/constants';
 import { WebsocketDataSchema, WebsocketDataTypes } from '@/schemas';
@@ -62,6 +63,7 @@ export const useRealtimeUpdates = (enabled: boolean) => {
           queryClient.setQueryData(['repeatMode'], () => message.repeat);
           queryClient.setQueryData(['isShuffle'], () => message.shuffle);
           store.set(seekBarValueAtom, getSeekBarValue());
+          store.set(volumeSliderValueAtom, message.volume);
           break;
         }
         case WebsocketDataTypes.VideoChanged: {
@@ -110,6 +112,7 @@ export const useRealtimeUpdates = (enabled: boolean) => {
         case WebsocketDataTypes.VolumeChanged: {
           queryClient.setQueryData(['volume'], () => message.volume);
           queryClient.setQueryData(['isMuted'], () => message.muted);
+          store.set(volumeSliderValueAtom, message.volume);
           break;
         }
         case WebsocketDataTypes.RepeatChanged: {

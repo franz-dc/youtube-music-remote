@@ -108,7 +108,6 @@ export const OPTION_SETTINGS: Record<
 };
 
 // App
-export const SAFE_LOW_VOLUME = 0.1;
 export const MINI_PLAYER_HEIGHT = 64;
 export const MINI_PLAYER_ALBUM_ART_WIDTH = MINI_PLAYER_HEIGHT - 20; // 10 vertical padding
 export const MORE_ICON =

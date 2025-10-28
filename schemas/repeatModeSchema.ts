@@ -3,7 +3,3 @@ export enum RepeatMode {
   ALL = 'ALL',
   ONE = 'ONE',
 }
-
-export type RepeatModeStateSchema = {
-  mode: RepeatMode | null;
-};

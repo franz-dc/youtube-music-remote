@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 
 import { useNowPlayingElapsedSeconds } from '@/hooks';
@@ -32,8 +32,13 @@ const PlayerSeekBar = ({ songInfo }: PlayerSeekBarProps) => {
 
   const seekSeconds = async (value: number) => {
     const seekValue = Math.round(value * songInfo.songDuration);
-    // FIXME: jittery on web, but not on mobile
-    if (elapsedSeconds === seekValue) return;
+
+    // Web jitter reduction fix: Do not update if new value is just within
+    // threshold from current server elapsed seconds
+    if (Platform.OS === 'web') {
+      if (Math.abs(elapsedSeconds - seekValue) <= 1) return;
+    }
+
     setSeekBarValue(value);
     await seek(seekValue);
   };
@@ -45,6 +50,7 @@ const PlayerSeekBar = ({ songInfo }: PlayerSeekBarProps) => {
         value={seekBarValue}
         step={0.001}
         onValueChange={seekSeconds}
+        hitSlop={10}
         accessibilityLabel={t('seek')}
       />
       <View style={styles.seekBarTime}>

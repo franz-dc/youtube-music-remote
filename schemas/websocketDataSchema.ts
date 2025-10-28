@@ -1,4 +1,4 @@
-import { RepeatModeStateSchema } from './repeatModeStateSchema';
+import { RepeatMode } from './repeatModeSchema';
 import { SongInfoSchema } from './songInfoSchema';
 
 export enum WebsocketDataTypes {
@@ -19,7 +19,7 @@ export type WebsocketDataSchema =
       muted: boolean;
       position: number;
       volume: number;
-      repeat: RepeatModeStateSchema['mode'];
+      repeat: RepeatMode;
       shuffle: boolean;
     }
   | {
@@ -43,7 +43,7 @@ export type WebsocketDataSchema =
     }
   | {
       type: WebsocketDataTypes.RepeatChanged;
-      repeat: RepeatModeStateSchema['mode'];
+      repeat: RepeatMode;
     }
   | {
       type: WebsocketDataTypes.ShuffleChanged;

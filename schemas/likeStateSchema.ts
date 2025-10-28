@@ -1,1 +1,5 @@
-export type LikeStateSchema = 'LIKE' | 'DISLIKE' | 'INDIFFERENT';
+export enum LikeState {
+  LIKE = 'LIKE',
+  DISLIKE = 'DISLIKE',
+  INDIFFERENT = 'INDIFFERENT',
+}
