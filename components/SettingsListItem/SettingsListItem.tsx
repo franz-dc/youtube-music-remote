@@ -53,7 +53,7 @@ const SettingsListItem = ({
       }
       right={() =>
         type === 'switch' ? (
-          <View>
+          <View style={{ justifyContent: 'center' }}>
             <Switch
               selected={value as boolean}
               onPress={() => setValue((prev) => !prev)}
