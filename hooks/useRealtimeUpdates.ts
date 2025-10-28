@@ -17,7 +17,8 @@ import { DEFAULT_SETTINGS } from '@/constants';
 import { WebsocketDataSchema, WebsocketDataTypes } from '@/schemas';
 import { getSeekBarValue } from '@/utils/getSeekBarValue';
 
-const WEBSOCKET_RECONNECT_INTERVAL = 5000;
+const WEBSOCKET_RECONNECT_INTERVAL_MS = 5000;
+const QUEUE_REFETCH_DELAY_ON_RECONNECT_MS = 1000;
 
 /**
  * Re-implementation of useQuery hooks from original polled REST API GET
@@ -85,7 +86,7 @@ export const useRealtimeUpdates = (enabled: boolean) => {
               queryClient.refetchQueries({ queryKey: ['queue'] }).then(() => {
                 setDidDisconnect(false);
               });
-            }, 1000);
+            }, QUEUE_REFETCH_DELAY_ON_RECONNECT_MS);
           } else {
             queryClient.refetchQueries({ queryKey: ['queue'] });
           }
@@ -126,7 +127,7 @@ export const useRealtimeUpdates = (enabled: boolean) => {
       }
     },
     shouldReconnect: true,
-    reconnectInterval: WEBSOCKET_RECONNECT_INTERVAL,
+    reconnectInterval: WEBSOCKET_RECONNECT_INTERVAL_MS,
   });
 
   useEffect(() => {

@@ -10,19 +10,13 @@ export const useVolume = () => {
 
   const [volume, setVolume] = useAtom(volumeSliderValueAtom);
 
-  // const { data: serverVolume } = useQuery({
-  //   queryKey: ['volume'],
-  //   queryFn: () => queryClient.getQueryData<number>(['volume']) || 100,
-  //   initialData: 100,
-  // });
-
   const { data: isMuted } = useQuery({
     queryKey: ['isMuted'],
     queryFn: () => queryClient.getQueryData<boolean>(['isMuted']) || false,
     initialData: false,
   });
 
-  const adjustVolume = (newVolume: number) => {
+  const adjustVolume = async (newVolume: number) => {
     // Web jitter reduction fix: Do not update if new value is just within
     // threshold from current server volume
     if (Platform.OS === 'web') {
@@ -31,7 +25,7 @@ export const useVolume = () => {
     }
 
     setVolume(newVolume);
-    updateVolume(newVolume);
+    await updateVolume(newVolume);
   };
 
   return { volume, isMuted, adjustVolume };

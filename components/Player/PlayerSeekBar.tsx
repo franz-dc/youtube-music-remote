@@ -34,7 +34,7 @@ const PlayerSeekBar = ({ songInfo }: PlayerSeekBarProps) => {
     const seekValue = Math.round(value * songInfo.songDuration);
 
     // Web jitter reduction fix: Do not update if new value is just within
-    // threshold from current server elapsed seconds
+    // threshold (1 second) from current server elapsed seconds
     if (Platform.OS === 'web') {
       if (Math.abs(elapsedSeconds - seekValue) <= 1) return;
     }
