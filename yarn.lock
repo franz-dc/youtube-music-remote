@@ -12701,8 +12701,8 @@ __metadata:
   linkType: hard
 
 "react-i18next@npm:^16.0.0":
-  version: 16.2.1
-  resolution: "react-i18next@npm:16.2.1"
+  version: 16.2.3
+  resolution: "react-i18next@npm:16.2.3"
   dependencies:
     "@babel/runtime": "npm:^7.27.6"
     html-parse-stringify: "npm:^3.0.1"
@@ -12718,7 +12718,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10c0/5eed81cba970832ed0901cc9bca15cda1d8e59ab98eab38813a3c1f11d4ddadbf66b9913bf76d632fc5519e3b9269bcb574fcbcec2295feafc3265ef5f39f50b
+  checksum: 10c0/510766f924fb93f348d0acdfe980d9bf2088f44161abc4756647204257285ff0fa0e1fab32438ff271c6d0d84f45ba47cfe684e1dcfe53bf8937d89a1fa99fa0
   languageName: node
   linkType: hard
 
