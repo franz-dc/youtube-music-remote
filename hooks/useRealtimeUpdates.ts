@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { useAtomValue } from 'jotai';
 import useWebSocket, { ReadyState } from 'react-use-websocket-lite';
@@ -14,19 +14,21 @@ import {
   volumeSliderValueAtom,
 } from '@/configs';
 import { DEFAULT_SETTINGS } from '@/constants';
-import { WebsocketDataSchema, WebsocketDataTypes } from '@/schemas';
+import {
+  QueueSchema,
+  WebsocketDataSchema,
+  WebsocketDataTypes,
+} from '@/schemas';
 import { getSeekBarValue } from '@/utils/getSeekBarValue';
 
 const WEBSOCKET_RECONNECT_INTERVAL_MS = 5000;
-const QUEUE_REFETCH_DELAY_ON_RECONNECT_MS = 1000;
+const QUEUE_REFETCH_DELAY_MS = 500;
 
 /**
  * Re-implementation of useQuery hooks from original polled REST API GET
  * requests to use WebSocket (real-time updates) instead.
  */
 export const useRealtimeUpdates = (enabled: boolean) => {
-  const [didDisconnect, setDidDisconnect] = useState(false);
-
   const ipAddress = useAtomValue(settingAtomFamily('ipAddress')) as string;
   const port = useAtomValue(settingAtomFamily('port')) as string;
 
@@ -42,14 +44,12 @@ export const useRealtimeUpdates = (enabled: boolean) => {
     connect: enabled && !!ipAddress,
     onClose: () => {
       queryClient.clear();
-      setDidDisconnect(true);
     },
     onError: () => {
       queryClient.clear();
-      setDidDisconnect(true);
       store.set(isWebsocketErrorAtom, true);
     },
-    onMessage: (event) => {
+    onMessage: async (event) => {
       const message: WebsocketDataSchema = JSON.parse(event.data);
       switch (message.type) {
         case WebsocketDataTypes.PlayerInfo: {
@@ -79,16 +79,22 @@ export const useRealtimeUpdates = (enabled: boolean) => {
           );
           store.set(seekBarValueAtom, getSeekBarValue());
 
-          // On web, the queue update is not received after reconnecting,
-          // so add a small delay before refetching
-          if (didDisconnect) {
+          // There are edge cases where there is a discrepancy between the now
+          // playing song and the queue update. To mitigate this, refetch the
+          // queue when the now playing song exits and the queue is empty (after
+          // a short delay).
+          //
+          // Replicable via:
+          // - Playing a "video" (not a song) from "Listen again" section
+          // - Coming from a disconnected state then reconnecting
+          const data = await queryClient.fetchQuery<QueueSchema>({
+            queryKey: ['queue'],
+          });
+
+          if (data.items.length === 0) {
             setTimeout(() => {
-              queryClient.refetchQueries({ queryKey: ['queue'] }).then(() => {
-                setDidDisconnect(false);
-              });
-            }, QUEUE_REFETCH_DELAY_ON_RECONNECT_MS);
-          } else {
-            queryClient.refetchQueries({ queryKey: ['queue'] });
+              queryClient.refetchQueries({ queryKey: ['queue'] });
+            }, QUEUE_REFETCH_DELAY_MS);
           }
 
           break;
