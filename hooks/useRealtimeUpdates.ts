@@ -14,11 +14,8 @@ import {
   volumeSliderValueAtom,
 } from '@/configs';
 import { DEFAULT_SETTINGS } from '@/constants';
-import {
-  QueueSchema,
-  WebsocketDataSchema,
-  WebsocketDataTypes,
-} from '@/schemas';
+import { WebsocketDataSchema, WebsocketDataTypes } from '@/schemas';
+import { getQueue } from '@/services';
 import { getSeekBarValue } from '@/utils/getSeekBarValue';
 
 const WEBSOCKET_RECONNECT_INTERVAL_MS = 5000;
@@ -79,19 +76,19 @@ export const useRealtimeUpdates = (enabled: boolean) => {
           );
           store.set(seekBarValueAtom, getSeekBarValue());
 
-          // There are edge cases where there is a discrepancy between the now
-          // playing song and the queue update. To mitigate this, refetch the
+          // There are edge cases where there are race condition issues between
+          // the new "now playing" song and queue. To mitigate this, refetch the
           // queue when the now playing song exits and the queue is empty (after
           // a short delay).
           //
           // Replicable via:
           // - Playing a "video" (not a song) from "Listen again" section
           // - Coming from a disconnected state then reconnecting
-          const data = await queryClient.fetchQuery<QueueSchema>({
-            queryKey: ['queue'],
-          });
+          const data = await getQueue();
 
-          if (data.items.length === 0) {
+          if (data?.items.length) {
+            queryClient.setQueryData(['queue'], () => data);
+          } else {
             setTimeout(() => {
               queryClient.refetchQueries({ queryKey: ['queue'] });
             }, QUEUE_REFETCH_DELAY_MS);
