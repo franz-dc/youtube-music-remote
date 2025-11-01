@@ -85,7 +85,7 @@ const QueueListItem = ({
 
       return {
         ...data,
-        items: data.items.map((item) => {
+        items: data.items.map((item, itemIdx) => {
           if (item.playlistPanelVideoWrapperRenderer) {
             return {
               ...item,
@@ -98,7 +98,8 @@ const QueueListItem = ({
                       .playlistPanelVideoRenderer,
                     selected:
                       item.playlistPanelVideoWrapperRenderer.primaryRenderer
-                        .playlistPanelVideoRenderer.videoId === song.videoId,
+                        .playlistPanelVideoRenderer.videoId === song.videoId &&
+                      itemIdx === index,
                   },
                 },
               },
@@ -111,7 +112,8 @@ const QueueListItem = ({
               playlistPanelVideoRenderer: {
                 ...item.playlistPanelVideoRenderer,
                 selected:
-                  item.playlistPanelVideoRenderer.videoId === song.videoId,
+                  item.playlistPanelVideoRenderer.videoId === song.videoId &&
+                  itemIdx === index,
               },
             };
           }
