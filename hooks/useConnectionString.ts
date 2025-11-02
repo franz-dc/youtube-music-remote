@@ -55,6 +55,9 @@ export const useConnectionString = (protocol: 'http' | 'ws' = 'http') => {
       // If coming from an update, set up connection profiles as these do not
       // exist prior to v0.8.0. Otherwise, this will be the same as initializing
       // everything to default.
+      const ipAddress = store.get(settingAtomFamily('ipAddress')) as string;
+      const port = store.get(settingAtomFamily('port')) as string;
+
       setConnectionProfiles([
         { ipAddress, port },
         ...Array.from({ length: MIN_CONNECTION_PROFILES - 1 }, () => ({
@@ -63,8 +66,8 @@ export const useConnectionString = (protocol: 'http' | 'ws' = 'http') => {
       ]);
     }
   }, [
-    ipAddress,
-    port,
+    // ipAddress,
+    // port,
     connectionProfile,
     setConnectionProfiles,
     setConnectionProfile,
