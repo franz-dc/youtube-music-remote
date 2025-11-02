@@ -9,12 +9,12 @@ export const API_VERSION = 'v1';
 // explicitly set the timeout to 5s due to React Native not failing requests
 axios.defaults.timeout = 5000;
 
-export const getHost = (protocol: 'http' | 'ws' = 'http') => {
+const getHost = () => {
   const ipAddress =
     (store.get(settingAtomFamily('ipAddress')) as string) || '0.0.0.0';
   const port =
     (store.get(settingAtomFamily('port')) as string) || DEFAULT_SETTINGS.port;
-  return `${protocol}://${ipAddress}:${port}`;
+  return `http://${ipAddress}:${port}`;
 };
 
 const authenticate = async () => {
