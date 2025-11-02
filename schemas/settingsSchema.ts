@@ -4,6 +4,11 @@ export type SettingsSchema = {
   // connection
   ipAddress: string;
   port: string;
+  connectionProfiles: {
+    ipAddress: string;
+    port: string;
+  }[];
+  connectionProfile: number;
   // appearance
   theme: (typeof SETTINGS_OPTIONS.theme)[number];
   useMaterialYouColors: boolean;

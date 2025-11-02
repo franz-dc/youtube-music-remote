@@ -1,22 +1,21 @@
 import { useEffect } from 'react';
 
-import { useAtomValue } from 'jotai';
 import useWebSocket, { ReadyState } from 'react-use-websocket-lite';
 
 import {
-  API_VERSION,
   isWebsocketConnectingAtom,
   isWebsocketErrorAtom,
   queryClient,
   seekBarValueAtom,
-  settingAtomFamily,
   store,
+  useSettingAtom,
   volumeSliderValueAtom,
 } from '@/configs';
-import { DEFAULT_SETTINGS } from '@/constants';
 import { WebsocketDataSchema, WebsocketDataTypes } from '@/schemas';
 import { getQueue } from '@/services';
 import { getSeekBarValue } from '@/utils/getSeekBarValue';
+
+import { useConnectionString } from './useConnectionString';
 
 const WEBSOCKET_RECONNECT_INTERVAL_MS = 5000;
 const QUEUE_REFETCH_DELAY_MS = 500;
@@ -26,10 +25,9 @@ const QUEUE_REFETCH_DELAY_MS = 500;
  * requests to use WebSocket (real-time updates) instead.
  */
 export const useRealtimeUpdates = (enabled: boolean) => {
-  const ipAddress = useAtomValue(settingAtomFamily('ipAddress')) as string;
-  const port = useAtomValue(settingAtomFamily('port')) as string;
-
-  const url = `ws://${ipAddress || '0.0.0.0'}:${port || DEFAULT_SETTINGS.port}/api/${API_VERSION}/ws`;
+  const ipAddress = useSettingAtom('ipAddress');
+  const connectionString = useConnectionString('ws');
+  const url = `${connectionString}/ws`;
 
   // clear query cache on url change
   useEffect(() => {

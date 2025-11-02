@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { DEFAULT_SETTINGS } from '@/constants';
+import { DEFAULT_SETTINGS } from '../constants/defaultSettings';
 
 import { accessTokenAtom, settingAtomFamily, store } from './storage';
 

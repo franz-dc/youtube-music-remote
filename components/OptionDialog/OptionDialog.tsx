@@ -30,12 +30,12 @@ export type SelectDialogProps = Omit<DialogProps, 'children'> & {
   /**
    * The initial value of the text input.
    */
-  value: string;
+  value: string | number;
   /**
    * Options to display.
    */
   options: {
-    id: string;
+    id: string | number;
     label: string;
   }[];
   /**
@@ -78,11 +78,13 @@ const OptionDialog = ({
       <Dialog {...DialogProps} onDismiss={handleCancel}>
         <Dialog.Title>{label}</Dialog.Title>
         <Dialog.Content style={styles.dialogContent}>
+          {/* @ts-ignore */}
           <RadioButton.Group value={value} onValueChange={handleSelect}>
             {options.map(({ id, label }) => (
               <RadioButton.Item
                 key={id}
                 label={label}
+                // @ts-ignore
                 value={id}
                 position='leading'
                 labelStyle={styles.label}

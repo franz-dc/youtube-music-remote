@@ -1,16 +1,21 @@
+import { TFunction } from 'i18next';
 import { Platform } from 'react-native';
 import { Easing } from 'react-native-reanimated';
 
 import { TextDialogProps } from '@/components';
+import { settingAtomFamily, store } from '@/configs';
 import { SettingsSchema } from '@/schemas';
 
 // External
 export * from './breakpoints';
+export * from './defaultSettings';
 
 // Languages - should be sorted in English alphabetical order
 export const LANGUAGES = ['en', 'ja'] as const;
 
 // Settings
+export const MIN_CONNECTION_PROFILES = 5;
+
 export const SETTINGS_KEYS = [
   // connection
   'ipAddress',
@@ -30,25 +35,6 @@ export const SETTINGS_OPTIONS = {
   theme: ['system', 'light', 'dark', 'black'],
   language: ['system', ...LANGUAGES],
 } as const satisfies Partial<Record<keyof SettingsSchema, string[]>>;
-
-export const DEFAULT_SETTINGS = {
-  // connection
-  ipAddress: '',
-  port: '26538',
-  // appearance
-  theme: 'system',
-  useMaterialYouColors: true,
-  showAlbumArtColor: true,
-  showLikeAndDislikeButtons: true,
-  showVolumeControl: true,
-  showFullScreenButton: true,
-  // general
-  language: 'system',
-  keepScreenOn: false,
-  checkForUpdatesOnAppStart: true,
-  // extras
-  isFreshInstall: false,
-} as const satisfies SettingsSchema;
 
 export const TEXT_SETTINGS: Record<
   string,
@@ -91,10 +77,18 @@ export const OPTION_SETTINGS: Record<
   string,
   {
     category: string;
-    options: string[];
+    options: (string | number)[];
     optionI18nPrefix: string;
+    labelGetter?: (option: any, t: TFunction) => string; // with settings prefix
   }
 > = {
+  connectionProfile: {
+    category: 'connection',
+    options: Array.from({ length: MIN_CONNECTION_PROFILES }, (_, i) => i),
+    optionI18nPrefix: 'profileNumbers',
+    labelGetter: (option: number, t) =>
+      t('connection.profileNumber', { number: option + 1 }),
+  },
   theme: {
     category: 'appearance',
     options: SETTINGS_OPTIONS.theme,
@@ -104,6 +98,61 @@ export const OPTION_SETTINGS: Record<
     category: 'general',
     options: SETTINGS_OPTIONS.language,
     optionI18nPrefix: 'languages',
+  },
+};
+
+export const SETTING_CHANGE_CALLBACKS: Partial<
+  Record<keyof SettingsSchema, (newValue: any) => void | Promise<void>>
+> = {
+  connectionProfile: (newValue: number) => {
+    const connectionProfile = (
+      store.get(
+        settingAtomFamily('connectionProfiles')
+      ) as SettingsSchema['connectionProfiles']
+    )[newValue];
+
+    if (!connectionProfile) return;
+
+    store.set(settingAtomFamily('ipAddress'), connectionProfile.ipAddress);
+    store.set(settingAtomFamily('port'), connectionProfile.port);
+  },
+  ipAddress: (newValue: string) => {
+    const connectionProfileIndex = store.get(
+      settingAtomFamily('connectionProfile')
+    ) as number;
+
+    const connectionProfiles = store.get(
+      settingAtomFamily('connectionProfiles')
+    ) as SettingsSchema['connectionProfiles'];
+
+    if (!connectionProfiles[connectionProfileIndex]) return;
+
+    const updatedProfiles = connectionProfiles.map((profile, index) =>
+      index === connectionProfileIndex
+        ? { ...profile, ipAddress: newValue }
+        : profile
+    );
+
+    store.set(settingAtomFamily('connectionProfiles'), updatedProfiles);
+  },
+  port: (newValue: string) => {
+    const connectionProfileIndex = store.get(
+      settingAtomFamily('connectionProfile')
+    ) as number;
+
+    const connectionProfiles = store.get(
+      settingAtomFamily('connectionProfiles')
+    ) as SettingsSchema['connectionProfiles'];
+
+    if (!connectionProfiles[connectionProfileIndex]) return;
+
+    const updatedProfiles = connectionProfiles.map((profile, index) =>
+      index === connectionProfileIndex
+        ? { ...profile, port: newValue }
+        : profile
+    );
+
+    store.set(settingAtomFamily('connectionProfiles'), updatedProfiles);
   },
 };
 

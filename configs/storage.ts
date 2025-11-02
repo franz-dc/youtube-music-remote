@@ -3,8 +3,9 @@ import { useAtom } from 'jotai/react';
 import { atomFamily, atomWithStorage, createJSONStorage } from 'jotai/utils';
 import { MMKV } from 'react-native-mmkv';
 
-import { DEFAULT_SETTINGS } from '@/constants';
 import { SettingsSchema } from '@/schemas';
+
+import { DEFAULT_SETTINGS } from '../constants/defaultSettings';
 
 export const storage = new MMKV();
 
@@ -40,7 +41,10 @@ export const atomWithMMKV = <T>(key: string, initialValue: T) =>
   );
 
 export const settingAtomFamily = atomFamily((setting: keyof SettingsSchema) =>
-  atomWithMMKV(setting, DEFAULT_SETTINGS[setting] as string | boolean)
+  atomWithMMKV(
+    setting,
+    DEFAULT_SETTINGS[setting] as SettingsSchema[keyof SettingsSchema]
+  )
 );
 
 type SetAtom<Args extends unknown[], Result> = (...args: Args) => Result;

@@ -49,7 +49,9 @@ const SettingsListItem = ({
       {...rest}
       title={title || t(`${category}.${setting}`)}
       description={
-        description || i18nValue || (type !== 'switch' ? value : undefined)
+        description ||
+        i18nValue ||
+        (type !== 'switch' && typeof value === 'string' ? value : undefined)
       }
       right={() =>
         type === 'switch' ? (

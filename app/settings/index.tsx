@@ -11,8 +11,52 @@ import {
   TextDialog,
 } from '@/components';
 import { settingAtomFamily, store, useSettingAtom } from '@/configs';
-import { OPTION_SETTINGS, TEXT_SETTINGS } from '@/constants';
+import {
+  OPTION_SETTINGS,
+  SETTING_CHANGE_CALLBACKS,
+  TEXT_SETTINGS,
+} from '@/constants';
 import { SettingsSchema } from '@/schemas';
+
+const ConnectionSettings = ({
+  openTextDialog,
+  openOptionDialog,
+}: {
+  openTextDialog: (setting: keyof SettingsSchema) => void;
+  openOptionDialog: (setting: keyof SettingsSchema) => void;
+}) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'settings' });
+
+  const [connectionProfile] = useSettingAtom('connectionProfile');
+  const [ipAddress] = useSettingAtom('ipAddress');
+
+  return (
+    <>
+      <SettingsListItem
+        category='connection'
+        setting='connectionProfile'
+        description={t('connection.profileNumber', {
+          number: connectionProfile + 1,
+        })}
+        type='option'
+        onPress={openOptionDialog}
+      />
+      <SettingsListItem
+        category='connection'
+        setting='ipAddress'
+        description={ipAddress || '-'}
+        type='text'
+        onPress={openTextDialog}
+      />
+      <SettingsListItem
+        category='connection'
+        setting='port'
+        type='text'
+        onPress={openTextDialog}
+      />
+    </>
+  );
+};
 
 const Settings = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
@@ -23,7 +67,6 @@ const Settings = () => {
   const [isTextDialogVisible, setIsTextDialogVisible] = useState(false);
   const [isOptionDialogVisible, setIsOptionDialogVisible] = useState(false);
 
-  const [ipAddress] = useSettingAtom('ipAddress');
   const [theme] = useSettingAtom('theme');
   const [language] = useSettingAtom('language');
 
@@ -55,18 +98,9 @@ const Settings = () => {
     <>
       <List.Section>
         <SettingsSubheader>{t('connection.title')}</SettingsSubheader>
-        <SettingsListItem
-          category='connection'
-          setting='ipAddress'
-          description={ipAddress || '-'}
-          type='text'
-          onPress={openTextDialog}
-        />
-        <SettingsListItem
-          category='connection'
-          setting='port'
-          type='text'
-          onPress={openTextDialog}
+        <ConnectionSettings
+          openTextDialog={openTextDialog}
+          openOptionDialog={openOptionDialog}
         />
       </List.Section>
       <List.Section>
@@ -145,6 +179,7 @@ const Settings = () => {
         onSubmit={(value) => {
           if (!settingKey) return;
           store.set(settingAtomFamily(settingKey), value);
+          SETTING_CHANGE_CALLBACKS[settingKey]?.(value);
         }}
       />
       <OptionDialog
@@ -160,17 +195,20 @@ const Settings = () => {
           optionSetting
             ? optionSetting.options.map((option) => ({
                 id: option,
-                label: t(
-                  `${optionSetting.category}.${
-                    optionSetting.optionI18nPrefix
-                  }.${option}`
-                ),
+                label:
+                  optionSetting.labelGetter?.(option, t) ||
+                  t(
+                    `${optionSetting.category}.${
+                      optionSetting.optionI18nPrefix
+                    }.${option}`
+                  ),
               }))
             : []
         }
         onSubmit={(value) => {
           if (!settingKey) return;
           store.set(settingAtomFamily(settingKey), value);
+          SETTING_CHANGE_CALLBACKS[settingKey]?.(value);
         }}
       />
     </>
