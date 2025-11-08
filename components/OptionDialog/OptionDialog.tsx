@@ -78,13 +78,13 @@ const OptionDialog = ({
       <Dialog {...DialogProps} onDismiss={handleCancel}>
         <Dialog.Title>{label}</Dialog.Title>
         <Dialog.Content style={styles.dialogContent}>
-          {/* @ts-ignore */}
+          {/* @ts-ignore: number works in practice */}
           <RadioButton.Group value={value} onValueChange={handleSelect}>
             {options.map(({ id, label }) => (
               <RadioButton.Item
                 key={id}
                 label={label}
-                // @ts-ignore
+                // @ts-ignore: number works in practice
                 value={id}
                 position='leading'
                 labelStyle={styles.label}
