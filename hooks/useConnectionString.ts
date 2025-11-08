@@ -65,13 +65,7 @@ export const useConnectionString = (protocol: 'http' | 'ws' = 'http') => {
         })),
       ]);
     }
-  }, [
-    // ipAddress,
-    // port,
-    connectionProfile,
-    setConnectionProfiles,
-    setConnectionProfile,
-  ]);
+  }, [connectionProfile, setConnectionProfiles, setConnectionProfile]);
 
   return `${protocol}://${ipAddress || '0.0.0.0'}:${port || DEFAULT_SETTINGS.port}/api/${API_VERSION}`;
 };
