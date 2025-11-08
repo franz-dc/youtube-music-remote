@@ -25,7 +25,7 @@ const QUEUE_REFETCH_DELAY_MS = 500;
  * requests to use WebSocket (real-time updates) instead.
  */
 export const useRealtimeUpdates = (enabled: boolean) => {
-  const ipAddress = useSettingAtom('ipAddress');
+  const [ipAddress] = useSettingAtom('ipAddress');
   const connectionString = useConnectionString('ws');
   const url = `${connectionString}/ws`;
 
