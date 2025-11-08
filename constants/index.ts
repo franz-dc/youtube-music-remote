@@ -78,26 +78,26 @@ export const OPTION_SETTINGS: Record<
   {
     category: string;
     options: (string | number)[];
-    optionI18nPrefix: string;
-    labelGetter?: (option: any, t: TFunction) => string; // with settings prefix
+    labelGetter?:
+      | string // settings[category][setting][option value]
+      | ((option: any, t: TFunction) => string); // t with settings prefix
   }
 > = {
   connectionProfile: {
     category: 'connection',
     options: Array.from({ length: MIN_CONNECTION_PROFILES }, (_, i) => i),
-    optionI18nPrefix: 'profileNumbers',
     labelGetter: (option: number, t) =>
       t('connection.profileNumber', { number: option + 1 }),
   },
   theme: {
     category: 'appearance',
     options: SETTINGS_OPTIONS.theme,
-    optionI18nPrefix: 'themes',
+    labelGetter: 'themes',
   },
   language: {
     category: 'general',
     options: SETTINGS_OPTIONS.language,
-    optionI18nPrefix: 'languages',
+    labelGetter: 'languages',
   },
 };
 

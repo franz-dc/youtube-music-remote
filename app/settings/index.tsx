@@ -196,12 +196,15 @@ const Settings = () => {
             ? optionSetting.options.map((option) => ({
                 id: option,
                 label:
-                  optionSetting.labelGetter?.(option, t) ||
-                  t(
-                    `${optionSetting.category}.${
-                      optionSetting.optionI18nPrefix
-                    }.${option}`
-                  ),
+                  typeof optionSetting.labelGetter === 'string'
+                    ? t(
+                        `${optionSetting.category}.${
+                          optionSetting.labelGetter
+                        }.${option}`
+                      )
+                    : typeof optionSetting.labelGetter === 'function'
+                      ? optionSetting.labelGetter(option, t)
+                      : String(option),
               }))
             : []
         }
