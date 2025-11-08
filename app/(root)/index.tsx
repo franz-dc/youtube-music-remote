@@ -36,6 +36,7 @@ const Queue = () => {
     data: queue,
     isLoading: isLoadingQueue,
     isError: isErrorQueue,
+    refetch: refetchQueue,
     isFetched,
   } = useQueue();
 
@@ -69,8 +70,6 @@ const Queue = () => {
       searchResultMenuRef.current?.show();
     }
   }, [selectedSong]);
-
-  const { refetch: refetchQueue } = useQueue();
 
   const handleSelectSong = useCallback(
     async ({
