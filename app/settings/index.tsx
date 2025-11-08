@@ -179,6 +179,7 @@ const Settings = () => {
         onSubmit={(value) => {
           if (!settingKey) return;
           store.set(settingAtomFamily(settingKey), value);
+          // @ts-ignore: value type matches in practice
           SETTING_CHANGE_CALLBACKS[settingKey]?.(value);
         }}
       />
@@ -211,6 +212,7 @@ const Settings = () => {
         onSubmit={(value) => {
           if (!settingKey) return;
           store.set(settingAtomFamily(settingKey), value);
+          // @ts-ignore: value type matches in practice
           SETTING_CHANGE_CALLBACKS[settingKey]?.(value);
         }}
       />

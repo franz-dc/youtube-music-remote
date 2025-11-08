@@ -10,6 +10,8 @@ import {
   RadioButton,
 } from 'react-native-paper';
 
+import { SettingsSchema } from '@/schemas';
+
 const styles = StyleSheet.create({
   dialogContent: {
     paddingHorizontal: 0,
@@ -21,7 +23,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export type SelectDialogProps = Omit<DialogProps, 'children'> & {
+type StringOrNumberOnly<T> = {
+  [K in keyof T]: string | number;
+};
+
+export type SelectDialogProps<
+  K extends keyof StringOrNumberOnly<SettingsSchema>,
+> = Omit<DialogProps, 'children'> & {
   /**
    * The label of the text input.
    * Also used as the dialog title.
@@ -30,12 +38,12 @@ export type SelectDialogProps = Omit<DialogProps, 'children'> & {
   /**
    * The initial value of the text input.
    */
-  value: string | number;
+  value: SettingsSchema[K];
   /**
    * Options to display.
    */
   options: {
-    id: string | number;
+    id: StringOrNumberOnly<SettingsSchema>[K];
     label: string;
   }[];
   /**
@@ -43,17 +51,17 @@ export type SelectDialogProps = Omit<DialogProps, 'children'> & {
    *
    * @param value The value of the text input.
    */
-  onSubmit: (value: string) => void | Promise<void>;
+  onSubmit: (value: SettingsSchema[K]) => void | Promise<void>;
 };
 
-const OptionDialog = ({
+const OptionDialog = <K extends keyof SettingsSchema>({
   label,
   value: initialValue,
   options,
   onSubmit,
   onDismiss,
   ...DialogProps
-}: SelectDialogProps) => {
+}: SelectDialogProps<K>) => {
   const { t } = useTranslation('translation');
 
   const [value, setValue] = useState(initialValue);
@@ -67,7 +75,7 @@ const OptionDialog = ({
     onDismiss?.();
   };
 
-  const handleSelect = async (newValue: string) => {
+  const handleSelect = async (newValue: SettingsSchema[K]) => {
     setValue(newValue);
     onSubmit(newValue); // do not await to prevent lag
     onDismiss?.();
