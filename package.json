@@ -2,7 +2,7 @@
   "name": "youtube-music-remote",
   "author": "Franz DC",
   "main": "expo-router/entry",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",
