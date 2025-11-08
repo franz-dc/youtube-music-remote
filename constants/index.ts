@@ -146,7 +146,12 @@ export const SETTING_CHANGE_CALLBACKS: Partial<
       settingAtomFamily('connectionProfiles')
     );
 
-    if (!connectionProfiles[connectionProfileIndex]) return;
+    if (
+      !connectionProfiles ||
+      !Array.isArray(connectionProfiles) ||
+      !connectionProfiles[connectionProfileIndex]
+    )
+      return;
 
     const updatedProfiles = connectionProfiles.map((profile, index) =>
       index === connectionProfileIndex
