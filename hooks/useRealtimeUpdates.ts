@@ -40,9 +40,15 @@ export const useRealtimeUpdates = (enabled: boolean) => {
     onClose: () => {
       queryClient.clear();
     },
-    onError: () => {
-      queryClient.clear();
-      store.set(isWebsocketErrorAtom, true);
+    onError: (e: any) => {
+      if (e?.message === 'Software caused connection abort') {
+        // due to app going to background on mobile devices
+        store.set(isWebsocketConnectingAtom, true);
+        queryClient.refetchQueries({ queryKey: ['queue'] });
+      } else {
+        store.set(isWebsocketErrorAtom, true);
+        queryClient.clear();
+      }
     },
     onMessage: async (event) => {
       const message: WebsocketDataSchema = JSON.parse(event.data);
@@ -60,6 +66,7 @@ export const useRealtimeUpdates = (enabled: boolean) => {
           queryClient.setQueryData(['isShuffle'], () => message.shuffle);
           store.set(seekBarValueAtom, getSeekBarValue());
           store.set(volumeSliderValueAtom, message.volume);
+
           break;
         }
         case WebsocketDataTypes.VideoChanged: {
