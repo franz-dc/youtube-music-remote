@@ -1,4 +1,4 @@
-import { SetStateAction, atom, createStore } from 'jotai';
+import { SetStateAction, WritableAtom, atom, createStore } from 'jotai';
 import { useAtom } from 'jotai/react';
 import { atomFamily, atomWithStorage, createJSONStorage } from 'jotai/utils';
 import { MMKV } from 'react-native-mmkv';
@@ -40,20 +40,24 @@ export const atomWithMMKV = <T>(key: string, initialValue: T) =>
     }))
   );
 
-export const settingAtomFamily = atomFamily((setting: keyof SettingsSchema) =>
-  atomWithMMKV(
-    setting,
-    DEFAULT_SETTINGS[setting] as SettingsSchema[keyof SettingsSchema]
-  )
+export const settingAtomFamilyBase = atomFamily(
+  (setting: keyof SettingsSchema) =>
+    atomWithMMKV(
+      setting,
+      DEFAULT_SETTINGS[setting] as SettingsSchema[keyof SettingsSchema]
+    )
 );
 
-type SetAtom<Args extends unknown[], Result> = (...args: Args) => Result;
+// abstraction of settingAtomFamily to get properly typed atoms
+export const settingAtomFamily = <K extends keyof SettingsSchema>(setting: K) =>
+  settingAtomFamilyBase(setting) as unknown as WritableAtom<
+    SettingsSchema[K],
+    [SetStateAction<SettingsSchema[K]>],
+    void
+  >;
 
 export const useSettingAtom = <K extends keyof SettingsSchema>(setting: K) =>
-  useAtom(settingAtomFamily(setting)) as unknown as [
-    SettingsSchema[K],
-    SetAtom<[SetStateAction<SettingsSchema[K]>], void>,
-  ];
+  useAtom(settingAtomFamily(setting));
 
 // access token
 export const accessTokenAtom = atomWithMMKV('accessToken', '');

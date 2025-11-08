@@ -105,10 +105,8 @@ export const SETTING_CHANGE_CALLBACKS: Partial<
   Record<keyof SettingsSchema, (newValue: any) => void | Promise<void>>
 > = {
   connectionProfile: (newValue: number) => {
-    const connectionProfile = (
-      store.get(
-        settingAtomFamily('connectionProfiles')
-      ) as SettingsSchema['connectionProfiles']
+    const connectionProfile = store.get(
+      settingAtomFamily('connectionProfiles')
     )[newValue];
 
     if (!connectionProfile) return;
@@ -119,11 +117,11 @@ export const SETTING_CHANGE_CALLBACKS: Partial<
   ipAddress: (newValue: string) => {
     const connectionProfileIndex = store.get(
       settingAtomFamily('connectionProfile')
-    ) as number;
+    );
 
     const connectionProfiles = store.get(
       settingAtomFamily('connectionProfiles')
-    ) as SettingsSchema['connectionProfiles'];
+    );
 
     if (!connectionProfiles[connectionProfileIndex]) return;
 
@@ -138,11 +136,11 @@ export const SETTING_CHANGE_CALLBACKS: Partial<
   port: (newValue: string) => {
     const connectionProfileIndex = store.get(
       settingAtomFamily('connectionProfile')
-    ) as number;
+    );
 
     const connectionProfiles = store.get(
       settingAtomFamily('connectionProfiles')
-    ) as SettingsSchema['connectionProfiles'];
+    );
 
     if (!connectionProfiles[connectionProfileIndex]) return;
 
