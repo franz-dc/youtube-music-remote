@@ -105,9 +105,13 @@ export const SETTING_CHANGE_CALLBACKS: Partial<
   Record<keyof SettingsSchema, (newValue: any) => void | Promise<void>>
 > = {
   connectionProfile: (newValue: number) => {
-    const connectionProfile = store.get(
+    const connectionProfiles = store.get(
       settingAtomFamily('connectionProfiles')
-    )[newValue];
+    );
+
+    if (!connectionProfiles || !Array.isArray(connectionProfiles)) return;
+
+    const connectionProfile = connectionProfiles[newValue];
 
     if (!connectionProfile) return;
 
