@@ -63,7 +63,8 @@
       "port": "Port",
       "invalidPort": "Port must be a number",
       "invalidPortRange": "Port must be between 1 and 65535",
-      "connectionId": "Connection ID"
+      "connectionProfile": "Connection Profile",
+      "profileNumber": "Profile {{number}}"
     },
     "appearance": {
       "title": "Appearance",

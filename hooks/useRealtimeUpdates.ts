@@ -1,22 +1,21 @@
 import { useEffect } from 'react';
 
-import { useAtomValue } from 'jotai';
 import useWebSocket, { ReadyState } from 'react-use-websocket-lite';
 
 import {
-  API_VERSION,
   isWebsocketConnectingAtom,
   isWebsocketErrorAtom,
   queryClient,
   seekBarValueAtom,
-  settingAtomFamily,
   store,
+  useSettingAtom,
   volumeSliderValueAtom,
 } from '@/configs';
-import { DEFAULT_SETTINGS } from '@/constants';
 import { WebsocketDataSchema, WebsocketDataTypes } from '@/schemas';
 import { getQueue } from '@/services';
 import { getSeekBarValue } from '@/utils/getSeekBarValue';
+
+import { useConnectionString } from './useConnectionString';
 
 const WEBSOCKET_RECONNECT_INTERVAL_MS = 5000;
 const QUEUE_REFETCH_DELAY_MS = 500;
@@ -26,10 +25,9 @@ const QUEUE_REFETCH_DELAY_MS = 500;
  * requests to use WebSocket (real-time updates) instead.
  */
 export const useRealtimeUpdates = (enabled: boolean) => {
-  const ipAddress = useAtomValue(settingAtomFamily('ipAddress')) as string;
-  const port = useAtomValue(settingAtomFamily('port')) as string;
-
-  const url = `ws://${ipAddress || '0.0.0.0'}:${port || DEFAULT_SETTINGS.port}/api/${API_VERSION}/ws`;
+  const [ipAddress] = useSettingAtom('ipAddress');
+  const connectionString = useConnectionString('ws');
+  const url = `${connectionString}/ws`;
 
   // clear query cache on url change
   useEffect(() => {
@@ -42,9 +40,15 @@ export const useRealtimeUpdates = (enabled: boolean) => {
     onClose: () => {
       queryClient.clear();
     },
-    onError: () => {
-      queryClient.clear();
-      store.set(isWebsocketErrorAtom, true);
+    onError: (e: any) => {
+      if (e?.message === 'Software caused connection abort') {
+        // due to app going to background on mobile devices
+        store.set(isWebsocketConnectingAtom, true);
+        queryClient.refetchQueries({ queryKey: ['queue'] });
+      } else {
+        store.set(isWebsocketErrorAtom, true);
+        queryClient.clear();
+      }
     },
     onMessage: async (event) => {
       const message: WebsocketDataSchema = JSON.parse(event.data);
@@ -62,6 +66,7 @@ export const useRealtimeUpdates = (enabled: boolean) => {
           queryClient.setQueryData(['isShuffle'], () => message.shuffle);
           store.set(seekBarValueAtom, getSeekBarValue());
           store.set(volumeSliderValueAtom, message.volume);
+
           break;
         }
         case WebsocketDataTypes.VideoChanged: {

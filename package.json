@@ -5,13 +5,13 @@
   "version": "0.7.0",
   "scripts": {
     "start": "expo start",
-    "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "expo lint",
-    "build:android": "expo prebuild --clean && expo run:android --variant release"
+    "build:android": "expo prebuild --clean && expo run:android --variant release",
+    "bump-version": "node ./scripts/bump-version.mjs"
   },
   "jest": {
     "preset": "jest-expo"

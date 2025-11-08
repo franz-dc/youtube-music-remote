@@ -1,5 +1,6 @@
 export * from './useBottomSheetBackHandler';
 export * from './useCategorySearch';
+export * from './useConnectionString';
 export * from './useDominantColor';
 export * from './useFullScreen';
 export * from './useGetLatestRelease';

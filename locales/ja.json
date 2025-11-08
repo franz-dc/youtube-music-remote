@@ -63,7 +63,8 @@
       "port": "ポート",
       "invalidPort": "ポートは数字である必要があります",
       "invalidPortRange": "ポートは1から65535の間である必要があります",
-      "connectionId": "接続ID"
+      "connectionProfile": "接続プロファイル",
+      "profileNumber": "プロファイル {{number}}"
     },
     "appearance": {
       "title": "外観",

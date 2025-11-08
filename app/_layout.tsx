@@ -23,7 +23,11 @@ import '@/i18n';
 import { UpdateRedirect } from '@/components';
 import { queryClient, store, useSettingAtom } from '@/configs';
 import { APP_FILE_EXTENSION, SETTINGS_OPTIONS } from '@/constants';
-import { useRealtimeUpdates, useStartupUpdateChecker } from '@/hooks';
+import {
+  useConnectionString,
+  useRealtimeUpdates,
+  useStartupUpdateChecker,
+} from '@/hooks';
 
 const systemColorScheme = Appearance.getColorScheme() || 'dark';
 
@@ -43,9 +47,8 @@ const StackWithConfig = () => {
   const { i18n } = useTranslation('translation');
   const [systemLanguage] = useState(i18n.language);
 
-  // initialize ip address and port for queue ui
-  useSettingAtom('ipAddress');
-  useSettingAtom('port');
+  // initialize connection for queue ui
+  useConnectionString();
 
   const [language] = useSettingAtom('language');
   const [theme] = useSettingAtom('theme');
