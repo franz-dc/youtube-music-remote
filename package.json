@@ -10,7 +10,8 @@
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "expo lint",
-    "build:android": "expo prebuild --clean && expo run:android --variant release"
+    "build:android": "expo prebuild --clean && expo run:android --variant release",
+    "bump-version": "node ./scripts/bump-version.mjs"
   },
   "jest": {
     "preset": "jest-expo"
