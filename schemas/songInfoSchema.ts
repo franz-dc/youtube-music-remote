@@ -1,6 +1,7 @@
 export type SongInfoSchema = {
   title: string;
   artist: string;
+  artistUrl?: string | null;
   views: number;
   uploadDate: string;
   imageSrc?: string | null;
