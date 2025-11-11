@@ -1,5 +1,7 @@
-import { StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-paper';
+import { Linking, StyleSheet, View } from 'react-native';
+import { Text, TouchableRipple } from 'react-native-paper';
+
+import { SongInfoSchema } from '@/schemas';
 
 const styles = StyleSheet.create({
   title: {
@@ -11,21 +13,35 @@ const styles = StyleSheet.create({
   },
 });
 
-export type SongDetailsProps = {
-  title: string;
-  artist: string;
+export type SongDetailsProps = SongInfoSchema & {
   sideBySide?: boolean;
 };
 
-const SongDetails = ({ title, artist, sideBySide }: SongDetailsProps) => {
+const SongDetails = ({
+  title,
+  artist,
+  artistUrl,
+  sideBySide,
+}: SongDetailsProps) => {
   return (
     <View style={[sideBySide && { flex: 1 }]}>
       <Text numberOfLines={sideBySide ? 2 : 1} style={styles.title}>
         {title}
       </Text>
-      <Text numberOfLines={1} variant='bodyLarge' style={styles.artist}>
-        {artist}
-      </Text>
+      <TouchableRipple
+        onPress={
+          artistUrl
+            ? () => {
+                Linking.openURL(artistUrl);
+              }
+            : undefined
+        }
+        style={{ alignSelf: 'flex-start' }}
+      >
+        <Text numberOfLines={1} variant='bodyLarge' style={styles.artist}>
+          {artist}
+        </Text>
+      </TouchableRipple>
     </View>
   );
 };

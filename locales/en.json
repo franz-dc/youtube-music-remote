@@ -42,7 +42,9 @@
     "hours_other": "{{count}} hours",
     "share": "Share",
     "like": "Like",
-    "dislike": "Dislike"
+    "dislike": "Dislike",
+    "goToAlbum": "Go to album",
+    "goToArtist": "Go to artist"
   },
   "queue": {
     "title": "Queue",

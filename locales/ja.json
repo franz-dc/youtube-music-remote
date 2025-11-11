@@ -42,7 +42,9 @@
     "hours_other": "{{count}}時間",
     "share": "共有",
     "like": "好き",
-    "dislike": "嫌い"
+    "dislike": "嫌い",
+    "goToAlbum": "アルバムに移動",
+    "goToArtist": "アーティストに移動"
   },
   "queue": {
     "title": "キュー",
