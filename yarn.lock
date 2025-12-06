@@ -12690,14 +12690,14 @@ __metadata:
   linkType: hard
 
 "react-i18next@npm:^16.0.0":
-  version: 16.2.4
-  resolution: "react-i18next@npm:16.2.4"
+  version: 16.4.0
+  resolution: "react-i18next@npm:16.4.0"
   dependencies:
     "@babel/runtime": "npm:^7.27.6"
     html-parse-stringify: "npm:^3.0.1"
     use-sync-external-store: "npm:^1.6.0"
   peerDependencies:
-    i18next: ">= 25.5.2"
+    i18next: ">= 25.6.2"
     react: ">= 16.8.0"
     typescript: ^5
   peerDependenciesMeta:
@@ -12707,7 +12707,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10c0/8212fea51e0cd0b7236b9f009daf89f6dc37e152325ad848c02a1adaaa4f761c5036ecdbfda28c651b042b2734e34bdb2cb4cfb9f10ea09b52285f29bc4e05ba
+  checksum: 10c0/055a5baf15cf90e87578fb3a7438bab925c7bbbfe86be517ffe3928555d772dcc72a7c3e58255a1a0cf774a04555402d9066fadc487a5c05a95735f738df1b30
   languageName: node
   linkType: hard
 
