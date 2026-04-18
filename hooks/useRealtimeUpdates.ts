@@ -8,8 +8,10 @@ import {
   accessTokenAtom,
   isWebsocketConnectingAtom,
   isWebsocketErrorAtom,
+  pendingSeekSecondsAtom,
   queryClient,
   seekBarValueAtom,
+  seekInFlightUntilAtom,
   store,
   useSettingAtom,
   volumeSliderValueAtom,
@@ -42,8 +44,17 @@ export const useRealtimeUpdates = (enabled: boolean) => {
 
   const handleMessage = useCallback(async (messageData: string) => {
     const message: WebsocketDataSchema = JSON.parse(messageData);
+    const seekInFlightUntil = store.get(seekInFlightUntilAtom);
+    const pendingSeekSeconds = store.get(pendingSeekSecondsAtom);
+    const isSeekInFlight = seekInFlightUntil > Date.now();
+    const shouldIgnoreSeekPositionUpdate = (position: number) =>
+      isSeekInFlight &&
+      pendingSeekSeconds !== null &&
+      Math.abs(position - pendingSeekSeconds) > 1;
+
     switch (message.type) {
       case WebsocketDataTypes.PlayerInfo: {
+        if (shouldIgnoreSeekPositionUpdate(message.position)) break;
         queryClient.setQueryData(['nowPlaying'], () => message.song || null);
         queryClient.setQueryData(
           ['nowPlayingElapsedSeconds'],
@@ -60,6 +71,8 @@ export const useRealtimeUpdates = (enabled: boolean) => {
         break;
       }
       case WebsocketDataTypes.VideoChanged: {
+        store.set(seekInFlightUntilAtom, 0);
+        store.set(pendingSeekSecondsAtom, null);
         queryClient.setQueryData(['nowPlaying'], () => message.song);
         queryClient.setQueryData(
           ['nowPlayingElapsedSeconds'],
@@ -81,6 +94,9 @@ export const useRealtimeUpdates = (enabled: boolean) => {
         break;
       }
       case WebsocketDataTypes.PlayerStateChanged: {
+        if (shouldIgnoreSeekPositionUpdate(message.position)) break;
+        store.set(seekInFlightUntilAtom, 0);
+        store.set(pendingSeekSecondsAtom, null);
         queryClient.setQueryData(['isPlaying'], () => message.isPlaying);
         queryClient.setQueryData(
           ['nowPlayingElapsedSeconds'],
@@ -90,6 +106,9 @@ export const useRealtimeUpdates = (enabled: boolean) => {
         break;
       }
       case WebsocketDataTypes.PositionChanged: {
+        if (shouldIgnoreSeekPositionUpdate(message.position)) break;
+        store.set(seekInFlightUntilAtom, 0);
+        store.set(pendingSeekSecondsAtom, null);
         queryClient.setQueryData(
           ['nowPlayingElapsedSeconds'],
           () => message.position

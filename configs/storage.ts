@@ -84,6 +84,8 @@ export const sleepTimerActiveAtom = atom(false);
 // slider states (due to web slider jitteriness)
 export const seekBarValueAtom = atom(0); // 0 to 1
 export const volumeSliderValueAtom = atom(0); // 0 to 100
+export const seekInFlightUntilAtom = atom(0);
+export const pendingSeekSecondsAtom = atom<number | null>(null);
 
 // realtime updates
 export const isWebsocketConnectingAtom = atom(true);

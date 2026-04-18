@@ -3,7 +3,11 @@ import { useCallback, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAtom } from 'jotai';
 
-import { seekBarValueAtom, useSettingAtom } from '@/configs';
+import {
+  pendingSeekSecondsAtom,
+  seekBarValueAtom,
+  useSettingAtom,
+} from '@/configs';
 import { SongInfoSchema } from '@/schemas';
 
 /**
@@ -25,6 +29,7 @@ export const useNowPlayingElapsedSeconds = () => {
   }, [queryClient]);
 
   const [seekBarValue, setSeekBarValue] = useAtom(seekBarValueAtom);
+  const [pendingSeekSeconds] = useAtom(pendingSeekSecondsAtom);
 
   // init seek bar value
   useEffect(() => {
@@ -40,7 +45,8 @@ export const useNowPlayingElapsedSeconds = () => {
   });
 
   return {
-    elapsedSeconds,
+    elapsedSeconds:
+      pendingSeekSeconds !== null ? pendingSeekSeconds : elapsedSeconds,
     seekBarValue,
     setSeekBarValue,
   };
