@@ -18,15 +18,16 @@ import {
 } from '@/configs';
 import { WebsocketDataSchema, WebsocketDataTypes } from '@/schemas';
 import { getQueue } from '@/services';
+import {
+  getAuthorizationHeader,
+  shouldIgnoreSeekPositionUpdate,
+} from '@/utils';
 import { getSeekBarValue } from '@/utils/getSeekBarValue';
 
 import { useConnectionString } from './useConnectionString';
 
 const WEBSOCKET_RECONNECT_INTERVAL_MS = 5000;
 const QUEUE_REFETCH_DELAY_MS = 500;
-
-const getAuthorizationHeader = (accessToken: string) =>
-  accessToken.startsWith('Bearer ') ? accessToken : `Bearer ${accessToken}`;
 
 /**
  * Re-implementation of useQuery hooks from original polled REST API GET
@@ -46,15 +47,17 @@ export const useRealtimeUpdates = (enabled: boolean) => {
     const message: WebsocketDataSchema = JSON.parse(messageData);
     const seekInFlightUntil = store.get(seekInFlightUntilAtom);
     const pendingSeekSeconds = store.get(pendingSeekSecondsAtom);
-    const isSeekInFlight = seekInFlightUntil > Date.now();
-    const shouldIgnoreSeekPositionUpdate = (position: number) =>
-      isSeekInFlight &&
-      pendingSeekSeconds !== null &&
-      Math.abs(position - pendingSeekSeconds) > 1;
 
     switch (message.type) {
       case WebsocketDataTypes.PlayerInfo: {
-        if (shouldIgnoreSeekPositionUpdate(message.position)) break;
+        if (
+          shouldIgnoreSeekPositionUpdate({
+            position: message.position,
+            pendingSeekSeconds,
+            seekInFlightUntil,
+          })
+        )
+          break;
         queryClient.setQueryData(['nowPlaying'], () => message.song || null);
         queryClient.setQueryData(
           ['nowPlayingElapsedSeconds'],
@@ -94,7 +97,14 @@ export const useRealtimeUpdates = (enabled: boolean) => {
         break;
       }
       case WebsocketDataTypes.PlayerStateChanged: {
-        if (shouldIgnoreSeekPositionUpdate(message.position)) break;
+        if (
+          shouldIgnoreSeekPositionUpdate({
+            position: message.position,
+            pendingSeekSeconds,
+            seekInFlightUntil,
+          })
+        )
+          break;
         store.set(seekInFlightUntilAtom, 0);
         store.set(pendingSeekSecondsAtom, null);
         queryClient.setQueryData(['isPlaying'], () => message.isPlaying);
@@ -106,7 +116,14 @@ export const useRealtimeUpdates = (enabled: boolean) => {
         break;
       }
       case WebsocketDataTypes.PositionChanged: {
-        if (shouldIgnoreSeekPositionUpdate(message.position)) break;
+        if (
+          shouldIgnoreSeekPositionUpdate({
+            position: message.position,
+            pendingSeekSeconds,
+            seekInFlightUntil,
+          })
+        )
+          break;
         store.set(seekInFlightUntilAtom, 0);
         store.set(pendingSeekSecondsAtom, null);
         queryClient.setQueryData(

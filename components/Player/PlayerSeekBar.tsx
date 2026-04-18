@@ -12,7 +12,7 @@ import {
 import { useNowPlayingElapsedSeconds } from '@/hooks';
 import { SongInfoSchema } from '@/schemas';
 import { seek } from '@/services';
-import { formatSecondsToDuration } from '@/utils';
+import { formatSecondsToDuration, isWithinSeekTolerance } from '@/utils';
 
 import Slider from '../Slider';
 
@@ -47,7 +47,7 @@ const PlayerSeekBar = ({ songInfo }: PlayerSeekBarProps) => {
     // Web jitter reduction fix: Do not update if new value is just within
     // threshold (1 second) from current server elapsed seconds
     if (Platform.OS === 'web') {
-      if (Math.abs(elapsedSeconds - seekValue) <= 1) return;
+      if (isWithinSeekTolerance(elapsedSeconds, seekValue)) return;
     }
 
     setSeekBarValue(value);

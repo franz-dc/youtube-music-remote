@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { DEFAULT_SETTINGS } from '../constants/defaultSettings';
-import { getConnectionOrigin } from '../utils';
+import { getAuthorizationHeader, getConnectionOrigin } from '../utils';
 
 import {
   accessTokenAtom,
@@ -52,9 +52,6 @@ const authenticate = async () => {
     authenticationPromise = null;
   }
 };
-
-const getAuthorizationHeader = (accessToken: string) =>
-  accessToken.startsWith('Bearer ') ? accessToken : `Bearer ${accessToken}`;
 
 axios.interceptors.request.use((config) => {
   const host = getHost();
