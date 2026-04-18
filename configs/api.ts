@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import { DEFAULT_SETTINGS } from '../constants/defaultSettings';
+import { getConnectionOrigin } from '../utils';
 
 import { accessTokenAtom, settingAtomFamily, store } from './storage';
 
@@ -14,7 +15,11 @@ const getHost = () => {
     (store.get(settingAtomFamily('ipAddress')) as string) || '0.0.0.0';
   const port =
     (store.get(settingAtomFamily('port')) as string) || DEFAULT_SETTINGS.port;
-  return `http://${ipAddress}:${port}`;
+  return getConnectionOrigin({
+    host: ipAddress,
+    port,
+    protocolFamily: 'http',
+  });
 };
 
 const authenticate = async () => {

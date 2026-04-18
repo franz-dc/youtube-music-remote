@@ -8,6 +8,7 @@ import {
 } from '@/configs';
 import { DEFAULT_SETTINGS, MIN_CONNECTION_PROFILES } from '@/constants';
 import { SettingsSchema } from '@/schemas';
+import { getConnectionOrigin } from '@/utils';
 
 const DEFAULT_CONNECTION_PROFILE: SettingsSchema['connectionProfiles'][0] = {
   ipAddress: '',
@@ -67,5 +68,9 @@ export const useConnectionString = (protocol: 'http' | 'ws' = 'http') => {
     }
   }, [connectionProfile, setConnectionProfiles, setConnectionProfile]);
 
-  return `${protocol}://${ipAddress || '0.0.0.0'}:${port || DEFAULT_SETTINGS.port}/api/${API_VERSION}`;
+  return `${getConnectionOrigin({
+    host: ipAddress || '0.0.0.0',
+    port: port || DEFAULT_SETTINGS.port,
+    protocolFamily: protocol,
+  })}/api/${API_VERSION}`;
 };

@@ -54,9 +54,8 @@ export const useNowPlayingElapsedSeconds = () => {
 export const useNowPlaying = () => {
   const queryClient = useQueryClient();
   const [ipAddress] = useSettingAtom('ipAddress');
-  const [port] = useSettingAtom('port');
 
-  const enabled = !!ipAddress && !!port;
+  const enabled = !!ipAddress;
 
   const useQueryResult = useQuery({
     queryKey: ['nowPlaying'],
