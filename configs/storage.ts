@@ -61,6 +61,21 @@ export const useSettingAtom = <K extends keyof SettingsSchema>(setting: K) =>
 
 // access token
 export const accessTokenAtom = atomWithMMKV('accessToken', '');
+const CLIENT_ID_STORAGE_KEY = 'clientId';
+
+const createClientId = () =>
+  `yt-music-remote-${Date.now().toString(36)}-${Math.random()
+    .toString(36)
+    .slice(2, 10)}`;
+
+export const getClientId = () => {
+  const existingClientId = storage.getString(CLIENT_ID_STORAGE_KEY);
+  if (existingClientId) return existingClientId;
+
+  const clientId = createClientId();
+  storage.set(CLIENT_ID_STORAGE_KEY, clientId);
+  return clientId;
+};
 
 // sleep timer
 export const sleepTimerAtom = atom(0); // in seconds

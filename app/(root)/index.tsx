@@ -43,7 +43,7 @@ const Queue = () => {
   const isWebsocketLoading = useAtomValue(isWebsocketConnectingAtom);
   const isWebsocketError = useAtomValue(isWebsocketErrorAtom);
 
-  const isLoading = isLoadingQueue || isWebsocketLoading;
+  const isLoading = isLoadingQueue || (!isFetched && isWebsocketLoading);
 
   const { bottom: bottomInset } = useSafeAreaInsets();
 
@@ -115,13 +115,15 @@ const Queue = () => {
       />
     );
 
-  if (isWebsocketError)
-    return <ConnectionError type='noConnection' style={{ paddingBottom }} />;
-
   if (isLoading || !isFetched) return <LoadingView />;
 
-  if (isWebsocketError && isErrorQueue)
-    return <ConnectionError type='serverError' style={{ paddingBottom }} />;
+  if (isErrorQueue)
+    return (
+      <ConnectionError
+        type={isWebsocketError ? 'serverError' : 'noConnection'}
+        style={{ paddingBottom }}
+      />
+    );
 
   if (!queue || !queue.items?.length)
     return (
