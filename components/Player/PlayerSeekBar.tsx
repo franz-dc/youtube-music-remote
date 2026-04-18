@@ -1,11 +1,18 @@
+import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { Platform, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 
+import {
+  pendingSeekSecondsAtom,
+  queryClient,
+  seekInFlightUntilAtom,
+  store,
+} from '@/configs';
 import { useNowPlayingElapsedSeconds } from '@/hooks';
 import { SongInfoSchema } from '@/schemas';
 import { seek } from '@/services';
-import { formatSecondsToDuration } from '@/utils';
+import { formatSecondsToDuration, isWithinSeekTolerance } from '@/utils';
 
 import Slider from '../Slider';
 
@@ -24,11 +31,15 @@ const styles = StyleSheet.create({
   },
 });
 
+const SEEK_GRACE_PERIOD_MS = 2500;
+
 const PlayerSeekBar = ({ songInfo }: PlayerSeekBarProps) => {
   const { t } = useTranslation('translation', { keyPrefix: 'player' });
 
   const { elapsedSeconds, seekBarValue, setSeekBarValue } =
     useNowPlayingElapsedSeconds();
+  const [, setSeekInFlightUntil] = useAtom(seekInFlightUntilAtom);
+  const [, setPendingSeekSeconds] = useAtom(pendingSeekSecondsAtom);
 
   const seekSeconds = async (value: number) => {
     const seekValue = Math.round(value * songInfo.songDuration);
@@ -36,10 +47,19 @@ const PlayerSeekBar = ({ songInfo }: PlayerSeekBarProps) => {
     // Web jitter reduction fix: Do not update if new value is just within
     // threshold (1 second) from current server elapsed seconds
     if (Platform.OS === 'web') {
-      if (Math.abs(elapsedSeconds - seekValue) <= 1) return;
+      if (isWithinSeekTolerance(elapsedSeconds, seekValue)) return;
     }
 
     setSeekBarValue(value);
+    setPendingSeekSeconds(seekValue);
+    const seekExpiry = Date.now() + SEEK_GRACE_PERIOD_MS;
+    setSeekInFlightUntil(seekExpiry);
+    queryClient.setQueryData(['nowPlayingElapsedSeconds'], () => seekValue);
+    setTimeout(() => {
+      if (store.get(seekInFlightUntilAtom) !== seekExpiry) return;
+      store.set(seekInFlightUntilAtom, 0);
+      store.set(pendingSeekSecondsAtom, null);
+    }, SEEK_GRACE_PERIOD_MS);
     await seek(seekValue);
   };
 

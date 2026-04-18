@@ -16,6 +16,20 @@ export const LANGUAGES = ['en', 'ja'] as const;
 // Settings
 export const MIN_CONNECTION_PROFILES = 5;
 
+const IPV4_SEGMENT_PATTERN = '(25[0-5]|2[0-4]\\d|1?\\d?\\d)';
+const IPV4_ADDRESS_REGEX = new RegExp(
+  `^(?:${IPV4_SEGMENT_PATTERN}\\.){3}${IPV4_SEGMENT_PATTERN}$`
+);
+const HOSTNAME_LABEL_REGEX = /^(?!-)[a-zA-Z0-9-]{1,63}(?<!-)$/;
+
+const isValidHostname = (value: string) => {
+  if (!value || value.length > 253) return false;
+
+  return value
+    .split('.')
+    .every((label) => !!label && HOSTNAME_LABEL_REGEX.test(label));
+};
+
 export const SETTINGS_KEYS = [
   // connection
   'ipAddress',
@@ -50,10 +64,7 @@ export const TEXT_SETTINGS: Record<
     category: 'connection',
     required: true,
     validation: (value) => {
-      if (
-        !/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(value) &&
-        value !== 'localhost'
-      )
+      if (!IPV4_ADDRESS_REGEX.test(value) && !isValidHostname(value))
         return 'settings.connection.invalidIpAddress';
       return null;
     },
@@ -61,8 +72,9 @@ export const TEXT_SETTINGS: Record<
   },
   port: {
     category: 'connection',
-    required: true,
+    required: false,
     validation: (value) => {
+      if (!value) return null;
       if (isNaN(+value)) return 'settings.connection.invalidPort';
       if (+value < 0 || +value > 65535)
         return 'settings.connection.invalidPortRange';

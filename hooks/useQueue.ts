@@ -12,9 +12,8 @@ import { getQueue } from '@/services';
  */
 export const useQueue = () => {
   const [ipAddress] = useSettingAtom('ipAddress');
-  const [port] = useSettingAtom('port');
 
-  const enabled = !!ipAddress && !!port;
+  const enabled = !!ipAddress;
 
   const useQueryResult = useQuery({
     queryKey: ['queue'],
