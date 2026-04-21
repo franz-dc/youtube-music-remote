@@ -1904,8 +1904,8 @@ __metadata:
   linkType: hard
 
 "@gorhom/bottom-sheet@npm:^5":
-  version: 5.0.6
-  resolution: "@gorhom/bottom-sheet@npm:5.0.6"
+  version: 5.2.10
+  resolution: "@gorhom/bottom-sheet@npm:5.2.10"
   dependencies:
     "@gorhom/portal": "npm:1.0.14"
     invariant: "npm:^2.2.4"
@@ -1915,13 +1915,13 @@ __metadata:
     react: "*"
     react-native: "*"
     react-native-gesture-handler: ">=2.16.1"
-    react-native-reanimated: ">=3.16.0"
+    react-native-reanimated: "*"
   peerDependenciesMeta:
     "@types/react":
       optional: true
     "@types/react-native":
       optional: true
-  checksum: 10c0/99eb540c13d13d3da844cdf598fa6b7db962088b3570d25ef3a77788a1388adf6e9b3f2f90f3bca8503041348e33a052ad0e8bb602796735368c6ca2810959a4
+  checksum: 10c0/67693c6d162151d7a81c5b976a7e477659b4a85aa2a08fddd2318390228822ff7ba214ecf1188cc969489142c2deda0a600db0ef07c7d9d9ead4305b6b64fd67
   languageName: node
   linkType: hard
 
