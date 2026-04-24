@@ -1,6 +1,7 @@
 import { SetStateAction, WritableAtom, atom, createStore } from 'jotai';
 import { useAtom } from 'jotai/react';
-import { atomFamily, atomWithStorage, createJSONStorage } from 'jotai/utils';
+import { atomWithStorage, createJSONStorage } from 'jotai/utils';
+import { atomFamily } from 'jotai-family';
 import { MMKV } from 'react-native-mmkv';
 
 import { SettingsSchema } from '@/schemas';

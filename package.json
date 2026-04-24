@@ -47,6 +47,7 @@
     "i18next": "^26.0.0",
     "intl-pluralrules": "^2.0.1",
     "jotai": "^2.10.2",
+    "jotai-family": "^1.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-i18next": "^16.0.0",
