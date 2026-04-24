@@ -67,6 +67,15 @@ export const useRealtimeUpdates = (enabled: boolean) => {
           store.set(seekBarValueAtom, getSeekBarValue());
           store.set(volumeSliderValueAtom, message.volume);
 
+          // Refetch queue on device wake from idle state
+          const queue = queryClient.getQueryData<any>(['queue']);
+
+          if (!queue) {
+            queryClient.refetchQueries({
+              queryKey: ['queue'],
+            });
+          }
+
           break;
         }
         case WebsocketDataTypes.VideoChanged: {

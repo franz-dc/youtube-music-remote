@@ -1,4 +1,7 @@
 {
   "cSpell.words": ["mmkv", "pressable", "unmute"],
-  "typescript.tsdk": "node_modules\\typescript\\lib"
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  }
 }

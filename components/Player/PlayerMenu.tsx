@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle, useRef } from 'react';
+import { forwardRef, useImperativeHandle, useMemo, useRef } from 'react';
 
 import {
   BottomSheetBackdrop,
@@ -7,7 +7,7 @@ import {
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 import { useTranslation } from 'react-i18next';
-import { Alert, Platform, Share, StyleSheet } from 'react-native';
+import { Alert, Linking, Platform, Share, StyleSheet } from 'react-native';
 import { Divider, List, Text, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -42,6 +42,33 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
 });
+
+// Cherry-picked working patterns (fully functional, private, etc.) from
+// https://wiki.archiveteam.org/index.php/YouTube/Technical_details#Playlists
+/* cspell:disable */
+const workingPlaylistIdPatterns = [
+  /^BLCM.{1,}/,
+  /^BLEM[A-Za-z0-9_-]{22}$/,
+  /^CL([A-Za-z0-9_-]{11}|[A-Za-z0-9_-]{22})$/,
+  /^EL([A-Za-z0-9_-]{11}|[A-Za-z0-9_-]{22})$/,
+  /^FL.{1,}/,
+  /^LL.{1,}/,
+  /^LM$/,
+  /^OLAK5uy_[klmn][A-Za-z0-9_-]{32}$/,
+  /^PL[0-9A-F]{16}$/,
+  /^PL[A-Za-z0-9_-]{32}$/,
+  /^RDCLAK5uy_[klmn][A-Za-z0-9_-]{32}$/,
+  /^RDTMAK5uy_[klmn][A-Za-z0-9_-]{32}$/,
+  /^SP([0-9A-F]{16}|[A-Za-z0-9_-]{32})$/,
+  /^TLGG[A-Za-z0-9_-]{22}$/,
+  /^TLPQ[A-Za-z0-9_-]{22}$/,
+  /^UU.{1,}/,
+  /^UULV.{1,}/,
+  /^UUMO.{1,}/,
+  /^UUSH.{1,}/,
+  /^WL$/,
+];
+/* cspell:enable */
 
 const PlayerMenu = forwardRef<PlayerMenuMethods, PlayerMenuProps>(
   ({ songInfo, onSleepTimerMenuOpen }, ref) => {
@@ -89,6 +116,18 @@ const PlayerMenu = forwardRef<PlayerMenuMethods, PlayerMenuProps>(
       handleDismissModalPress();
       await toggleDislike();
     };
+
+    const resolvedPlaylistURL = useMemo(() => {
+      if (
+        songInfo.playlistId &&
+        workingPlaylistIdPatterns.some((regex) =>
+          regex.test(songInfo.playlistId)
+        )
+      ) {
+        return `https://music.youtube.com/playlist?list=${songInfo.playlistId}`;
+      }
+      return null;
+    }, [songInfo.playlistId]);
 
     return (
       <BottomSheetModalProvider>
@@ -155,6 +194,28 @@ const PlayerMenu = forwardRef<PlayerMenuMethods, PlayerMenuProps>(
               onPress={handleDislikePress}
               style={styles.listItem}
             />
+            {resolvedPlaylistURL && (
+              <List.Item
+                title={t('goToAlbum')}
+                left={() => <List.Icon icon='album' />}
+                onPress={() => {
+                  Linking.openURL(resolvedPlaylistURL);
+                  handleDismissModalPress();
+                }}
+                style={styles.listItem}
+              />
+            )}
+            {!!songInfo.artistUrl && (
+              <List.Item
+                title={t('goToArtist')}
+                left={() => <List.Icon icon='account-music' />}
+                onPress={() => {
+                  Linking.openURL(songInfo.artistUrl!);
+                  handleDismissModalPress();
+                }}
+                style={styles.listItem}
+              />
+            )}
             <List.Item
               title={t('share')}
               left={() => <List.Icon icon='share' />}
