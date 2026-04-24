@@ -50,11 +50,14 @@ export const TEXT_SETTINGS: Record<
     category: 'connection',
     required: true,
     validation: (value) => {
+      // allow localhost, ipv4 and hostnames (simplified)
       if (
-        !/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(value) &&
-        value !== 'localhost'
-      )
+        !/^(?:(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}|localhost|(?:\d{1,3}\.){3}\d{1,3})$/.test(
+          value
+        )
+      ) {
         return 'settings.connection.invalidIpAddress';
+      }
       return null;
     },
     withHelperText: true,
