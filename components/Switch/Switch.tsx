@@ -1,5 +1,5 @@
 // From https://snack.expo.dev/@crystalarcus/material-switch
-
+/* eslint-disable */
 import { useEffect, useState } from 'react';
 
 import { Pressable, StyleSheet, View } from 'react-native';

@@ -99,6 +99,7 @@ module.exports = {
         caughtErrorsIgnorePattern: '^_',
       },
     ],
+    'react-hooks/set-state-in-effect': 'off',
   },
   settings: {
     react: {

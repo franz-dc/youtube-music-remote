@@ -4,7 +4,7 @@
   YouTube Music Remote
 </h1>
 
-Control [YouTube Music](https://github.com/th-ch/youtube-music) from your phone, tablet, or another computer.
+Control [YouTube Music Desktop](https://github.com/pear-devs/pear-desktop) from your phone, tablet, or another computer.
 
 Download the app [here](https://github.com/franz-dc/youtube-music-remote/releases/latest)!
 
@@ -17,9 +17,13 @@ For the web version, see the [dedicated section](#web-version) below.
   <img src="https://github.com/franz-dc/youtube-music-remote/blob/main/images/queue.webp" width="200" style="max-width: 100%;" alt="Queue">
 </p>
 
+## Prerequisites
+
+You should have YouTube Music Desktop installed. You can get it from [here](https://github.com/pear-devs/pear-desktop/releases/latest).
+
 ## Getting Started
 
-1. Enable the API Server plugin in YouTube Music.
+1. From YouTube Music Desktop, enable the API Server plugin.
 2. Set the authorization strategy to `No authorization`.
 3. Install YouTube Music Remote to your device or access the web version.
 4. Configure the connection settings.
