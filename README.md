@@ -19,14 +19,15 @@ For the web version, see the [dedicated section](#web-version) below.
 
 ## Prerequisites
 
-You should have YouTube Music Desktop installed with the API Server plugin enabled. You can get it from [here](https://github.com/pear-devs/pear-desktop/releases/latest).
+You should have YouTube Music Desktop installed. You can get it from [here](https://github.com/pear-devs/pear-desktop/releases/latest).
 
 ## Getting Started
 
-1. Set the authorization strategy to `No authorization`.
-2. Install YouTube Music Remote to your device or access the web version.
-3. Configure the connection settings.
-4. Enjoy controlling YouTube Music remotely!
+1. From YouTube Music Desktop, enable the API Server plugin.
+2. Set the authorization strategy to `No authorization`.
+3. Install YouTube Music Remote to your device or access the web version.
+4. Configure the connection settings.
+5. Enjoy controlling YouTube Music remotely!
 
 ## Web Version
 
