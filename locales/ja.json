@@ -58,8 +58,8 @@
     "title": "設定",
     "connection": {
       "title": "接続",
-      "ipAddress": "IPアドレス",
-      "invalidIpAddress": "無効なIPアドレス",
+      "ipAddress": "ホスト",
+      "invalidIpAddress": "無効なIPアドレスまたはホスト名",
       "port": "ポート",
       "invalidPort": "ポートは数字である必要があります",
       "invalidPortRange": "ポートは1から65535の間である必要があります",
