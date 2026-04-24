@@ -8,6 +8,9 @@ const styles = StyleSheet.create({
     fontSize: 16 * 1.25,
     fontWeight: 'bold',
   },
+  subtitle: {
+    flexDirection: 'row',
+  },
   artist: {
     opacity: 0.5,
   },
@@ -22,26 +25,38 @@ const SongDetails = ({
   artist,
   artistUrl,
   sideBySide,
+  album,
 }: SongDetailsProps) => {
   return (
     <View style={[sideBySide && { flex: 1 }]}>
       <Text numberOfLines={sideBySide ? 2 : 1} style={styles.title}>
         {title}
       </Text>
-      <TouchableRipple
-        onPress={
-          artistUrl
-            ? () => {
-                Linking.openURL(artistUrl);
-              }
-            : undefined
-        }
-        style={{ alignSelf: 'flex-start' }}
-      >
-        <Text numberOfLines={1} variant='bodyLarge' style={styles.artist}>
-          {artist}
-        </Text>
-      </TouchableRipple>
+      <View style={styles.subtitle}>
+        <TouchableRipple
+          onPress={
+            artistUrl
+              ? () => {
+                  Linking.openURL(artistUrl);
+                }
+              : undefined
+          }
+          style={{ alignSelf: 'flex-start' }}
+        >
+          <Text numberOfLines={1} variant='bodyLarge' style={styles.artist}>
+            {artist}
+          </Text>
+        </TouchableRipple>
+        {!!album && (
+          <Text
+            numberOfLines={1}
+            variant='bodyLarge'
+            style={[styles.artist, { marginLeft: 4 }]}
+          >
+            • {album}
+          </Text>
+        )}
+      </View>
     </View>
   );
 };
