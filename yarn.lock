@@ -7940,14 +7940,14 @@ __metadata:
   linkType: hard
 
 "i18next@npm:^26.0.0":
-  version: 26.0.7
-  resolution: "i18next@npm:26.0.7"
+  version: 26.2.0
+  resolution: "i18next@npm:26.2.0"
   peerDependencies:
     typescript: ^5 || ^6
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/5bcf5535a9b0612d5e580673c89e6a0f7e09202011f4161aa096afe35283857e129df3adb0521ccae60823791178a011f6724ad838f66b4fd3b95bb8be324b11
+  checksum: 10c0/8ce453de86422503141ece62785089236894173d50c269d1b4ea1da5f362bc9a3023c1af25c90979decbddb007b35812726cd90de973c445785609ae3c775e75
   languageName: node
   linkType: hard
 
