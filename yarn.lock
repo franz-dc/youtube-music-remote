@@ -9376,8 +9376,8 @@ __metadata:
   linkType: hard
 
 "jotai@npm:^2.10.2":
-  version: 2.19.1
-  resolution: "jotai@npm:2.19.1"
+  version: 2.20.0
+  resolution: "jotai@npm:2.20.0"
   peerDependencies:
     "@babel/core": ">=7.0.0"
     "@babel/template": ">=7.0.0"
@@ -9392,7 +9392,7 @@ __metadata:
       optional: true
     react:
       optional: true
-  checksum: 10c0/82651da60711b2ceb4f50e3869b92fa9e71dab085f11cb0277bcad4c0f6691af5e66a5a1997082e13912a39ab3ad1e83f4b96b59fb0990dd392c8f94deffb9ef
+  checksum: 10c0/e16c88dc8792826b9f148faf0fa5547e9948bf7f2b9e7b968cae89448024b40cde3a2cffa0df89fef223a7bc79bed72844f525c7cb86bd37741d44aede5e4fc1
   languageName: node
   linkType: hard
 
