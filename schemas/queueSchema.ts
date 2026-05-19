@@ -90,7 +90,7 @@ export type PlaylistPanelVideoRenderer = {
     };
   };
   videoId: string;
-  shortBylineText: { runs: { text: string }[] };
+  shortBylineText: { runs?: { text: string }[] };
   trackingParams: string;
   menu: {
     menuRenderer: {

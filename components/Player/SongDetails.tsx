@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Linking, StyleSheet, View } from 'react-native';
 import { Text, TouchableRipple } from 'react-native-paper';
 
@@ -27,10 +28,12 @@ const SongDetails = ({
   sideBySide,
   album,
 }: SongDetailsProps) => {
+  const { t } = useTranslation('translation');
+
   return (
     <View style={[sideBySide && { flex: 1 }]}>
       <Text numberOfLines={sideBySide ? 2 : 1} style={styles.title}>
-        {title}
+        {title || t('queue.unknownTitle')}
       </Text>
       <View style={styles.subtitle}>
         <TouchableRipple
@@ -44,7 +47,7 @@ const SongDetails = ({
           style={{ alignSelf: 'flex-start' }}
         >
           <Text numberOfLines={1} variant='bodyLarge' style={styles.artist}>
-            {artist}
+            {artist || t('queue.unknownArtist')}
           </Text>
         </TouchableRipple>
         {!!album && (
