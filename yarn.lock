@@ -9368,11 +9368,11 @@ __metadata:
   linkType: hard
 
 "jotai-family@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "jotai-family@npm:1.0.1"
+  version: 1.0.2
+  resolution: "jotai-family@npm:1.0.2"
   peerDependencies:
     jotai: ">=2.9.0"
-  checksum: 10c0/0608c251b3b5fd17fff7f7d7e04b0f23028900d9515481f18b6b425a494786eb21348788e7782ea485f23517e7c6ee53b7f29cb893e1c71487904fa204ee81da
+  checksum: 10c0/32f0198b46587df987043a10a71e263349fa1cb53fee3c8976d92ae29039ae60e56b5dc861cfa73885d6346c4e7c3ef5fa65c474fd5b307691b922119824e80e
   languageName: node
   linkType: hard
 
