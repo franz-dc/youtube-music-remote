@@ -76,7 +76,7 @@ const PlayButton = () => {
 };
 
 const MiniPlayer = ({ songInfo }: MiniPlayerProps) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'player' });
+  const { t } = useTranslation('translation');
 
   const theme = useTheme();
 
@@ -111,10 +111,10 @@ const MiniPlayer = ({ songInfo }: MiniPlayerProps) => {
       )}
       <View style={styles.textContainer}>
         <Text numberOfLines={1} style={styles.title}>
-          {songInfo.title}
+          {songInfo.title || t('queue.unknownTitle')}
         </Text>
         <Text numberOfLines={1} style={styles.artist}>
-          {songInfo.artist}
+          {songInfo.artist || t('queue.unknownArtist')}
         </Text>
       </View>
       <View style={styles.controlsContainer}>
@@ -122,14 +122,14 @@ const MiniPlayer = ({ songInfo }: MiniPlayerProps) => {
           icon='skip-previous'
           size={30}
           onPress={playPreviousTrack}
-          accessibilityLabel={t('playPrevious')}
+          accessibilityLabel={t('player.playPrevious')}
         />
         <PlayButton />
         <IconButton
           icon='skip-next'
           size={30}
           onPress={playNextTrack}
-          accessibilityLabel={t('playNext')}
+          accessibilityLabel={t('player.playNext')}
         />
       </View>
     </View>

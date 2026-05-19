@@ -66,8 +66,8 @@ const QueueListItem = ({
   const { t } = useTranslation('translation', { keyPrefix: 'queue' });
 
   const smallestThumbnailUrl = song.thumbnail.thumbnails[0].url;
-  const title = song.title.runs[0].text ?? t('unknownTitle');
-  const artist = song.shortBylineText.runs[0].text ?? t('unknownChannel');
+  const title = song.title.runs?.[0].text ?? t('unknownTitle');
+  const artist = song.shortBylineText.runs?.[0].text ?? t('unknownArtist');
   const isPlaying = song.selected;
 
   const activeBackgroundColor = Color(theme.colors.onSurface)
