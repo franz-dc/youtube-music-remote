@@ -19,7 +19,8 @@
         }
       },
       "supportsTablet": true,
-      "bundleIdentifier": "com.franzdc.youtubemusicremote"
+      "bundleIdentifier": "com.franzdc.youtubemusicremote",
+      "buildNumber": "1"
     },
     "android": {
       "adaptiveIcon": {
@@ -41,7 +42,8 @@
         "REQUEST_INSTALL_PACKAGES",
         "android.permission.POST_NOTIFICATIONS"
       ],
-      "package": "com.franzdc.youtubemusicremote"
+      "package": "com.franzdc.youtubemusicremote",
+      "versionCode": 1
     },
     "web": {
       "bundler": "metro",
