@@ -54,9 +54,15 @@ const Searchbar = ({ onSubmit, ...props }: SearchbarProps) => {
   const handleKeyPress = (
     e: NativeSyntheticEvent<TextInputKeyPressEventData>
   ) => {
+    if (Platform.OS !== 'web') return;
     if (e.nativeEvent.key === 'Enter') {
       onSubmit(query);
     }
+  };
+
+  const handleSubmitEditing = () => {
+    if (Platform.OS === 'web') return;
+    onSubmit(query);
   };
 
   return (
@@ -84,7 +90,7 @@ const Searchbar = ({ onSubmit, ...props }: SearchbarProps) => {
         autoFocus={!q}
         value={query}
         onChangeText={setQuery}
-        // onSubmitEditing={() => onSubmit(query)}
+        onSubmitEditing={handleSubmitEditing}
         onKeyPress={handleKeyPress}
         blurOnSubmit={query.trim().length !== 0}
         {...props}
