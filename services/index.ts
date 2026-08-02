@@ -101,8 +101,7 @@ export const getQueue = async () => {
 export const addSongToQueue = async (
   videoId: string,
   insertPosition:
-    | 'INSERT_AT_END'
-    | 'INSERT_AFTER_CURRENT_VIDEO' = 'INSERT_AT_END'
+    'INSERT_AT_END' | 'INSERT_AFTER_CURRENT_VIDEO' = 'INSERT_AT_END'
 ) => {
   await api.post('/queue', { videoId, insertPosition });
 };

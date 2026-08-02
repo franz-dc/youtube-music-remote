@@ -18,8 +18,7 @@ export type MusicCardShelfRendererObj = SearchResultSong & {
   type: 'musicCardShelfRenderer';
   // header: string;
   contents: (
-    | MusicCardShelfRendererTextContent
-    | MusicCardShelfRendererSongContent
+    MusicCardShelfRendererTextContent | MusicCardShelfRendererSongContent
   )[];
 };
 
