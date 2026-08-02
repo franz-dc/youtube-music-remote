@@ -2,7 +2,14 @@ import { useState } from 'react';
 
 import { useGlobalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { NativeSyntheticEvent, Platform, StyleSheet, TextInputKeyPressEventData, TextInputProps, View } from 'react-native';
+import {
+  NativeSyntheticEvent,
+  Platform,
+  StyleSheet,
+  TextInputKeyPressEventData,
+  TextInputProps,
+  View,
+} from 'react-native';
 import { IconButton, TextInput, useTheme } from 'react-native-paper';
 
 const styles = StyleSheet.create({
@@ -44,7 +51,9 @@ const Searchbar = ({ onSubmit, ...props }: SearchbarProps) => {
   const hasQuery = query.trim().length !== 0;
   const clearQuery = () => setQuery('');
 
-  const handleKeyPress = (e: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
+  const handleKeyPress = (
+    e: NativeSyntheticEvent<TextInputKeyPressEventData>
+  ) => {
     if (e.nativeEvent.key === 'Enter') {
       onSubmit(query);
     }
@@ -75,7 +84,7 @@ const Searchbar = ({ onSubmit, ...props }: SearchbarProps) => {
         autoFocus={!q}
         value={query}
         onChangeText={setQuery}
-        onSubmitEditing={() => onSubmit(query)}
+        // onSubmitEditing={() => onSubmit(query)}
         onKeyPress={handleKeyPress}
         blurOnSubmit={query.trim().length !== 0}
         {...props}
