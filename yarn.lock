@@ -9727,11 +9727,11 @@ __metadata:
   linkType: hard
 
 "jotai-family@npm:^1.0.1":
-  version: 1.0.2
-  resolution: "jotai-family@npm:1.0.2"
+  version: 1.1.0
+  resolution: "jotai-family@npm:1.1.0"
   peerDependencies:
     jotai: ">=2.9.0"
-  checksum: 10c0/32f0198b46587df987043a10a71e263349fa1cb53fee3c8976d92ae29039ae60e56b5dc861cfa73885d6346c4e7c3ef5fa65c474fd5b307691b922119824e80e
+  checksum: 10c0/f8ee07e62a7a9c641c321e1644c75011ee9540a7ff1306932b3f95aabfc650a449c5b249385409ce89f67945116e7b7a3a368d89ac026099b55578304deaa6c6
   languageName: node
   linkType: hard
 
