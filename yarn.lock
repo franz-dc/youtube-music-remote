@@ -12428,11 +12428,11 @@ __metadata:
   linkType: hard
 
 "react-use-websocket-lite@npm:^1.0.1":
-  version: 1.1.0
-  resolution: "react-use-websocket-lite@npm:1.1.0"
+  version: 1.1.1
+  resolution: "react-use-websocket-lite@npm:1.1.1"
   peerDependencies:
     react: ^18.0.0 || ^19.0.0
-  checksum: 10c0/250a17247b6ab45f3526198ac79d6f8c62445cfc3270da069a22447e5ab25deefb5d937db56bfeef77a5751691e4c90c36071037c52dc1ae1ebfa644ff30d9b0
+  checksum: 10c0/ec8a756024e4904f454e9c53a22407d799ffcb2b7406f9a725e3be633929657ce07c406694b23a1d74a211161a96bf7710e98de6a6c304e8e1fca8595a15b348
   languageName: node
   linkType: hard
 
