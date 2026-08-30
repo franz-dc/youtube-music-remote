@@ -30,8 +30,8 @@ export const useDominantColor = (imageUrl?: string | null) => {
     const getDominantColor = async () => {
       try {
         const colors = await getColors(imageUrl);
-        // @ts-ignore: dominant - android/web; primary - ios
-        const dominantColor: string = colors?.dominant || colors?.primary;
+        const dominantColor: string =
+          colors.platform === 'ios' ? colors.primary : colors.dominant;
         setData(
           dominantColor
             ? {
