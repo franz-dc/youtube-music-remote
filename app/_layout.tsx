@@ -2,15 +2,15 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
 import { QueryClientProvider } from '@tanstack/react-query';
-import * as FileSystem from 'expo-file-system';
+import { File, Paths } from 'expo-file-system';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
-import * as NavigationBar from 'expo-navigation-bar';
+import { NavigationBar } from 'expo-navigation-bar';
 import {
   requestPermissionsAsync,
   setNotificationHandler,
 } from 'expo-notifications';
 import { SplashScreen, Stack } from 'expo-router';
-import { setStatusBarHidden, setStatusBarStyle } from 'expo-status-bar';
+import { StatusBar } from 'expo-status-bar';
 import { Provider as JotaiProvider } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { Appearance, Platform, View, useWindowDimensions } from 'react-native';
@@ -35,9 +35,10 @@ SplashScreen.preventAutoHideAsync();
 
 setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
     shouldPlaySound: true,
     shouldSetBadge: false,
+    shouldShowBanner: true,
+    shouldShowList: true,
   }),
 });
 
@@ -116,9 +117,6 @@ const StackWithConfig = () => {
         language === 'system' ? systemLanguage : (language as string)
       );
 
-      await NavigationBar.setPositionAsync('absolute');
-      await NavigationBar.setBackgroundColorAsync('transparent');
-
       setIsInitialized(true);
       await SplashScreen.hideAsync();
 
@@ -159,7 +157,7 @@ const StackWithConfig = () => {
 
   // update status bar style when theme changes
   useEffect(() => {
-    setStatusBarStyle(
+    StatusBar.setStyle(
       themes[theme as keyof typeof themes].dark ? 'light' : 'dark'
     );
   }, [theme, themes]);
@@ -170,18 +168,18 @@ const StackWithConfig = () => {
   useEffect(() => {
     if (!isFreshInstall || Platform.OS === 'web' || isInitialized) return;
 
-    FileSystem.deleteAsync(
-      FileSystem.cacheDirectory + `update.${APP_FILE_EXTENSION}`,
-      { idempotent: true }
+    const updateFile = new File(
+      Paths.join(Paths.cache.uri, `update.${APP_FILE_EXTENSION}`)
     );
+    updateFile.delete();
 
     setIsFreshInstall(false);
   }, [isFreshInstall, setIsFreshInstall, isInitialized]);
 
   // hide bars on landscape mode
   useEffect(() => {
-    setStatusBarHidden(isLandscape);
-    NavigationBar.setVisibilityAsync(isLandscape ? 'hidden' : 'visible');
+    StatusBar.setHidden(isLandscape);
+    // NavigationBar.setHidden(isLandscape);
   }, [isLandscape]);
 
   useRealtimeUpdates(isInitialized);
@@ -193,6 +191,10 @@ const StackWithConfig = () => {
       {Platform.OS !== 'web' && (
         <UpdateRedirect isInitialized={isInitialized} />
       )}
+      <NavigationBar
+        hidden={isLandscape}
+        style={activeTheme.dark ? 'dark' : 'light'}
+      />
       <View
         style={{
           flex: 1,

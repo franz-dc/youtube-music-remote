@@ -2,6 +2,8 @@ import { QueryObserverResult } from '@tanstack/react-query';
 
 import { QueueSchema } from '@/schemas';
 
+const MAX_POLL_ATTEMPTS = 10;
+
 /**
  * Poll the queue until the song with `videoId` is found at the next position
  * after the current song.
@@ -28,13 +30,12 @@ export const pollQueue = async (
   // Poll every 1 second interval until the song is added to the queue.
   // If the song is not added after 10 attempts, abort the operation.
   let attempts = 0;
-  const maxAttempts = 10;
 
   return new Promise((resolve) => {
     const poll = async () => {
       attempts += 1;
 
-      if (attempts > maxAttempts) return resolve(false);
+      if (attempts > MAX_POLL_ATTEMPTS) return resolve(false);
 
       const { data: queue } = await refetchQueue();
 
