@@ -137,23 +137,27 @@ const Queue = () => {
     <>
       <View style={{ flex: 1, paddingBottom }}>
         <FlashList
-          data={queue.items.filter(
-            (item) =>
-              item?.playlistPanelVideoRenderer?.videoId ||
+          data={queue.items}
+          renderItem={({ item, index }) => {
+            const song =
+              item.playlistPanelVideoRenderer ||
               item.playlistPanelVideoWrapperRenderer?.primaryRenderer
-                .playlistPanelVideoRenderer.videoId
-          )}
-          renderItem={({ item, index }) => (
-            <QueueListItem
-              song={
-                (item.playlistPanelVideoRenderer ||
-                  item.playlistPanelVideoWrapperRenderer?.primaryRenderer
-                    ?.playlistPanelVideoRenderer)!
-              }
-              index={index}
-              onMoreActionsOpen={setSelectedSong}
-            />
-          )}
+                ?.playlistPanelVideoRenderer;
+
+            if (!song) return <></>;
+
+            return (
+              <QueueListItem
+                song={
+                  (item.playlistPanelVideoRenderer ||
+                    item.playlistPanelVideoWrapperRenderer?.primaryRenderer
+                      ?.playlistPanelVideoRenderer)!
+                }
+                index={index}
+                onMoreActionsOpen={setSelectedSong}
+              />
+            );
+          }}
           keyExtractor={keyExtractor}
           estimatedItemSize={64}
           contentContainerStyle={{ paddingBottom: 8 }}
