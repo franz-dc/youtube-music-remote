@@ -1227,10 +1227,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.18.6, @babel/runtime@npm:^7.20.0, @babel/runtime@npm:^7.25.0, @babel/runtime@npm:^7.29.2":
+"@babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.18.6, @babel/runtime@npm:^7.20.0, @babel/runtime@npm:^7.25.0":
   version: 7.29.2
   resolution: "@babel/runtime@npm:7.29.2"
   checksum: 10c0/30b80a0140d16467792e1bbeb06f655b0dab70407da38dfac7fedae9c859f9ae9d846ef14ad77bd3814c064295fe9b1bc551f1541ea14646ae9f22b71a8bc17a
+  languageName: node
+  linkType: hard
+
+"@babel/runtime@npm:^7.29.7":
+  version: 7.29.7
+  resolution: "@babel/runtime@npm:7.29.7"
+  checksum: 10c0/ca11572f7146b21e0bde6a9ed4bb6a89eafbee5f0944c7eb54d0d8a2dac962c33638a1d611e14faa71dfbb92b4b5f9236232208568a6b7d5c6f3f39ddb91771e
   languageName: node
   linkType: hard
 
@@ -12118,10 +12125,10 @@ __metadata:
   linkType: hard
 
 "react-i18next@npm:^17.0.0":
-  version: 17.0.11
-  resolution: "react-i18next@npm:17.0.11"
+  version: 17.0.13
+  resolution: "react-i18next@npm:17.0.13"
   dependencies:
-    "@babel/runtime": "npm:^7.29.2"
+    "@babel/runtime": "npm:^7.29.7"
     html-parse-stringify: "npm:^4.0.1"
     use-sync-external-store: "npm:^1.6.0"
   peerDependencies:
@@ -12135,7 +12142,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10c0/f49e83e377f56d8f6a198a00539925edbc77370b68a51ad8b1829b581abcd22dd57843118a8e541c2284f58899d8035d255c41e246cfc64e9c0ca42df071ed81
+  checksum: 10c0/58369886b4b49dd1c3c950de8d89811a15f1728f0805356f5003ec77ea96f2ef007ef25fb039fb241676d9f48664448d8be9dbc569bebfa06ad1cad5a76517ec
   languageName: node
   linkType: hard
 
