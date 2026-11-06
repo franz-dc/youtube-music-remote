@@ -2,7 +2,7 @@
   "expo": {
     "name": "YT Music Remote",
     "slug": "youtube-music-remote",
-    "version": "0.10.0",
+    "version": "0.10.1",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -15,7 +15,7 @@
       },
       "supportsTablet": true,
       "bundleIdentifier": "com.franzdc.youtubemusicremote",
-      "buildNumber": "3"
+      "buildNumber": "4"
     },
     "android": {
       "adaptiveIcon": {
@@ -28,7 +28,7 @@
         "android.permission.POST_NOTIFICATIONS"
       ],
       "package": "com.franzdc.youtubemusicremote",
-      "versionCode": 3
+      "versionCode": 4
     },
     "web": {
       "bundler": "metro",
@@ -61,17 +61,16 @@
       ],
       "expo-font",
       "expo-web-browser",
-      "expo-splash-screen",
       "expo-status-bar",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash.png",
-          "resizeMode": "cover",
+          "image": "./assets/images/logo.png",
+          "imageWidth": 180,
+          "resizeMode": "contain",
           "backgroundColor": "#ffffff",
           "dark": {
-            "image": "./assets/images/splash.png",
-            "resizeMode": "contain",
+            "image": "./assets/images/logo.png",
             "backgroundColor": "#1a1b21"
           }
         }
