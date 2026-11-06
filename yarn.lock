@@ -10913,15 +10913,15 @@ __metadata:
   linkType: hard
 
 "react-native-tab-view@npm:^4.1.1":
-  version: 4.3.2
-  resolution: "react-native-tab-view@npm:4.3.2"
+  version: 4.3.4
+  resolution: "react-native-tab-view@npm:4.3.4"
   dependencies:
     use-latest-callback: "npm:^0.2.4"
   peerDependencies:
     react: ">= 18.2.0"
     react-native: "*"
     react-native-pager-view: ">= 6.0.0"
-  checksum: 10c0/1ed1332775ed05baf92655cb4d2054b6657ec23786b8ed46afdc2889e6182316379106dfc46e960a37635edf785d37f28da05a52ef232e6e39e00249359e6d70
+  checksum: 10c0/4a3aeacd5fbdf4fae9ba320da053fab0329131e9faac7f7290ddaa737850ac22c301dd2ab7942a1f0b09221fe3a198cc53eddf9910c66de19aa9e0e575cc61f2
   languageName: node
   linkType: hard
 
