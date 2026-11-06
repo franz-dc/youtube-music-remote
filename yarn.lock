@@ -8885,24 +8885,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jotai@npm:^2.10.2":
-  version: 2.20.3
-  resolution: "jotai@npm:2.20.3"
+"jotai@npm:^3.0.0":
+  version: 3.0.1
+  resolution: "jotai@npm:3.0.1"
   peerDependencies:
-    "@babel/core": ">=7.0.0"
-    "@babel/template": ">=7.0.0"
-    "@types/react": ">=17.0.0"
-    react: ">=17.0.0"
+    "@types/react": ">=18.0.0"
+    react: ">=18.0.0"
   peerDependenciesMeta:
-    "@babel/core":
-      optional: true
-    "@babel/template":
-      optional: true
     "@types/react":
       optional: true
     react:
       optional: true
-  checksum: 10c0/a280f2dffb48ec2888e83d4f876bb7e6f26c2cc6bb5aa983ca789f8698e43b9d00e56f4ba023aaf3b4454725896c440d0520300c2a9b7b26fae8b0627d0d3207
+  checksum: 10c0/84b6adac2e3c8f7e8fd27c52f3206ceb1b22f9b46dfb81100b3765f652134399e91bfaee49a15e2e25083adf5638b8168aeb338234074e9c80955d51c231b456
   languageName: node
   linkType: hard
 
@@ -13258,7 +13252,7 @@ __metadata:
     intl-pluralrules: "npm:^2.0.1"
     jest: "npm:^29.2.1"
     jest-expo: "npm:~57.0.5"
-    jotai: "npm:^2.10.2"
+    jotai: "npm:^3.0.0"
     jotai-family: "npm:^1.0.1"
     prettier: "npm:^3.3.3"
     react: "npm:19.2.3"

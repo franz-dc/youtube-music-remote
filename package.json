@@ -46,7 +46,7 @@
     "expo-web-browser": "~57.0.2",
     "i18next": "^26.0.0",
     "intl-pluralrules": "^2.0.1",
-    "jotai": "^2.10.2",
+    "jotai": "^3.0.0",
     "jotai-family": "^1.0.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
