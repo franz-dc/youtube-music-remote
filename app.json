@@ -2,7 +2,7 @@
   "expo": {
     "name": "YT Music Remote",
     "slug": "youtube-music-remote",
-    "version": "0.9.2",
+    "version": "0.10.0",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -15,7 +15,7 @@
       },
       "supportsTablet": true,
       "bundleIdentifier": "com.franzdc.youtubemusicremote",
-      "buildNumber": "2"
+      "buildNumber": "3"
     },
     "android": {
       "adaptiveIcon": {
@@ -28,7 +28,7 @@
         "android.permission.POST_NOTIFICATIONS"
       ],
       "package": "com.franzdc.youtubemusicremote",
-      "versionCode": 2
+      "versionCode": 3
     },
     "web": {
       "bundler": "metro",
