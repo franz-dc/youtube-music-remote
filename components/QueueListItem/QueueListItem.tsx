@@ -1,7 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query';
 import Color from 'color';
 import { useTranslation } from 'react-i18next';
-import { Image, StyleSheet, View } from 'react-native';
+import { GestureResponderEvent, Image, StyleSheet, View } from 'react-native';
+import { DraxHandle } from 'react-native-drax';
 import { Icon, Text, TouchableRipple, useTheme } from 'react-native-paper';
 
 import { LIST_ITEM_PRESS_DELAY_MS, LONG_PRESS_DELAY_MS } from '@/constants';
@@ -15,6 +16,10 @@ import { changeActiveSongInQueue } from '@/services';
 export type SongListItemProps = {
   song: PlaylistPanelVideoRenderer;
   index: number;
+  resolveIndexAtPosition: (
+    pageY: number,
+    fallbackIndex: number
+  ) => Promise<number>;
   onMoreActionsOpen: (params: SearchResultSong & { index: number }) => void;
 };
 
@@ -59,6 +64,7 @@ const styles = StyleSheet.create({
 const QueueListItem = ({
   song,
   index,
+  resolveIndexAtPosition,
   onMoreActionsOpen,
 }: SongListItemProps) => {
   const theme = useTheme();
@@ -76,8 +82,17 @@ const QueueListItem = ({
 
   const queryClient = useQueryClient();
 
-  const playSelectedSong = async () => {
+  const playSelectedSong = async (event: GestureResponderEvent) => {
+    if (isPlaying) return;
+
     const currentQueue = queryClient.getQueryData<QueueSchema>(['queue']);
+    // Resolve the index from where the user pressed. While a reorder is being
+    // applied, the rendered `index` prop can point at a different row than the
+    // one on screen.
+    const queueIndex = await resolveIndexAtPosition(
+      event.nativeEvent.pageY,
+      index
+    );
 
     // Optimistically update the queue due to delay
     queryClient.setQueryData<QueueSchema>(['queue'], (data) => {
@@ -96,10 +111,7 @@ const QueueListItem = ({
                   playlistPanelVideoRenderer: {
                     ...item.playlistPanelVideoWrapperRenderer.primaryRenderer
                       .playlistPanelVideoRenderer,
-                    selected:
-                      item.playlistPanelVideoWrapperRenderer.primaryRenderer
-                        .playlistPanelVideoRenderer.videoId === song.videoId &&
-                      itemIdx === index,
+                    selected: itemIdx === queueIndex,
                   },
                 },
               },
@@ -111,9 +123,7 @@ const QueueListItem = ({
               ...item,
               playlistPanelVideoRenderer: {
                 ...item.playlistPanelVideoRenderer,
-                selected:
-                  item.playlistPanelVideoRenderer.videoId === song.videoId &&
-                  itemIdx === index,
+                selected: itemIdx === queueIndex,
               },
             };
           }
@@ -122,77 +132,120 @@ const QueueListItem = ({
     });
 
     try {
-      await changeActiveSongInQueue(index);
+      await changeActiveSongInQueue(queueIndex);
     } catch {
       queryClient.setQueryData<QueueSchema>(['queue'], currentQueue);
     }
   };
 
-  const handleMoreActionsOpen = () => {
+  const handleMoreActionsOpen = async (event: GestureResponderEvent) => {
+    const queueIndex = await resolveIndexAtPosition(
+      event.nativeEvent.pageY,
+      index
+    );
+
     onMoreActionsOpen({
       title,
       subtitle: artist,
       thumbnail: smallestThumbnailUrl,
       videoId: song.videoId,
-      index,
+      index: queueIndex,
     });
   };
 
   return (
-    <TouchableRipple
-      onPress={playSelectedSong}
-      onLongPress={handleMoreActionsOpen}
-      unstable_pressDelay={LIST_ITEM_PRESS_DELAY_MS}
-      delayLongPress={LONG_PRESS_DELAY_MS}
-    >
+    <>
       <View
-        style={[
-          styles.listItemContainer,
-          isPlaying && {
-            backgroundColor: activeBackgroundColor,
-          },
-        ]}
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          alignItems: 'center',
+          // gap: 14,
+          backgroundColor: theme.colors.surface,
+        }}
       >
-        <View
+        <TouchableRipple
+          onPress={playSelectedSong}
+          onLongPress={handleMoreActionsOpen}
+          unstable_pressDelay={LIST_ITEM_PRESS_DELAY_MS}
+          delayLongPress={LONG_PRESS_DELAY_MS}
           style={[
-            styles.albumArtContainer,
-            { backgroundColor: theme.dark ? '#000000' : '#ffffff' },
+            styles.listItemContainer,
+            { flex: 1 },
+            isPlaying && {
+              backgroundColor: activeBackgroundColor,
+            },
           ]}
         >
-          <Image
-            source={{ uri: smallestThumbnailUrl }}
-            style={[
-              styles.albumArt,
-              isPlaying && {
-                opacity: theme.dark ? 0.15 : 0.25,
-              },
-            ]}
-          />
-          {isPlaying && (
-            <>
-              <View style={styles.albumArtPlayingIcon}>
-                <Icon
-                  source='equalizer'
-                  size={30}
-                  color={theme.colors.onSurface}
-                />
-              </View>
-            </>
-          )}
-        </View>
-        <View style={styles.songTextContainer}>
-          <Text
-            numberOfLines={1}
-            style={[styles.title, isPlaying && { color: theme.colors.primary }]}
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 14,
+              flex: 1,
+            }}
           >
-            {title}
-          </Text>
-          <Text numberOfLines={1} style={styles.artist}>
-            {artist}
-          </Text>
-        </View>
+            <View
+              style={[
+                styles.albumArtContainer,
+                { backgroundColor: theme.dark ? '#000000' : '#ffffff' },
+              ]}
+            >
+              <Image
+                source={{ uri: smallestThumbnailUrl }}
+                style={[
+                  styles.albumArt,
+                  isPlaying && {
+                    opacity: theme.dark ? 0.15 : 0.25,
+                  },
+                ]}
+              />
+              {isPlaying && (
+                <>
+                  <View style={styles.albumArtPlayingIcon}>
+                    <Icon
+                      source='equalizer'
+                      size={30}
+                      color={theme.colors.onSurface}
+                    />
+                  </View>
+                </>
+              )}
+            </View>
+            <View style={styles.songTextContainer}>
+              <Text
+                numberOfLines={1}
+                style={[
+                  styles.title,
+                  isPlaying && { color: theme.colors.primary },
+                ]}
+              >
+                {title}
+              </Text>
+              <Text numberOfLines={1} style={styles.artist}>
+                {artist}
+              </Text>
+            </View>
+          </View>
+        </TouchableRipple>
+        <DraxHandle
+          style={{
+            justifyContent: 'center',
+            paddingHorizontal: 16,
+            paddingVertical: 20,
+            ...(isPlaying && {
+              backgroundColor: activeBackgroundColor,
+            }),
+          }}
+        >
+          <Icon
+            source='drag-horizontal-variant'
+            size={24}
+            color={theme.colors.onSurface}
+          />
+        </DraxHandle>
       </View>
-    </TouchableRipple>
+    </>
   );
 };
 

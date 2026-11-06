@@ -1,0 +1,594 @@
+diff --git a/package.json b/package.json
+index b316ce0..37938e2 100644
+--- a/package.json
++++ b/package.json
+@@ -10,6 +10,7 @@
+       "source": "./src/index.ts",
+       "types": "./lib/typescript/src/index.d.ts",
+       "react-native": "./src/index.ts",
++      "browser": "./src/index.ts",
+       "default": "./lib/module/index.js"
+     },
+     "./package.json": "./package.json"
+diff --git a/src/DraxList.tsx b/src/DraxList.tsx
+index b0ef97c..155e784 100644
+--- a/src/DraxList.tsx
++++ b/src/DraxList.tsx
+@@ -149,6 +149,10 @@ export const DraxList = <T,>({
+   // when the consumer uses a different list component.
+   const ResolvedList = ListComponent ?? require('react-native').FlatList;
+ 
++  // Render the parent-provided data directly. `sortable.data` buffers the last
++  // committed order, so feeding it would leave the list one commit behind the
++  // parent: shifts get cleared while the old order is still mounted, which
++  // flashes the pre-reorder list.
+   return (
+     <SortableContainer
+       sortable={sortable}
+@@ -163,13 +167,14 @@ export const DraxList = <T,>({
+         horizontal={isHorizontal}
+         keyExtractor={sortable.stableKeyExtractor}
+         numColumns={cols}
+-        data={sortable.data}
++        data={data}
+         onScroll={sortable.onScroll}
+         onContentSizeChange={sortable.onContentSizeChange}
+         renderItem={(info: ListRenderItemInfo<T>) => (
+           <SortableItem
+             sortable={sortable}
+             index={info.index}
++            item={info.item}
+             {...itemDraxViewProps}
+           >
+             {renderItem(info)}
+diff --git a/src/DraxProvider.tsx b/src/DraxProvider.tsx
+index 75580b2..45ec3e4 100644
+--- a/src/DraxProvider.tsx
++++ b/src/DraxProvider.tsx
+@@ -1,8 +1,7 @@
+-import type { ReactNode, RefObject } from 'react';
++import type { ComponentRef, ReactNode, RefObject } from 'react';
+ import { useCallback, useMemo, useRef, useState } from 'react';
+-import type { HostInstance } from 'react-native';
+ import { StyleSheet, View } from 'react-native';
+-import { useSharedValue } from 'react-native-reanimated';
++import { useAnimatedRef, useSharedValue } from 'react-native-reanimated';
+ 
+ import { DebugOverlay } from './DebugOverlay';
+ import { DraxContext } from './DraxContext';
+@@ -106,10 +105,7 @@ export const DraxProvider = ({
+     });
+ 
+   // ── Root view ref ──────────────────────────────────────────────────
+-  const rootViewRef = useRef<HostInstance>(null);
+-  const setRootViewRef = (ref: HostInstance | null) => {
+-    rootViewRef.current = ref;
+-  };
++  const rootViewRef = useAnimatedRef<ComponentRef<typeof View>>();
+ 
+   // Measure root view's screen position on layout
+   const handleRootLayout = useCallback(() => {
+@@ -120,7 +116,7 @@ export const DraxProvider = ({
+           rootOffsetSV.value = { x: pageX, y: pageY };
+         });
+     }
+-  }, [rootOffsetSV]);
++  }, [rootOffsetSV, rootViewRef]);
+ 
+   // ── Stable context value ───────────────────────────────────────────
+   const contextValue = useMemo<DraxContextValue>(
+@@ -189,12 +185,13 @@ export const DraxProvider = ({
+       handleDragEnd,
+       setHoverContent,
+       droppedItemsRef,
++      rootViewRef,
+     ]
+   );
+ 
+   return (
+     <DraxContext value={contextValue}>
+-      <View style={style} ref={setRootViewRef} onLayout={handleRootLayout} collapsable={false}>
++      <View style={style} ref={rootViewRef} onLayout={handleRootLayout} collapsable={false}>
+         {children}
+         {debug && (
+           <DebugOverlay
+diff --git a/src/DraxView.tsx b/src/DraxView.tsx
+index 31a0c65..0f6b530 100644
+--- a/src/DraxView.tsx
++++ b/src/DraxView.tsx
+@@ -355,7 +355,8 @@ export const DraxView = memo((props: DraxViewProps): ReactNode => {
+     lockDragYPosition,
+     dragBoundsSV,
+     props.dragActivationFailOffset,
+-    scrollHorizontal
++    scrollHorizontal,
++    dragHandle
+   );
+ 
+   // ── Animated styles ────────────────────────────────────────────────
+diff --git a/src/HoverLayer.tsx b/src/HoverLayer.tsx
+index 41031b3..ed30b3f 100644
+--- a/src/HoverLayer.tsx
++++ b/src/HoverLayer.tsx
+@@ -6,6 +6,7 @@ import type { SharedValue } from 'react-native-reanimated';
+ import Reanimated, { useAnimatedStyle } from 'react-native-reanimated';
+ import { runOnUI } from 'react-native-worklets';
+ 
++import { DraxHandleContext } from './DraxHandleContext';
+ import type { DragPhase, Position } from './types';
+ 
+ /** Flattened hover styles for the currently dragged view */
+@@ -68,8 +69,9 @@ export const HoverLayer = memo(
+     const flatHoverDraggingWithoutReceiverStyle = hs?.hoverDraggingWithoutReceiverStyle ?? null;
+     const flatHoverDragReleasedStyle = hs?.hoverDragReleasedStyle ?? null;
+ 
+-    // Position style: applied to the outer full-screen container.
+-    // Only handles positioning (translate) and visibility (opacity).
++    // Position style: applied to the outer container.
++    // Animated left/top is used instead of transform: on Fabric, an animated
++    // transform on an ancestor blanks nested <Image> content (drax #267).
+     const positionStyle = useAnimatedStyle(() => {
+       const phase = dragPhaseSV.value;
+       if (phase === 'idle') {
+@@ -77,10 +79,8 @@ export const HoverLayer = memo(
+       }
+       return {
+         opacity: 1,
+-        transform: [
+-          { translateX: hoverPositionSV.value.x },
+-          { translateY: hoverPositionSV.value.y },
+-        ] as const,
++        left: hoverPositionSV.value.x,
++        top: hoverPositionSV.value.y,
+       };
+     });
+ 
+@@ -138,25 +138,30 @@ export const HoverLayer = memo(
+     // If we returned null when content is empty, remounting causes a one-frame
+     // flash (the view renders at default position before useAnimatedStyle kicks in).
+     return (
+-      <Reanimated.View
+-        style={[styles.container, positionStyle]}
+-        pointerEvents="none"
+-      >
+-        <Reanimated.View style={[styles.content, dimensionStyle, visualStyle]}>
+-          {hoverContentRef.current}
++      <DraxHandleContext.Provider value={null}>
++        <Reanimated.View
++          style={[styles.container, positionStyle]}
++          pointerEvents="none"
++        >
++          <Reanimated.View style={[styles.content, dimensionStyle, visualStyle]}>
++            {hoverContentRef.current}
++          </Reanimated.View>
+         </Reanimated.View>
+-      </Reanimated.View>
++      </DraxHandleContext.Provider>
+     );
+   }
+ );
+ 
+ const styles = StyleSheet.create({
+   container: {
+-    ...StyleSheet.absoluteFillObject,
++    position: 'absolute',
++    top: 0,
++    left: 0,
++    // Keep the floating copy above the list on both platforms.
++    zIndex: 9999,
+     // Default hidden — useAnimatedStyle overrides to opacity:1 when dragging.
+     // Prevents a one-frame flash on first mount before the animated style evaluates.
+     opacity: 0,
+-    transformOrigin: 'top left',
+   },
+   content: {
+     // Shrink-wrap to content width — without this the inner view stretches
+diff --git a/src/SortableItem.tsx b/src/SortableItem.tsx
+index c5504c8..912d72d 100644
+--- a/src/SortableItem.tsx
++++ b/src/SortableItem.tsx
+@@ -100,6 +100,9 @@ export interface SortableItemProps extends DraxViewProps {
+   /** When true, this item cannot be dragged and stays in its position.
+    *  Other items will skip over it during reorder. */
+   fixed?: boolean;
++  /** The item currently rendered at this index. Falls back to the buffered
++   *  data order when not provided. */
++  item?: any;
+   children: ReactNode;
+ }
+ 
+@@ -107,6 +110,7 @@ const SortableItemInner = ({
+   sortable,
+   index,
+   fixed = false,
++  item: renderedItem,
+   children,
+   ...draxViewProps
+ }: SortableItemProps) => {
+@@ -126,7 +130,6 @@ const SortableItemInner = ({
+     rawData,
+     originalIndexes,
+     scrollPosition,
+-    onItemSnapEnd,
+     fixedKeys,
+   } = sortable._internal;
+ 
+@@ -134,7 +137,11 @@ const SortableItemInner = ({
+   const { hoverReadySV, draggedIdSV } = useDraxContext();
+ 
+   const originalIndex = originalIndexes[index] ?? index;
+-  const item = rawData[originalIndex];
++  // Prefer the item the list actually rendered. While the parent data is
++  // being replaced, this differs from the buffered `rawData` order for one
++  // render; using the rendered item keeps keys, measurements and drag payloads
++  // pointing at the item that is on screen.
++  const item = renderedItem !== undefined ? renderedItem : rawData[originalIndex];
+   const itemKey = item !== undefined ? keyExtractor(item, index) : undefined;
+ 
+   // Register/unregister fixed items so reorder logic can skip them.
+@@ -221,7 +228,10 @@ const SortableItemInner = ({
+           draxViewProps.onDragDrop?.(event);
+         }}
+         onSnapEnd={(snapData) => {
+-          onItemSnapEnd?.();
++          // Read at call time: SortableContainer assigns this in a layout
++          // effect after the items have rendered. Destructuring it during
++          // render captures `undefined`, so the drop is never finalized.
++          sortable._internal.onItemSnapEnd?.();
+           draxViewProps.onSnapEnd?.(snapData);
+         }}
+         onMeasure={(measurements) => {
+diff --git a/src/hooks/useDragGesture.ts b/src/hooks/useDragGesture.ts
+index 4e36d6c..f0ec7f9 100644
+--- a/src/hooks/useDragGesture.ts
++++ b/src/hooks/useDragGesture.ts
+@@ -1,4 +1,5 @@
+ import { Platform } from 'react-native';
++import { measure } from 'react-native-reanimated';
+ import type { SharedValue } from 'react-native-reanimated';
+ import { runOnJS } from 'react-native-worklets';
+ 
+@@ -25,7 +26,8 @@ export const useDragGesture = (
+   lockDragYPosition?: boolean,
+   dragBoundsSV?: SharedValue<{ x: number; y: number; width: number; height: number } | null>,
+   dragActivationFailOffset?: number,
+-  scrollHorizontal?: boolean
++  scrollHorizontal?: boolean,
++  dragHandle?: boolean
+ ) => {
+   const {
+     draggedIdSV,
+@@ -39,6 +41,7 @@ export const useDragGesture = (
+     grabOffsetSV,
+     startPositionSV,
+     rootOffsetSV,
++    rootViewRef,
+     handleDragStart,
+     handleReceiverChange,
+     handleDragEnd,
+@@ -69,24 +72,43 @@ export const useDragGesture = (
+     onActivate: (event) => {
+       'worklet';
+ 
++      // Re-measure the root view on drag start in case DraxProvider is nested
++      // inside an outer ScrollView/FlatList that has scrolled since onLayout.
++      if (Platform.OS !== 'web') {
++        const measuredRoot = measure(rootViewRef);
++        if (measuredRoot) {
++          rootOffsetSV.value = { x: measuredRoot.pageX, y: measuredRoot.pageY };
++        }
++      }
++
+       // Convert screen-absolute touch to root-view-relative
+       const rootOffset = rootOffsetSV.value;
+       const rootRelX = event.absoluteX - rootOffset.x;
+       const rootRelY = event.absoluteY - rootOffset.y;
+ 
+-      // Derive the view's visual position from the gesture event.
+-      // event.x/y = touch relative to the view's bounds (accounts for transforms).
+-      // This is more accurate than the spatial index for sortable items where
+-      // permanent shifts move views via CSS transform without updating layout.
+-      const viewAbsPos: Position = {
+-        x: rootRelX - event.x,
+-        y: rootRelY - event.y,
+-      };
+-
+-      // Grab offset = touch position within the view
++      // Derive the view's visual position and grab offset.
++      // When dragHandle is false, GestureDetector wraps the DraxView directly,
++      // so event.x/y is touch relative to the DraxView's bounds (accounts for transforms).
++      // When dragHandle is true, GestureDetector wraps the child DraxHandle,
++      // so event.x/y is relative to the handle — use the spatial index for the DraxView's position.
++      const spatialIndex = viewSpatialIndexSV.value;
++      const entries = spatialIndexSV.value;
++      const viewAbsPos: Position =
++        dragHandle && spatialIndex >= 0 && entries[spatialIndex]
++          ? computeAbsolutePositionWorklet(
++              spatialIndex,
++              entries,
++              scrollOffsetsSV.value
++            )
++          : {
++              x: rootRelX - event.x,
++              y: rootRelY - event.y,
++            };
++
++      // Grab offset = touch position within the DraxView
+       const grabOffset: Position = {
+-        x: event.x,
+-        y: event.y,
++        x: rootRelX - viewAbsPos.x,
++        y: rootRelY - viewAbsPos.y,
+       };
+ 
+       // Store shared state (all positions in root-relative space).
+@@ -105,8 +127,7 @@ export const useDragGesture = (
+       // Clamp to drag bounds if specified
+       if (dragBoundsSV?.value) {
+         const b = dragBoundsSV.value;
+-        const entries = spatialIndexSV.value;
+-        const viewEntry = entries[viewSpatialIndexSV.value];
++        const viewEntry = entries[spatialIndex];
+         const vw = viewEntry ? viewEntry.width : 0;
+         const vh = viewEntry ? viewEntry.height : 0;
+         hoverX = Math.max(b.x, Math.min(b.x + b.width - vw, hoverX));
+diff --git a/src/hooks/useSortableList.ts b/src/hooks/useSortableList.ts
+index 1ff54d0..aea5d96 100644
+--- a/src/hooks/useSortableList.ts
++++ b/src/hooks/useSortableList.ts
+@@ -112,6 +112,16 @@ export const useSortableList = <T,>(
+   const itemMeasurements = useRef<Map<string, SortableItemMeasurement>>(
+     new Map()
+   );
++  /**
++   * Geometry for items that are not currently mounted by the underlying
++   * virtualized list (FlashList/FlatList only measure visible cells). Slot
++   * detection and shift targets need a position for every item, so missing
++   * entries are interpolated/extrapolated from the nearest measured cells.
++   */
++  const estimatedMeasurementsRef = useRef<{
++    stamp: string;
++    byIndex: Map<number, SortableItemMeasurement>;
++  } | null>(null);
+   const containerMeasurementsRef = useRef<DraxViewMeasurements | undefined>(
+     undefined
+   );
+@@ -160,6 +170,30 @@ export const useSortableList = <T,>(
+       return rawData.length > 0 ? [...Array(rawData.length).keys()] : [];
+     });
+ 
++    // Layout or data order may have changed; rebuild estimated geometry.
++    estimatedMeasurementsRef.current = null;
++
++    // Drop measurements whose item moved to a different slot. They are
++    // refreshed by onLayout for mounted cells and estimated for offscreen
++    // ones. Without this, a virtualized list would keep stale coordinates
++    // for cells it has since unmounted.
++    let orderChanged = rawData.length !== stableData.length;
++    if (!orderChanged) {
++      for (let i = 0; i < rawData.length; i++) {
++        const a = rawData[i];
++        const b = stableData[i];
++        if (
++          a === undefined ||
++          b === undefined ||
++          keyExtractor(a, i) !== keyExtractor(b, i)
++        ) {
++          orderChanged = true;
++          break;
++        }
++      }
++    }
++    if (orderChanged) itemMeasurements.current.clear();
++
+     const committedKeys = committedKeyOrderRef.current;
+     if (committedKeys.length > 0 && committedKeys.length === rawData.length) {
+       // Check if new data order matches committed visual order by keys.
+@@ -172,9 +206,26 @@ export const useSortableList = <T,>(
+         }
+       }
+       if (matches) {
+-        // Parent accepted our reorder — stableData stays unchanged.
+-        // FlatList keeps rendering the original data order; permanent shifts
+-        // handle the visual reorder. No Fabric commit → no race → no blink.
++        // Parent accepted our reorder. Switch to the accepted data order and
++        // clear the temporary shifts in the same commit. This is required for
++        // virtualized lists: cells that were never mounted have no shift, so
++        // they would otherwise mount in the pre-reorder order.
++        committedOrderRef.current = [];
++        committedKeyOrderRef.current = [];
++        committedShiftsRef.current = {};
++        ghostShiftsRef.current = {};
++        // Invalidate shifts synchronously so the animated style reads zero
++        // shifts in the same frame as the Fabric commit. Otherwise the
++        // reordered cells keep their old offsets for one frame, which looks
++        // like the list snapping back to the pre-drag order before settling.
++        shiftsValidSV.value = false;
++        runOnUI(() => {
++          'worklet';
++          instantClearSV.value = true;
++          shiftsRef.value = {};
++          shiftsValidSV.value = true;
++        })();
++        setStableData(rawData);
+         return;
+       }
+     }
+@@ -206,7 +257,8 @@ export const useSortableList = <T,>(
+ 
+   // ── Helpers ─────────────────────────────────────────────────────────
+ 
+-  const getMeasurementByOriginalIndex = (
++  /** Measurement reported by a mounted SortableItem, if any. */
++  const getActualMeasurement = (
+     originalIndex: number
+   ): SortableItemMeasurement | undefined => {
+     const item = stableData[originalIndex];
+@@ -215,6 +267,125 @@ export const useSortableList = <T,>(
+     return itemMeasurements.current.get(key);
+   };
+ 
++  /**
++   * Build estimated measurements for unmounted items. Anchors are real
++   * measurements; gaps between anchors are distributed by index and the
++   * remaining items are extrapolated with the average measured size.
++   */
++  const getEstimatedMeasurements = (): Map<number, SortableItemMeasurement> => {
++    const stamp = `${itemMeasurements.current.size}:${originalIndexes.length}:${
++      stableData.length
++    }:${horizontal ? 'h' : 'v'}`;
++    const cached = estimatedMeasurementsRef.current;
++    if (cached?.stamp === stamp) return cached.byIndex;
++
++    const byIndex = new Map<number, SortableItemMeasurement>();
++    const actual: { index: number; m: SortableItemMeasurement }[] = [];
++    for (let i = 0; i < originalIndexes.length; i++) {
++      const origIdx = originalIndexes[i]!;
++      const m = getActualMeasurement(origIdx);
++      if (m) actual.push({ index: origIdx, m });
++    }
++
++    if (actual.length === 0) {
++      estimatedMeasurementsRef.current = { stamp, byIndex };
++      return byIndex;
++    }
++
++    actual.sort((a, b) => a.index - b.index);
++
++    let sumMain = 0;
++    for (const { m } of actual) {
++      sumMain += horizontal ? m.width : m.height;
++    }
++    const avgMain = sumMain / actual.length;
++
++    let gapSum = 0;
++    let gapSamples = 0;
++    for (let i = 1; i < actual.length; i++) {
++      const prev = actual[i - 1]!;
++      const next = actual[i]!;
++      if (next.index !== prev.index + 1) continue;
++      gapSum += horizontal
++        ? next.m.x - (prev.m.x + prev.m.width)
++        : next.m.y - (prev.m.y + prev.m.height);
++      gapSamples++;
++    }
++    const gap = gapSamples > 0 ? gapSum / gapSamples : 0;
++    const step = avgMain + gap;
++
++    let cursor = 0;
++    for (let i = 0; i < originalIndexes.length; i++) {
++      const origIdx = originalIndexes[i]!;
++      if (getActualMeasurement(origIdx)) continue;
++
++      while (cursor < actual.length && actual[cursor]!.index < origIdx) {
++        cursor++;
++      }
++      const prev = cursor > 0 ? actual[cursor - 1] : undefined;
++      const next = cursor < actual.length ? actual[cursor] : undefined;
++
++      let main: number;
++      let cross: number;
++      let mainSize: number;
++      let crossSize: number;
++
++      if (prev && next) {
++        const t = (origIdx - prev.index) / (next.index - prev.index);
++        main = (horizontal ? prev.m.x : prev.m.y) +
++          ((horizontal ? next.m.x : next.m.y) -
++            (horizontal ? prev.m.x : prev.m.y)) * t;
++        cross = (horizontal ? prev.m.y : prev.m.x) +
++          ((horizontal ? next.m.y : next.m.x) -
++            (horizontal ? prev.m.y : prev.m.x)) * t;
++        mainSize = (horizontal ? prev.m.width : prev.m.height) +
++          ((horizontal ? next.m.width : next.m.height) -
++            (horizontal ? prev.m.width : prev.m.height)) * t;
++        crossSize = (horizontal ? prev.m.height : prev.m.width) +
++          ((horizontal ? next.m.height : next.m.width) -
++            (horizontal ? prev.m.height : prev.m.width)) * t;
++      } else if (prev) {
++        main = (horizontal ? prev.m.x : prev.m.y) +
++          (origIdx - prev.index) * step;
++        cross = horizontal ? prev.m.y : prev.m.x;
++        mainSize = avgMain;
++        crossSize = horizontal ? prev.m.height : prev.m.width;
++      } else if (next) {
++        main = (horizontal ? next.m.x : next.m.y) -
++          (next.index - origIdx) * step;
++        cross = horizontal ? next.m.y : next.m.x;
++        mainSize = avgMain;
++        crossSize = horizontal ? next.m.height : next.m.width;
++      } else {
++        continue;
++      }
++
++      byIndex.set(origIdx, {
++        x: horizontal ? main : cross,
++        y: horizontal ? cross : main,
++        width: horizontal ? mainSize : crossSize,
++        height: horizontal ? crossSize : mainSize,
++        key: `__drax_estimate_${origIdx}`,
++        index: origIdx,
++        scrollAtMeasure: actual[0]!.m.scrollAtMeasure,
++      });
++    }
++
++    estimatedMeasurementsRef.current = { stamp, byIndex };
++    return byIndex;
++  };
++
++  const getMeasurementByOriginalIndex = (
++    originalIndex: number
++  ): SortableItemMeasurement | undefined => {
++    const actual = getActualMeasurement(originalIndex);
++    if (actual) return actual;
++    // Only single-column lists are supported by the estimate. Grids still
++    // require real measurements (their layout is two-dimensional).
++    if (numColumns !== 1) return undefined;
++    return getEstimatedMeasurements().get(originalIndex);
++  };
++
+   // Alias for internal use
+   const getMeasForOrigIdx = getMeasurementByOriginalIndex;
+ 
+@@ -461,7 +632,9 @@ export const useSortableList = <T,>(
+       const item = stableData[origIdx];
+       if (item === undefined) continue;
+       const key = keyExtractor(item, origIdx);
+-      const currentMeas = getMeasForOrigIdx(origIdx);
++      // Only move cells that are actually mounted. Unmounted items have no
++      // view to transform; when they mount later they use the data order.
++      const currentMeas = getActualMeasurement(origIdx);
+       if (!currentMeas) continue;
+       const target = targetPositions.get(i);
+       if (!target) continue;
+diff --git a/src/types.ts b/src/types.ts
+index f393ffc..75ae4c9 100644
+--- a/src/types.ts
++++ b/src/types.ts
+@@ -1,14 +1,15 @@
+-import type { ReactNode, RefObject } from 'react';
++import type { ComponentRef, ReactNode, RefObject } from 'react';
+ import type {
+   NativeScrollEvent,
+   NativeSyntheticEvent,
+   ScrollViewProps,
+   StyleProp,
++  View,
+   ViewProps,
+   ViewStyle,
+ } from 'react-native';
+-import type { HostInstance } from 'react-native';
+ import type {
++  AnimatedRef,
+   AnimatedStyle,
+   EntryOrExitLayoutType,
+   SharedValue,
+@@ -517,7 +518,7 @@ export interface DraxContextValue {
+   droppedItemsRef: RefObject<Map<string, Set<string>>>;
+ 
+   // ── View refs ──────────────────────────────────────────────────────
+-  rootViewRef: { current: HostInstance | null };
++  rootViewRef: AnimatedRef<ComponentRef<typeof View>>;
+   parent?: DraxParentView;
+ }
+ 

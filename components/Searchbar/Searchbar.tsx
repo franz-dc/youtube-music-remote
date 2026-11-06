@@ -41,7 +41,12 @@ export type SearchbarProps = TextInputProps & {
   onSubmit: (query: string) => void;
 };
 
-const Searchbar = ({ onSubmit, ...props }: SearchbarProps) => {
+const Searchbar = ({
+  onSubmit,
+  selectionColor,
+  cursorColor,
+  ...props
+}: SearchbarProps) => {
   const theme = useTheme();
 
   const { t } = useTranslation('translation', { keyPrefix: 'search' });
@@ -55,13 +60,14 @@ const Searchbar = ({ onSubmit, ...props }: SearchbarProps) => {
     e: NativeSyntheticEvent<TextInputKeyPressEventData>
   ) => {
     if (Platform.OS !== 'web') return;
-    if (e.nativeEvent.key === 'Enter') {
+    if (e.nativeEvent.key === 'Enter' && query.trim().length !== 0) {
       onSubmit(query);
     }
   };
 
   const handleSubmitEditing = () => {
     if (Platform.OS === 'web') return;
+    if (query.trim().length === 0) return;
     onSubmit(query);
   };
 
@@ -79,7 +85,6 @@ const Searchbar = ({ onSubmit, ...props }: SearchbarProps) => {
           styles.textInput,
           { color: theme.colors.onSurface },
           Platform.OS === 'web' && {
-            // @ts-expect-error: remove outline for web
             outline: 'none',
           },
         ]}
@@ -92,7 +97,7 @@ const Searchbar = ({ onSubmit, ...props }: SearchbarProps) => {
         onChangeText={setQuery}
         onSubmitEditing={handleSubmitEditing}
         onKeyPress={handleKeyPress}
-        blurOnSubmit={query.trim().length !== 0}
+        submitBehavior={query.trim().length !== 0 ? 'blurAndSubmit' : 'submit'}
         {...props}
       />
       {hasQuery && (

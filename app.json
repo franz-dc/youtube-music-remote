@@ -7,11 +7,6 @@
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#ffffff"
-    },
     "ios": {
       "infoPlist": {
         "NSAppTransportSecurity": {
@@ -27,16 +22,6 @@
         "foregroundImage": "./assets/images/icon.png",
         "monochromeImage": "./assets/images/icon-monochrome.png",
         "backgroundColor": "#ffffff"
-      },
-      "splash": {
-        "image": "./assets/images/splash.png",
-        "resizeMode": "cover",
-        "backgroundColor": "#ffffff",
-        "dark": {
-          "image": "./assets/images/splash.png",
-          "resizeMode": "contain",
-          "backgroundColor": "#1a1b21"
-        }
       },
       "permissions": [
         "REQUEST_INSTALL_PACKAGES",
@@ -72,6 +57,23 @@
         {
           "icon": "./assets/images/logo.png",
           "color": "#ffffff"
+        }
+      ],
+      "expo-font",
+      "expo-web-browser",
+      "expo-splash-screen",
+      "expo-status-bar",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash.png",
+          "resizeMode": "cover",
+          "backgroundColor": "#ffffff",
+          "dark": {
+            "image": "./assets/images/splash.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#1a1b21"
+          }
         }
       ]
     ],

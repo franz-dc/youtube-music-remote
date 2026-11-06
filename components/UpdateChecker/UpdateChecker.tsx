@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { nativeApplicationVersion as currentVersion } from 'expo-application';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import { startActivityAsync } from 'expo-intent-launcher';
-import * as Notifications from 'expo-notifications';
+import { clearLastNotificationResponse } from 'expo-notifications';
 import { useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Platform, StyleSheet } from 'react-native';
@@ -24,7 +24,7 @@ const UpdateChecker = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'about' });
 
   useEffect(() => {
-    Notifications.clearLastNotificationResponseAsync();
+    clearLastNotificationResponse();
   }, []);
 
   const params = useLocalSearchParams<{
@@ -74,6 +74,7 @@ const UpdateChecker = () => {
       setProgress(0);
       setIsDownloading(true);
 
+      // TODO: migrate to latest FileSystem API
       const downloadResumable = FileSystem.createDownloadResumable(
         asset!.browser_download_url,
         FileSystem.cacheDirectory + `update.${APP_FILE_EXTENSION}`,

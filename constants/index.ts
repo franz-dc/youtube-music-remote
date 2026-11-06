@@ -183,4 +183,6 @@ export const APP_FILE_EXTENSION = Platform.select({
 });
 export const LIST_ITEM_PRESS_DELAY_MS = 100;
 export const LONG_PRESS_DELAY_MS = 250;
+// Height of a queue row in dp: 8dp vertical padding * 2 + 48dp album art.
+export const QUEUE_ITEM_HEIGHT = 64;
 export const PLAYER_STATE_POLLING_INTERVAL_MS = 10000; // 10 seconds

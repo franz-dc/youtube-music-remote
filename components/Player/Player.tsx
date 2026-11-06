@@ -220,7 +220,7 @@ const Player = () => {
         activeOffsetY={[-1, 1]}
         failOffsetX={[-7, 7]}
       >
-        <BottomSheetView style={styles.bottomSheetView}>
+        <BottomSheetView style={[styles.bottomSheetView, { height }]}>
           <LinearGradient
             colors={
               showAlbumArtColor && theme.dark

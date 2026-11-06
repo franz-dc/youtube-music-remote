@@ -22,7 +22,7 @@ const Layout = () => {
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
 
-  const pushFromMenu = (path: Href<string>) => {
+  const pushFromMenu = (path: Href) => {
     closeMenu();
     router.push(path);
   };

@@ -2,13 +2,13 @@ import { SetStateAction, WritableAtom, atom, createStore } from 'jotai';
 import { useAtom } from 'jotai/react';
 import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 import { atomFamily } from 'jotai-family';
-import { MMKV } from 'react-native-mmkv';
+import { createMMKV } from 'react-native-mmkv';
 
 import { SettingsSchema } from '@/schemas';
 
 import { DEFAULT_SETTINGS } from '../constants/defaultSettings';
 
-export const storage = new MMKV();
+export const storage = createMMKV();
 
 export const store = createStore();
 
@@ -22,7 +22,7 @@ function setItem(key: string, value: string): void {
 }
 
 function removeItem(key: string): void {
-  storage.delete(key);
+  storage.remove(key);
 }
 
 function clearAll(): void {

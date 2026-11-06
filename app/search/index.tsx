@@ -153,7 +153,6 @@ const CategorizedSearchResults = ({
           />
         )}
         keyExtractor={(item, idx) => `${item.videoId}-${idx}`}
-        estimatedItemSize={64}
         contentContainerStyle={{
           paddingBottom: bottomInset,
         }}
