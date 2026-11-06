@@ -10801,15 +10801,15 @@ __metadata:
   linkType: hard
 
 "react-native-image-colors@npm:^2.4.0":
-  version: 2.6.0
-  resolution: "react-native-image-colors@npm:2.6.0"
+  version: 2.6.1
+  resolution: "react-native-image-colors@npm:2.6.1"
   dependencies:
     node-vibrant: "npm:^4.0.3"
   peerDependencies:
     expo: "*"
     react: "*"
     react-native: "*"
-  checksum: 10c0/3326cdbcf871d9e76226428135f27e61953eba20ebcc7afc15cf9c829767c9e4c4d378a6081673ebcda919d48846214bb7909a959a8f7d1be03edd6da3f589bd
+  checksum: 10c0/ba68ab6d80c0ff8b5ef655659b3a9fcf2d96d2afe2cf37017a88736b8adac0e32c9c9c1cca9084914bcd07bfc2366a452a73a3f84f2253b4ec8c257d64fc432b
   languageName: node
   linkType: hard
 
