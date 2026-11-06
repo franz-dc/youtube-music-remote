@@ -1328,15 +1328,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@egjs/hammerjs@npm:^2.0.17":
-  version: 2.0.17
-  resolution: "@egjs/hammerjs@npm:2.0.17"
-  dependencies:
-    "@types/hammerjs": "npm:^2.0.36"
-  checksum: 10c0/dbedc15a0e633f887c08394bd636faf6a3abd05726dc0909a0e01209d5860a752d9eca5e512da623aecfabe665f49f1d035de3103eb2f9022c5cea692f9cc9be
-  languageName: node
-  linkType: hard
-
 "@emnapi/core@npm:^1.4.3":
   version: 1.10.0
   resolution: "@emnapi/core@npm:1.10.0"
@@ -3229,16 +3220,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@shopify/flash-list@npm:2.0.2":
-  version: 2.0.2
-  resolution: "@shopify/flash-list@npm:2.0.2"
-  dependencies:
-    tslib: "npm:2.8.1"
+"@shopify/flash-list@npm:2.3.2":
+  version: 2.3.2
+  resolution: "@shopify/flash-list@npm:2.3.2"
   peerDependencies:
     "@babel/runtime": "*"
     react: "*"
     react-native: "*"
-  checksum: 10c0/c4e88348ce66e8f51c6213a42574a097d54cebf2125dc3fd8c077f3f7b83e25209c67bcb9a9102a3178c146cf5c23a978febd9a5ed5328ba1d7c663b5a8149d2
+  checksum: 10c0/3e58913506b1dc7f02dd0696c478fd963ede413d9d7121705a08ff505d5c21e611813ce9370068238b8983ff582ed7b8ee94f68e94f99a1ac8f600c01fff118e
   languageName: node
   linkType: hard
 
@@ -3387,13 +3376,6 @@ __metadata:
   dependencies:
     "@types/node": "npm:*"
   checksum: 10c0/235d2fc69741448e853333b7c3d1180a966dd2b8972c8cbcd6b2a0c6cd7f8d582ab2b8e58219dbc62cce8f1b40aa317ff78ea2201cdd8249da5025adebed6f0b
-  languageName: node
-  linkType: hard
-
-"@types/hammerjs@npm:^2.0.36":
-  version: 2.0.46
-  resolution: "@types/hammerjs@npm:2.0.46"
-  checksum: 10c0/f3c1cb20dc2f0523f7b8c76065078544d50d8ae9b0edc1f62fed657210ed814266ff2dfa835d2c157a075991001eec3b64c88bf92e3e6e895c0db78d05711d06
   languageName: node
   linkType: hard
 
@@ -10681,18 +10663,40 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-gesture-handler@npm:~2.32.0":
-  version: 2.32.0
-  resolution: "react-native-gesture-handler@npm:2.32.0"
+"react-native-drax@npm:1.1.0":
+  version: 1.1.0
+  resolution: "react-native-drax@npm:1.1.0"
+  peerDependencies:
+    react: ">=18.0.0"
+    react-native: ">=0.68.0"
+    react-native-gesture-handler: ">=2.0.0"
+    react-native-reanimated: ^4.0.0
+  checksum: 10c0/1c4269157c69a82b2febf09b70f1008413fcbe351655aa6452d4b4de621e829fb6e28faa0a19b42b9ed02454587a5b2543249bdd1e73e86bff285bee289ebc11
+  languageName: node
+  linkType: hard
+
+"react-native-drax@patch:react-native-drax@npm%3A1.1.0#~/.yarn/patches/react-native-drax-npm-1.1.0-91a11e0fed.patch":
+  version: 1.1.0
+  resolution: "react-native-drax@patch:react-native-drax@npm%3A1.1.0#~/.yarn/patches/react-native-drax-npm-1.1.0-91a11e0fed.patch::version=1.1.0&hash=6b8388"
+  peerDependencies:
+    react: ">=18.0.0"
+    react-native: ">=0.68.0"
+    react-native-gesture-handler: ">=2.0.0"
+    react-native-reanimated: ^4.0.0
+  checksum: 10c0/ea5ddd7b4f57f12f76f6342e2ea7c49cfe0cc260e943d1272c437e04b928d01bd74586d69ef429a6c6905672ce754cee84dd71d13c2ba1eb9e6c5fe164e6d05c
+  languageName: node
+  linkType: hard
+
+"react-native-gesture-handler@npm:^3.2.1":
+  version: 3.2.1
+  resolution: "react-native-gesture-handler@npm:3.2.1"
   dependencies:
-    "@egjs/hammerjs": "npm:^2.0.17"
     "@types/react-test-renderer": "npm:^19.1.0"
-    hoist-non-react-statics: "npm:^3.3.0"
     invariant: "npm:^2.2.4"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10c0/f3d903a8ad1f053732f7cbfbd16891a6bc696f4d03428a334948587a203fdcfa29592f1fc6c4c03c175932febe9df1fce3eb40ddd54d2fa3de63cc939ccd0e85
+  checksum: 10c0/e20537d1eafe35206494eae7885ef85e7cd85185b32ccaac3d25f3e87beafa007ac79556c0af8da245db1140f6b5df35d20509d7fa56301d730de5a8abb1b90f
   languageName: node
   linkType: hard
 
@@ -12288,7 +12292,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.8.1, tslib@npm:^2.0.0, tslib@npm:^2.1.0, tslib@npm:^2.4.0":
+"tslib@npm:^2.0.0, tslib@npm:^2.1.0, tslib@npm:^2.4.0":
   version: 2.8.1
   resolution: "tslib@npm:2.8.1"
   checksum: 10c0/9c4759110a19c53f992d9aae23aac5ced636e99887b51b9e61def52611732872ff7668757d4e4c61f19691e36f4da981cd9485e869b4a7408d689f6bf1f14e62
@@ -13112,7 +13116,7 @@ __metadata:
     "@gorhom/bottom-sheet": "npm:^5.2.14"
     "@pchmn/expo-material3-theme": "npm:^1.3.2"
     "@react-native-community/slider": "npm:5.2.0"
-    "@shopify/flash-list": "npm:2.0.2"
+    "@shopify/flash-list": "npm:2.3.2"
     "@tanstack/react-query": "npm:^5.59.19"
     "@types/color": "npm:^4.2.0"
     "@types/jest": "npm:^29.5.12"
@@ -13160,7 +13164,8 @@ __metadata:
     react-dom: "npm:19.2.3"
     react-i18next: "npm:^17.0.0"
     react-native: "npm:0.86.3"
-    react-native-gesture-handler: "npm:~2.32.0"
+    react-native-drax: "patch:react-native-drax@npm%3A1.1.0#~/.yarn/patches/react-native-drax-npm-1.1.0-91a11e0fed.patch"
+    react-native-gesture-handler: "npm:^3.2.1"
     react-native-image-colors: "npm:^2.4.0"
     react-native-mmkv: "npm:^4.3.2"
     react-native-nitro-modules: "npm:^0.37.1"

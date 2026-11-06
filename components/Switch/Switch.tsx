@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     width: 52,
     alignItems: 'center',
     position: 'absolute',
+    pointerEvents: 'none',
   },
 });
 
@@ -285,7 +286,7 @@ const Switch = ({
 
   return (
     <View style={{ borderRadius: 20, backgroundColor: theme.colors.surface }}>
-      <View pointerEvents='none' style={styles.stateOuter}>
+      <View style={styles.stateOuter}>
         <Animated.View style={handleOutlineStyle} key={3}></Animated.View>
       </View>
       <Animated.View style={trackStyle} key={1}>

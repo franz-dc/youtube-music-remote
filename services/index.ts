@@ -9,6 +9,7 @@ import {
   SearchResultSchema,
   SongInfoSchema,
 } from '@/schemas';
+import { getQueueItemId } from '@/utils/queue';
 
 // Player
 export const pause = async () => {
@@ -106,17 +107,56 @@ export const addSongToQueue = async (
   await api.post('/queue', { videoId, insertPosition });
 };
 
-export const changeActiveSongInQueue = async (index: number) => {
-  await api.patch('/queue', { index });
+// Queue edits are applied optimistically in the UI, so requests that depend on
+// queue positions must not race each other. Serializing them guarantees that a
+// play request sent right after a reorder (or removal) reaches the server after
+// that edit, using the same order the UI is showing.
+let pendingQueueEdit: Promise<unknown> = Promise.resolve();
+
+const withQueueEditLock = <T>(edit: () => Promise<T>): Promise<T> => {
+  const result = pendingQueueEdit.then(edit, edit);
+  pendingQueueEdit = result.catch(() => undefined);
+  return result;
 };
 
-export const moveSongInQueue = async (fromIndex: number, toIndex: number) => {
-  await api.patch(`/queue/${fromIndex}`, { toIndex });
+export const changeActiveSongInQueue = (index: number) =>
+  withQueueEditLock(() => api.patch('/queue', { index }));
+
+const QUEUE_MOVE_POLL_INTERVAL_MS = 100;
+const QUEUE_MOVE_POLL_MAX_ATTEMPTS = 20;
+
+/**
+ * The desktop app applies a queue move asynchronously. The PATCH resolves
+ * before the queue reflects the new position, so poll until the moved song is
+ * actually at `toIndex`. The queue edit lock keeps a play request sent right
+ * after the drag waiting for this, so it cannot run against the old order.
+ */
+const waitForSongToMove = async (toIndex: number, movedItemId?: string) => {
+  if (!movedItemId) return;
+
+  for (let attempt = 0; attempt < QUEUE_MOVE_POLL_MAX_ATTEMPTS; attempt += 1) {
+    const queue = await getQueue();
+
+    if (getQueueItemId(queue?.items[toIndex]) === movedItemId) return;
+
+    await new Promise((resolve) =>
+      setTimeout(resolve, QUEUE_MOVE_POLL_INTERVAL_MS)
+    );
+  }
 };
 
-export const removeSongFromQueue = async (index: number) => {
-  await api.delete(`/queue/${index}`);
-};
+export const moveSongInQueue = (
+  fromIndex: number,
+  toIndex: number,
+  movedItemId?: string
+) =>
+  withQueueEditLock(async () => {
+    await api.patch(`/queue/${fromIndex}`, { toIndex });
+    await waitForSongToMove(toIndex, movedItemId);
+  });
+
+export const removeSongFromQueue = (index: number) =>
+  withQueueEditLock(() => api.delete(`/queue/${index}`));
 
 // Search
 export const search = async (searchParams: {

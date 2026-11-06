@@ -117,6 +117,9 @@ const StackWithConfig = () => {
         language === 'system' ? systemLanguage : (language as string)
       );
 
+      // await NavigationBar.setPositionAsync('absolute');
+      // await NavigationBar.setBackgroundColorAsync('transparent');
+
       setIsInitialized(true);
       await SplashScreen.hideAsync();
 
