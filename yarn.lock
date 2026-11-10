@@ -9652,8 +9652,8 @@ __metadata:
   linkType: hard
 
 "jotai@npm:^3.0.0":
-  version: 3.0.1
-  resolution: "jotai@npm:3.0.1"
+  version: 3.0.2
+  resolution: "jotai@npm:3.0.2"
   peerDependencies:
     "@types/react": ">=18.0.0"
     react: ">=18.0.0"
@@ -9662,7 +9662,7 @@ __metadata:
       optional: true
     react:
       optional: true
-  checksum: 10c0/84b6adac2e3c8f7e8fd27c52f3206ceb1b22f9b46dfb81100b3765f652134399e91bfaee49a15e2e25083adf5638b8168aeb338234074e9c80955d51c231b456
+  checksum: 10c0/c2d7824305e3451651acade0ea7e877e2e7e67b0efa213da210ffeb39b84b9103aa98f9f7534709bb22dd4fab74985e37ab19bbbb3fe9592c2015b8ad09877aa
   languageName: node
   linkType: hard
 
