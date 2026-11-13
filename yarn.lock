@@ -1269,13 +1269,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.29.7":
-  version: 7.29.13
-  resolution: "@babel/runtime@npm:7.29.13"
-  checksum: 10c0/6e589f63a3f9192bc8de99a5bc02ff14daf14590e8de77c0f3487f4b7c3784181c60dfad927986d232fbf5581723bb577aae704b42ec14c8c44ad05b590b96d6
-  languageName: node
-  linkType: hard
-
 "@babel/template@npm:^7.28.6, @babel/template@npm:^7.3.3":
   version: 7.28.6
   resolution: "@babel/template@npm:7.28.6"
@@ -11539,25 +11532,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^17.0.0":
-  version: 17.1.13
-  resolution: "react-i18next@npm:17.1.13"
+"react-i18next@npm:^18.0.0":
+  version: 18.0.1
+  resolution: "react-i18next@npm:18.0.1"
   dependencies:
-    "@babel/runtime": "npm:^7.29.7"
     html-parse-stringify: "npm:^4.0.1"
-    use-sync-external-store: "npm:^1.6.0"
   peerDependencies:
-    i18next: ">= 26.2.0"
-    react: ">= 16.8.0"
+    "@types/react": "*"
+    i18next: ">= 27.0.1"
+    react: ">= 18.0.0"
     typescript: ^5 || ^6 || ^7
   peerDependenciesMeta:
-    react-dom:
-      optional: true
-    react-native:
+    "@types/react":
       optional: true
     typescript:
       optional: true
-  checksum: 10c0/961c7b43e8d568cc31499c810da8d3db7d4b1a8a5f14803c7e3462713bdae4f54444913e299750edd5fcf61f8b6962714d0781ee7399192fb94c3152bc894d38
+  checksum: 10c0/a372c17158db33d7deec495dfdff127930334cdc264a931ea942289f25ddbd45e9debb69e986e587db4be8e8eff6ea0a50351b73fd6469be65c1cfa0acde4120
   languageName: node
   linkType: hard
 
@@ -13656,15 +13646,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"use-sync-external-store@npm:^1.6.0":
-  version: 1.6.0
-  resolution: "use-sync-external-store@npm:1.6.0"
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/35e1179f872a53227bdf8a827f7911da4c37c0f4091c29b76b1e32473d1670ebe7bcd880b808b7549ba9a5605c233350f800ffab963ee4a4ee346ee983b6019b
-  languageName: node
-  linkType: hard
-
 "utif2@npm:^4.0.1":
   version: 4.1.0
   resolution: "utif2@npm:4.1.0"
@@ -14187,7 +14168,7 @@ __metadata:
     prettier: "npm:^3.3.3"
     react: "npm:19.2.3"
     react-dom: "npm:19.2.3"
-    react-i18next: "npm:^17.0.0"
+    react-i18next: "npm:^18.0.0"
     react-native: "npm:0.86.3"
     react-native-drax: "patch:react-native-drax@npm%3A1.1.0#~/.yarn/patches/react-native-drax-npm-1.1.0-91a11e0fed.patch"
     react-native-gesture-handler: "npm:^3.2.1"
