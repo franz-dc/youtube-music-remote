@@ -50,7 +50,7 @@
     "jotai-family": "^1.0.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "react-i18next": "^17.0.0",
+    "react-i18next": "^18.0.0",
     "react-native": "0.86.3",
     "react-native-drax": "patch:react-native-drax@npm%3A1.1.0#~/.yarn/patches/react-native-drax-npm-1.1.0-91a11e0fed.patch",
     "react-native-gesture-handler": "^3.2.1",
